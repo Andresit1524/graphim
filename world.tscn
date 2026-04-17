@@ -1,8 +1,21 @@
 [gd_scene format=3 uid="uid://i7fektpxxnq7"]
 
 [ext_resource type="PackedScene" uid="uid://dxe84k80np1vp" path="res://assets/graphim_node.tscn" id="1_f3sb7"]
+[ext_resource type="Script" uid="uid://bnhtndqyock2t" path="res://addons/vector_display_2d/vector_display_2d.gd" id="2_tlwt5"]
+[ext_resource type="Script" uid="uid://b45qlmebloada" path="res://addons/vector_display_2d/vector_display_settings.gd" id="3_aqk2v"]
+
+[sub_resource type="Resource" id="Resource_036b0"]
+script = ExtResource("3_aqk2v")
+metadata/_custom_type_script = "uid://b45qlmebloada"
 
 [node name="World" type="Node2D" unique_id=1487274566]
 
 [node name="GraphimNode" parent="." unique_id=56422329 instance=ExtResource("1_f3sb7")]
 position = Vector2(599, 369)
+
+[node name="VectorDisplay2D" type="Node2D" parent="GraphimNode" unique_id=1875064555 node_paths=PackedStringArray("target_node")]
+script = ExtResource("2_tlwt5")
+target_node = NodePath("..")
+target_property = "position"
+settings = SubResource("Resource_036b0")
+metadata/_custom_type_script = "uid://bnhtndqyock2t"
