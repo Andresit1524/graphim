@@ -11,11 +11,18 @@ config_version=5
 [application]
 
 config/name="Graphim"
+run/main_scene="uid://i7fektpxxnq7"
 config/features=PackedStringArray("4.6")
 
 [dotnet]
 
 project/assembly_name="Graphim"
+
+[file_customization]
+
+folder_colors={
+"res://assets/": "yellow"
+}
 
 [physics]
 
