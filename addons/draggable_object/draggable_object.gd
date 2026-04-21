@@ -13,6 +13,7 @@ const DRAG_LERP_TIME: float = 0.1
 ## Permite que el objeto sea arrastable con el mouse
 @export var draggable: bool = true
 
+
 ## Indica si se esta arrastrando el objeto actualmente
 var is_dragging: bool = false:
 	set(value):
@@ -35,6 +36,7 @@ func _input_event(_viewport, event: InputEvent, _shape_idx) -> void:
 	event = event as InputEventMouseButton
 
 	is_dragging = event.pressed
+	get_viewport().set_input_as_handled()
 
 
 func _notification(what: int) -> void:
