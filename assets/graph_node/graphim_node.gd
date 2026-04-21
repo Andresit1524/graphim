@@ -51,14 +51,24 @@ func _set_color(_color: Color, tweened := false) -> void:
 	tween.tween_property(sprite, "modulate", _color, DRAG_EFFECT_TIME)
 
 
+## Resalta un objeto
+func _highlight(value: bool, tweened := false) -> void:
+	var _color := Color.GRAY if value else Color.WHITE
+
+	if not tweened:
+		modulate = _color
+		return
+
+	var tween := create_tween().set_trans(Tween.TRANS_SINE)
+	tween.tween_property(sprite, "modulate", _color, DRAG_EFFECT_TIME)
+
+
 ## Establece el efecto visual al arrastrar el objeto
 func _set_drag_visuals(value: bool) -> void:
-	if value:
-		_expand()
-		_set_color(Color.GRAY, true)
-	else:
-		_contract()
-		_set_color(Color.WHITE, true)
+	_highlight(value, true)
+
+	if value: _expand()
+	else: _contract()
 
 
 #endregion
@@ -73,14 +83,14 @@ func _bump() -> void:
 	_contract()
 
 
-## Expande el nodo. Usa el tween que retorna para detectar el final
+## Expande el nodo
 func _expand() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
 	tween.tween_property(sprite, "scale", Vector2(BUMP_SCALE, BUMP_SCALE), DRAG_EFFECT_TIME)
 	return tween
 
 
-## Contrae el nodo a su tamaño original. Usa el tween que retorna para detectar el final
+## Contrae el nodo a su tamaño original
 func _contract() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
 	tween.tween_property(sprite, "scale", Vector2(1, 1), DRAG_EFFECT_TIME)
