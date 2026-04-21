@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dxe84k80np1vp"]
 
-[ext_resource type="Script" uid="uid://ckfncohh5djdm" path="res://assets/graph/graph_node.gd" id="1_54dhc"]
-[ext_resource type="Texture2D" uid="uid://b3k136d6rc3um" path="res://icon.svg" id="2_07fje"]
+[ext_resource type="Script" uid="uid://ckfncohh5djdm" path="res://assets/graph/graphim_node.gd" id="1_54dhc"]
+[ext_resource type="Texture2D" uid="uid://bldlc2khhc5db" path="res://assets/graph/sprite.svg" id="2_h0j33"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1lc2y"]
-size = Vector2(58, 58)
+[sub_resource type="CircleShape2D" id="CircleShape2D_h0j33"]
+radius = 25.0
 
 [node name="GraphimNode" type="StaticBody2D" unique_id=56422329]
 input_pickable = true
@@ -12,7 +12,7 @@ script = ExtResource("1_54dhc")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=215753269]
 scale = Vector2(0.453125, 0.45312494)
-texture = ExtResource("2_07fje")
+texture = ExtResource("2_h0j33")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1393948073]
-shape = SubResource("RectangleShape2D_1lc2y")
+shape = SubResource("CircleShape2D_h0j33")
