@@ -15,6 +15,7 @@ metadata/_custom_type_script = "uid://b45qlmebloada"
 
 [node name="GraphimNode" parent="." unique_id=56422329 instance=ExtResource("1_f3sb7")]
 position = Vector2(675, 305)
+color = Color(1, 0, 0, 1)
 
 [node name="VectorDisplay2D" type="Node2D" parent="GraphimNode" unique_id=1875064555 node_paths=PackedStringArray("target_node")]
 script = ExtResource("2_tlwt5")
@@ -24,6 +25,7 @@ metadata/_custom_type_script = "uid://bnhtndqyock2t"
 
 [node name="GraphimNode2" parent="." unique_id=1488389095 instance=ExtResource("1_f3sb7")]
 position = Vector2(473, 314)
+color = Color(1, 0, 0, 1)
 
 [node name="VectorDisplay2D" type="Node2D" parent="GraphimNode2" unique_id=743625869 node_paths=PackedStringArray("target_node")]
 script = ExtResource("2_tlwt5")
@@ -33,6 +35,7 @@ metadata/_custom_type_script = "uid://bnhtndqyock2t"
 
 [node name="GraphimNode3" parent="." unique_id=560863726 instance=ExtResource("1_f3sb7")]
 position = Vector2(657, 452)
+color = Color(1, 0, 0, 1)
 
 [node name="VectorDisplay2D" type="Node2D" parent="GraphimNode3" unique_id=1801983706 node_paths=PackedStringArray("target_node")]
 script = ExtResource("2_tlwt5")
