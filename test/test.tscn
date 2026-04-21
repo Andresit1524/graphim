@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://i7fektpxxnq7"]
+
+[ext_resource type="PackedScene" uid="uid://dxe84k80np1vp" path="res://assets/graph/graphim_node.tscn" id="1_65205"]
+
+[node name="World" type="Node2D" unique_id=1487274566]
+
+[node name="GraphimNode" parent="." unique_id=56422329 instance=ExtResource("1_65205")]
+position = Vector2(930, 243)
+
+[node name="GraphimNode2" parent="." unique_id=1488389095 instance=ExtResource("1_65205")]
+position = Vector2(469, 113)
+
+[node name="GraphimNode3" parent="." unique_id=560863726 instance=ExtResource("1_65205")]
+position = Vector2(666, 548)
+
+[node name="GraphimNode4" parent="." unique_id=744704783 instance=ExtResource("1_65205")]
+position = Vector2(226, 364)
