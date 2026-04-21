@@ -2,6 +2,12 @@
 class_name GraphimNode extends DraggableObject
 
 
+## Escala al rebotar el nodo
+const BUMP_SCALE := 1.1
+## Tiempo de rebote
+const BUMP_TIME := 0.2
+
+
 ## Color del nodo
 @export var color: Color = Color.WHITE:
 	set(value):
@@ -27,6 +33,31 @@ func _physics_process(delta: float) -> void:
 	handle_dragging()
 
 
-## EStablece el color del nodo
+## Establece el color del nodo
 func _set_color(_color: Color) -> void:
+	_bump()
 	sprite.modulate = _color
+
+
+#region Tamaño del nodo
+
+
+## Aumenta el tamaño del nodo y lo deja como antes
+func _bump() -> void:
+	_expand()
+	_contract()
+
+
+## Expande el nodo
+func _expand():
+	var tween := create_tween().set_trans(Tween.TRANS_SINE)
+	tween.tween_property(sprite, "scale", Vector2(BUMP_SCALE, BUMP_SCALE), BUMP_TIME)
+
+
+## Contrae el nodo a su tamaño original
+func _contract():
+	var tween := create_tween().set_trans(Tween.TRANS_SINE)
+	tween.tween_property(sprite, "scale", Vector2(1, 1), BUMP_TIME)
+
+
+#endregion

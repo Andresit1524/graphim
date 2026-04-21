@@ -4,14 +4,13 @@
 [ext_resource type="Texture2D" uid="uid://bldlc2khhc5db" path="res://assets/graph/sprite.svg" id="2_h0j33"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_h0j33"]
-radius = 25.0
+radius = 53.0
 
 [node name="GraphimNode" type="StaticBody2D" unique_id=56422329]
 input_pickable = true
 script = ExtResource("1_54dhc")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=215753269]
-scale = Vector2(0.453125, 0.45312494)
 texture = ExtResource("2_h0j33")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1393948073]
