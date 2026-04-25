@@ -52,8 +52,3 @@ func _input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> vo
 	if mb_event.pressed:
 		is_dragging = true
 		get_viewport().set_input_as_handled()
-
-
-func _notification(what: int) -> void:
-	# Desactiva el arrastre si el mouse sale de pantalla
-	if what == NOTIFICATION_WM_MOUSE_EXIT: is_dragging = false
