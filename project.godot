@@ -12,7 +12,9 @@ config_version=5
 
 config/name="Graphim"
 run/main_scene="uid://i7fektpxxnq7"
+config/tags=PackedStringArray("unal")
 config/features=PackedStringArray("4.6")
+config/icon="uid://p50qwu20juc8"
 
 [dotnet]
 
