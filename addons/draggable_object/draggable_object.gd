@@ -36,12 +36,22 @@ func handle_dragging(delta: float) -> void:
 	global_position = global_position.lerp(get_global_mouse_position(), DRAG_LERP_SPEED * delta)
 
 
-func _input_event(_viewport, event: InputEvent, _shape_idx) -> void:
-	if not event is InputEventMouseButton: return
-	event = event as InputEventMouseButton
+func _input(event: InputEvent) -> void:
+	if not is_dragging or not event is InputEventMouseButton: return
 
-	is_dragging = event.pressed
-	get_viewport().set_input_as_handled()
+	# Desactiva el arrastre cuando se suelta el mouse, incluso si es fuera del objeto
+	var mb_event := event as InputEventMouseButton
+	if not mb_event.pressed: is_dragging = false
+
+
+func _input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> void:
+	if not event is InputEventMouseButton: return
+	var mb_event := event as InputEventMouseButton
+
+	# Activa el arrastre si se clica en el objeto
+	if mb_event.pressed:
+		is_dragging = true
+		get_viewport().set_input_as_handled()
 
 
 func _notification(what: int) -> void:
