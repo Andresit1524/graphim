@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Graphim"
+run/main_scene="uid://i7fektpxxnq7"
 config/tags=PackedStringArray("unal")
 config/features=PackedStringArray("4.6")
 config/icon="uid://p50qwu20juc8"
@@ -18,6 +19,18 @@ config/icon="uid://p50qwu20juc8"
 [dotnet]
 
 project/assembly_name="Graphim"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/vector_display_2d/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://addons/": "teal",
+"res://assets/": "yellow",
+"res://test/": "red"
+}
 
 [physics]
 

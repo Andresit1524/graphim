@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="VectorDisplaySettings" format=3 uid="uid://533xt4lr4xd6"]
+
+[ext_resource type="Script" uid="uid://b45qlmebloada" path="res://addons/vector_display_2d/vector_display_settings.gd" id="1_s7jta"]
+
+[resource]
+script = ExtResource("1_s7jta")
+vector_scale = 0.1
+length_mode = "Clamp"
+metadata/_custom_type_script = "uid://b45qlmebloada"
