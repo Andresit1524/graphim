@@ -5,9 +5,16 @@ class_name GraphimNode extends DraggableObject
 ## Escala al rebotar el nodo
 const BUMP_SCALE := 1.1
 ## Tiempo de rebote
-const DRAG_EFFECT_TIME := 0.2
+const EFFECT_TIME := 0.2
 
 
+## Peso del nodo
+@export var weight: float = 1:
+	set(value):
+		if not is_node_ready(): await ready
+		weight = value
+		_bump()
+		_set_weight(value)
 ## Color del nodo
 @export var color: Color = Color.WHITE:
 	set(value):
@@ -18,6 +25,7 @@ const DRAG_EFFECT_TIME := 0.2
 
 
 @onready var sprite: Sprite2D = $Sprite
+@onready var label: Label = %Label
 
 
 var velocity: Vector2
@@ -48,7 +56,7 @@ func _set_color(_color: Color, tweened := false) -> void:
 		return
 
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(sprite, "modulate", _color, DRAG_EFFECT_TIME)
+	tween.tween_property(sprite, "modulate", _color, EFFECT_TIME)
 
 
 ## Resalta un objeto
@@ -60,7 +68,7 @@ func _highlight(value: bool, tweened := false) -> void:
 		return
 
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(sprite, "modulate", _color, DRAG_EFFECT_TIME)
+	tween.tween_property(sprite, "modulate", _color, EFFECT_TIME)
 
 
 ## Establece el efecto visual al arrastrar el objeto
@@ -86,15 +94,26 @@ func _bump() -> void:
 ## Expande el nodo
 func _expand() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(sprite, "scale", Vector2(BUMP_SCALE, BUMP_SCALE), DRAG_EFFECT_TIME)
+	tween.tween_property(sprite, "scale", Vector2(BUMP_SCALE, BUMP_SCALE), EFFECT_TIME)
 	return tween
 
 
 ## Contrae el nodo a su tamaño original
 func _contract() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(sprite, "scale", Vector2(1, 1), DRAG_EFFECT_TIME)
+	tween.tween_property(sprite, "scale", Vector2(1, 1), EFFECT_TIME)
 	return tween
+
+
+#endregion
+
+
+#region Peso del nodo
+
+
+## Cambia el peso del nodo
+func _set_weight(value: float) -> void:
+	label.text = str(value)
 
 
 #endregion

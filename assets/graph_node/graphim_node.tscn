@@ -8,6 +8,10 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_h0j33"]
 radius = 13.25
 
+[sub_resource type="LabelSettings" id="LabelSettings_g6t7m"]
+font_size = 11
+font_color = Color(0, 0, 0, 1)
+
 [node name="GraphimNode" type="StaticBody2D" unique_id=56422329]
 input_pickable = true
 script = ExtResource("1_54dhc")
@@ -23,3 +27,21 @@ script = ExtResource("3_fgl2v")
 target_node = NodePath("..")
 settings = ExtResource("4_oydsy")
 metadata/_custom_type_script = "uid://bnhtndqyock2t"
+
+[node name="Label" type="Label" parent="." unique_id=878557251]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "0.0"
+label_settings = SubResource("LabelSettings_g6t7m")
+horizontal_alignment = 1
+vertical_alignment = 1
