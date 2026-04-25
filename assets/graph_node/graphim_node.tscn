@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://533xt4lr4xd6" path="res://test/vd_settings.tres" id="4_oydsy"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_h0j33"]
-radius = 53.0
+radius = 13.25
 
 [node name="GraphimNode" type="StaticBody2D" unique_id=56422329]
 input_pickable = true
