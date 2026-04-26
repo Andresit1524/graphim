@@ -2,6 +2,8 @@
 class_name GraphimNode extends DraggableObject
 
 
+# TODO: recomendado mover estas constantes a un autoload
+
 ## Escala al rebotar el nodo
 const BUMP_SCALE := 1.1
 ## Tiempo de rebote
