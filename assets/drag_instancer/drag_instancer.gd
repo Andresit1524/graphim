@@ -6,10 +6,12 @@ class_name DragInstancer extends PanelContainer
 
 ## Escena a crear en el instanciador
 @export var scene: PackedScene
-## Nombre de la propiedad que desactiva - deja quieto el objeto
-@export var disable_property_name: StringName = &"disable"
 ## Nodo objetivo para albergar las instancias
 @export var instances_node: Node
+## Nombre de la propiedad que desactiva - deja quieto el objeto
+@export var disable_property_name: StringName = &"disable"
+## Invierte el valor de la propiedad para desactivar. Útil si la propiedad funciona a la inversa a como se requiere
+@export var inverse_disable_value: bool = false
 
 @export_group("Ajustes de instancia")
 ## Escala para mostrar el objeto en el panel
@@ -39,7 +41,7 @@ func _ready() -> void:
 	instance.scale = Vector2(instance_size, instance_size)
 
 	# Desactiva el objeto dentro del panel
-	instance.set(disable_property_name, true)
+	instance.set(disable_property_name, true != inverse_disable_value)
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -71,7 +73,7 @@ func _start_drag() -> void:
 	if reset_instance_size: preview_node.scale = Vector2(1, 1)
 	else: preview_node.scale = Vector2(instance_size, instance_size)
 	preview_node.modulate.a = 0.5
-	preview_node.set(disable_property_name, true)
+	preview_node.set(disable_property_name, true != inverse_disable_value)
 
 	# Añadir a la raíz para evitar recortes de contenedores UI
 	get_tree().root.add_child(preview_node)
@@ -100,4 +102,4 @@ func _end_drag() -> void:
 	# Configura el objeto final
 	final_instance.global_position = final_pos
 	final_instance.scale = Vector2(1, 1)
-	final_instance.set(disable_property_name, false)
+	final_instance.set(disable_property_name, false != inverse_disable_value)
