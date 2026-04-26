@@ -22,11 +22,11 @@ position = Vector2(226, 364)
 [node name="DragInstancer" parent="." unique_id=704335588 node_paths=PackedStringArray("instances_node") instance=ExtResource("2_8a8pi")]
 offset_left = 23.0
 offset_top = 22.0
-offset_right = 223.0
-offset_bottom = 222.0
+offset_right = 144.0
+offset_bottom = 143.0
 scene = ExtResource("1_65205")
 instances_node = NodePath("../Nodes")
 disable_property_name = &"input_pickable"
 inverse_disable_value = true
-instance_size = 5.0
+instance_size = 3.0
 reset_instance_size = true
