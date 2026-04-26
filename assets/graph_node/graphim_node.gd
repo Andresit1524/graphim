@@ -23,7 +23,7 @@ const EFFECT_TIME := 0.2
 		if not is_node_ready(): await ready
 		color = value
 		_bump()
-		_set_color(value)
+		_set_color(value, true)
 
 
 @onready var sprite: Sprite2D = $Sprite

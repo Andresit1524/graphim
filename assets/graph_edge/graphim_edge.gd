@@ -8,6 +8,8 @@ class_name GraphimEdge extends Node2D
 const BUMP_SCALE := 2
 ## Tiempo de rebote
 const EFFECT_TIME := 0.2
+## Epsilon para optimizaciones
+const EPSILON := 1
 
 
 ## Primer nodo a unir
@@ -34,15 +36,26 @@ const EFFECT_TIME := 0.2
 @onready var curve: Line2D = $Curve
 
 
+var last_a_pos: Vector2
+var last_b_pos: Vector2
+
+
 func _physics_process(_delta: float) -> void:
 	if not node_a or not node_b: return
 
 	# Añade los puntos entre los nodos para conectarlos
 	var points := []
-	var pos_a := to_local(node_a.global_position)
-	var pos_b := to_local(node_b.global_position)
+	var a_pos := to_local(node_a.global_position)
+	var b_pos := to_local(node_b.global_position)
 
-	curve.points = PackedVector2Array([pos_a, pos_b])
+	# Omite el procesamiento si el punto no es suficientemente lejos
+	if ((a_pos - last_a_pos).length_squared() < EPSILON
+	and (b_pos - last_b_pos).length_squared() < EPSILON): return
+
+	last_a_pos = to_local(a_pos)
+	last_b_pos = to_local(b_pos)
+
+	curve.points = PackedVector2Array([a_pos, b_pos])
 
 
 #region Visuales
