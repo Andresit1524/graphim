@@ -4,6 +4,7 @@
 
 [node name="GraphimEdge" type="Node2D" unique_id=379864618]
 script = ExtResource("1_ewrya")
+arrowhead_size = 2.0
 
 [node name="Curve" type="Line2D" parent="." unique_id=1062482950]
 width = 5.0
