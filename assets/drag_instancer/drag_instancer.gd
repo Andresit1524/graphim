@@ -1,7 +1,7 @@
-## Clase que almacena una instancia de un objeto y permite arrastrarlo para que se cree una instancia
-## en la escena actual. Al implementar, la escena debe tener una propiedad que permita desactivar su
-## interacción con otros objetos
-class_name Instancer extends PanelContainer
+## [code]DragInstancer[/code] almacena un objeto y permite arrastrarlo para que se cree una instancia
+## en el nodo dado. Al implementar, la escena debe tener una propiedad que permita desactivar su
+## interacción con otros objetos, de forma recomendada.
+class_name DragInstancer extends PanelContainer
 
 
 ## Escena a crear en el instanciador
@@ -25,11 +25,11 @@ var preview_node: Node = null
 
 func _ready() -> void:
 	if not scene:
-		push_error("[Instancer] No tienes una escena definida para instanciar")
+		push_error("[DragInstancer] No tienes una escena definida para instanciar")
 		return
 
 	if not instances_node:
-		push_warning("[Instancer] No hay nodo asignado para las instancias. Usando la escena actual")
+		push_warning("[DragInstancer] No hay nodo asignado para las instancias. Usando la escena actual")
 		instances_node = get_tree().current_scene
 
 	# Instancia una versión del objeto para mostrar en el panel
