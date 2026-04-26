@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="Graphim"
-run/main_scene="uid://i7fektpxxnq7"
 config/tags=PackedStringArray("unal")
+run/main_scene="uid://i7fektpxxnq7"
 config/features=PackedStringArray("4.6")
 config/icon="uid://p50qwu20juc8"
 
