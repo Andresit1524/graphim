@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dmnkt781qie5t"]
 
-[ext_resource type="Script" path="res://assets/drag_instancer/drag_instancer.gd" id="1_s064f"]
+[ext_resource type="Script" uid="uid://rh4ukwesiowp" path="res://assets/drag_instancer/drag_instancer.gd" id="1_s064f"]
 [ext_resource type="PackedScene" uid="uid://dxe84k80np1vp" path="res://assets/graph_node/graphim_node.tscn" id="2_w7sey"]
 
 [node name="DragInstancer" type="PanelContainer" unique_id=704335588]

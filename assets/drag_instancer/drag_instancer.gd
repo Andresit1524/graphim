@@ -78,7 +78,7 @@ func _start_drag() -> void:
 	preview_node.global_position = get_global_mouse_position()
 
 
-## Finaliza el arrastre creando el objeto definitivo y poníendole en su sitio
+## Finaliza el arrastre creando el objeto definitivo y poniéndole en su sitio
 func _end_drag() -> void:
 	is_dragging = false
 	var final_pos = get_global_mouse_position()
@@ -87,6 +87,9 @@ func _end_drag() -> void:
 	if preview_node:
 		preview_node.queue_free()
 		preview_node = null
+
+	# Aborta el proceso si soltamos el mouse dentro del panel
+	if get_global_rect().has_point(final_pos): return
 
 	# Instancia de forma definitiva y añade al nodo indicado
 	var final_instance = scene.instantiate()
