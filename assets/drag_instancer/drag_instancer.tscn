@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dmnkt781qie5t"]
+
+[ext_resource type="Script" uid="uid://rh4ukwesiowp" path="res://assets/drag_instancer/drag_instancer.gd" id="1_s064f"]
+
+[node name="DragInstancer" type="PanelContainer" unique_id=704335588]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s064f")
