@@ -44,6 +44,9 @@ func _ready() -> void:
 	instance.set(disable_property_name, true != inverse_disable_value)
 
 
+#region Drag and drop
+
+
 func _gui_input(event: InputEvent) -> void:
 	if not scene: return
 	if not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT): return
@@ -103,3 +106,6 @@ func _end_drag() -> void:
 	final_instance.global_position = final_pos
 	final_instance.scale = Vector2(1, 1)
 	final_instance.set(disable_property_name, false != inverse_disable_value)
+
+
+#endregion
