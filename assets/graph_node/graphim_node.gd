@@ -17,8 +17,8 @@ var last_global_pos := Vector2.ZERO
 func _ready() -> void:
 	# Conecta las señales para el arrastre y la actualización de datos
 	dragging.connect(_set_drag_visuals)
-	data.new_weight.connect(_set_weight)
-	data.new_color.connect(_set_color)
+	data.weight_changed.connect(_set_weight)
+	data.color_changed.connect(_set_color)
 
 	# Fuerza a actualiizar
 	data.refresh()
