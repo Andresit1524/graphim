@@ -1,4 +1,4 @@
-class_name NodeData extends RefCounted
+class_name NodeData extends Node
 
 
 ## Señal que avisa de que el peso se ha actualizado
@@ -8,14 +8,14 @@ signal color_changed(new_color: Color)
 
 
 ## Peso del nodo
-var weight: float = 1.0:
+@export var weight: float = 1.0:
 	set(value):
 		weight = value
 		weight_changed.emit(value)
 
 ## Color del nodo
 # ! Tiene sentido que esté aca?
-var color: Color = Color.WHITE:
+@export var color: Color = Color.WHITE:
 	set(value):
 		color = value
 		color_changed.emit(value)

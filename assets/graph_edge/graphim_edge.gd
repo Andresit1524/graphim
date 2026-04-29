@@ -18,7 +18,7 @@ class_name GraphimEdge extends Node2D
 
 
 @onready var curve: Line2D = $Curve
-@onready var data := EdgeData.new()
+@onready var data: EdgeData = $Data
 
 
 var last_start_pos: Vector2
@@ -27,10 +27,7 @@ var last_end_pos: Vector2
 
 func _ready() -> void:
 	data.directed_changed.connect(queue_redraw)
-	data.color_changed.connect(func(c):
-		_bump()
-		_set_color(c, true)
-	)
+	data.color_changed.connect(_set_color)
 
 	# Refresca los datos
 	data.refresh()
@@ -90,7 +87,7 @@ func _draw() -> void:
 
 
 ## Establece el color de la arista
-func _set_color(_color: Color, tweened := false) -> void:
+func _change_color(_color: Color, tweened := false) -> void:
 	if not tweened:
 		curve.default_color = _color
 		queue_redraw()
@@ -135,6 +132,18 @@ func _contract() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
 	tween.tween_property(curve, "width", thickness, Constants.EFFECT_TIME)
 	return tween
+
+
+#endregion
+
+
+#region Setters
+
+
+## Establece el color de la arista
+func _set_color(_color: Color) -> void:
+	_bump()
+	_change_color(_color, true)
 
 
 #endregion

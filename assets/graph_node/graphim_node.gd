@@ -4,10 +4,8 @@ class_name GraphimNode extends DraggableObject
 
 @onready var sprite: Sprite2D = $Sprite
 @onready var label: Label = %Label
+@onready var data: NodeData = $Data
 
-
-## Datos del nodo
-var data := NodeData.new()
 
 # Velocidad y última posición
 var velocity: Vector2

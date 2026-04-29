@@ -1,10 +1,14 @@
 [gd_scene format=3 uid="uid://dslxtc5emgxkc"]
 
 [ext_resource type="Script" uid="uid://bllr2a3vqjlj" path="res://assets/graph_edge/graphim_edge.gd" id="1_ewrya"]
+[ext_resource type="Script" uid="uid://52rwwi550umr" path="res://assets/graph_edge/edge_data.gd" id="2_n63bc"]
 
 [node name="GraphimEdge" type="Node2D" unique_id=379864618]
 script = ExtResource("1_ewrya")
 arrowhead_size = 2.0
+
+[node name="Data" type="Node" parent="." unique_id=1389238358]
+script = ExtResource("2_n63bc")
 
 [node name="Curve" type="Line2D" parent="." unique_id=1062482950]
 width = 5.0
