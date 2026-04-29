@@ -56,7 +56,7 @@ func _highlight(value: bool, tweened := false) -> void:
 		return
 
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(sprite, "modulate", _color, Constants.EFFECT_TIME)
+	tween.tween_property(self, "modulate", _color, Constants.EFFECT_TIME)
 
 
 ## Establece el efecto visual al arrastrar el objeto
