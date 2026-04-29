@@ -2,32 +2,26 @@
 class_name GraphimNode extends DraggableObject
 
 
-## Peso del nodo
-@export var weight: float = 1:
-	set(value):
-		if not is_node_ready(): await ready
-		weight = value
-		_bump()
-		_set_weight(value)
-## Color del nodo
-@export var color: Color = Color.WHITE:
-	set(value):
-		if not is_node_ready(): await ready
-		color = value
-		_bump()
-		_set_color(value, true)
-
-
 @onready var sprite: Sprite2D = $Sprite
 @onready var label: Label = %Label
 
 
+## Datos del nodo
+var data := NodeData.new()
+
+# Velocidad y última posición
 var velocity: Vector2
 var last_global_pos := Vector2.ZERO
 
 
 func _ready() -> void:
+	# Conecta las señales para el arrastre y la actualización de datos
 	dragging.connect(_set_drag_visuals)
+	data.new_weight.connect(_set_weight)
+	data.new_color.connect(_set_color)
+
+	# Fuerza a actualiizar
+	data.refresh()
 
 
 func _physics_process(delta: float) -> void:
@@ -43,8 +37,8 @@ func _physics_process(delta: float) -> void:
 #region Visuales
 
 
-## Establece el color del nodo
-func _set_color(_color: Color, tweened := false) -> void:
+## Cambia el color del nodo con posibilidad de tween para suavizado
+func _change_color(_color: Color, tweened := false) -> void:
 	if not tweened:
 		sprite.modulate = _color
 		return
@@ -102,12 +96,18 @@ func _contract() -> Tween:
 #endregion
 
 
-#region Peso del nodo
+#region Setters
 
 
 ## Cambia el peso del nodo
 func _set_weight(value: float) -> void:
 	label.text = str(value)
+
+
+## Cambia el color del nodo
+func _set_color(new_color: Color) -> void:
+	_bump()
+	_change_color(new_color, true)
 
 
 #endregion
