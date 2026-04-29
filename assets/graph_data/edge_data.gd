@@ -5,10 +5,12 @@ class_name EdgeData extends RefCounted
 
 
 ## Emitida cuando alguno de los dos extremos cambia
+# TODO: implementar este
 signal extremes_changed(new_start: GraphimNode, new_end: GraphimNode)
 ## Emitida cuando cambia el caracter de arista dirigida
-signal directed_changed(new_directed: bool)
+signal directed_changed()
 ## Emitida cuando el peso cambia
+# TODO: implementar este
 signal weight_changed(new_weight: float)
 
 ## Emitida cuando el color cambia
@@ -19,18 +21,18 @@ signal color_changed(new_color: Color)
 var start_node: GraphimNode:
 	set(value):
 		start_node = value
-		extremes_changed.emit(value)
+		extremes_changed.emit(value, end_node)
 ## Nodo del final de la arista
 var end_node: GraphimNode:
 	set(value):
 		end_node = value
-		extremes_changed.emit(value)
+		extremes_changed.emit(start_node, value)
 
 ## Define si la arista es dirigida o no
 var directed: bool = false:
 	set(value):
 		directed = value
-		directed_changed.emit(value)
+		directed_changed.emit()
 ## Define el peso de la arista
 var weight: float = 1.0:
 	set(value):
@@ -54,7 +56,7 @@ var color: Color = Color.WHITE:
 ## Refresca los datos
 func refresh() -> void:
 	extremes_changed.emit(start_node, end_node)
-	directed_changed.emit(directed)
+	directed_changed.emit()
 	color_changed.emit(color)
 
 

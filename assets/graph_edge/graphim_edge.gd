@@ -27,9 +27,9 @@ var last_end_pos: Vector2
 
 func _ready() -> void:
 	data.directed_changed.connect(queue_redraw)
-	data.color_changed.connect(func():
+	data.color_changed.connect(func(c):
 		_bump()
-		_set_color(data.color, true)
+		_set_color(c, true)
 	)
 
 	# Refresca los datos
