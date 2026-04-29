@@ -2,16 +2,6 @@
 class_name GraphimEdge extends Node2D
 
 
-# TODO: recomendado mover estas constantes a un autoload
-
-## Escala al rebotar el nodo
-const BUMP_SCALE := 2
-## Tiempo de rebote
-const EFFECT_TIME := 0.2
-## Epsilon para optimizaciones
-const EPSILON := 1
-
-
 ## Primer nodo a unir
 @export var node_a: GraphimNode
 ## Segundo nodo a unir
@@ -60,8 +50,8 @@ func _physics_process(_delta: float) -> void:
 	var b_pos := to_local(node_b.global_position)
 
 	# Omite el procesamiento si el punto no es suficientemente lejos
-	if ((a_pos - last_a_pos).length_squared() < EPSILON
-	and (b_pos - last_b_pos).length_squared() < EPSILON): return
+	if ((a_pos - last_a_pos).length_squared() < Constants.EPSILON
+	and (b_pos - last_b_pos).length_squared() < Constants.EPSILON): return
 
 	last_a_pos = a_pos
 	last_b_pos = b_pos
@@ -111,7 +101,7 @@ func _set_color(_color: Color, tweened := false) -> void:
 		return
 
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(curve, "default_color", _color, EFFECT_TIME)
+	tween.tween_property(curve, "default_color", _color, Constants.EFFECT_TIME)
 	tween.finished.connect(queue_redraw, CONNECT_ONE_SHOT)
 
 
@@ -122,7 +112,7 @@ func _set_thickness(value: float, tweened := false) -> void:
 		return
 
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(curve, "width", value, EFFECT_TIME)
+	tween.tween_property(curve, "width", value, Constants.EFFECT_TIME)
 
 
 #endregion
@@ -140,14 +130,14 @@ func _bump() -> void:
 ## Expande el nodo
 func _expand() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(curve, "width", thickness * BUMP_SCALE, EFFECT_TIME)
+	tween.tween_property(curve, "width", thickness * Constants.BUMP_SCALE, Constants.EFFECT_TIME)
 	return tween
 
 
 ## Contrae el nodo a su tamaño original
 func _contract() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(curve, "width", thickness, EFFECT_TIME)
+	tween.tween_property(curve, "width", thickness, Constants.EFFECT_TIME)
 	return tween
 
 
