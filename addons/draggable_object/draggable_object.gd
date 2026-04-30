@@ -10,9 +10,8 @@ class_name DraggableObject extends PhysicsBody2D
 signal dragging(value: bool)
 
 
-## Velocidad a la que se mueve el objeto
-const DRAG_LERP_SPEED: float = 10
-
+## Velocidad a la que se mueve el objeto tras el mouse al arrastrar
+@export var drag_follow_speed: float = 20.0
 
 ## Permite que el objeto sea arrastable con el mouse
 @export var draggable: bool = true
@@ -33,7 +32,7 @@ func handle_dragging(delta: float) -> void:
 	if global_position.distance_squared_to(get_global_mouse_position()) < 0.1: return
 
 	# Para un arrastre suave, lerp es más eficiente
-	global_position = global_position.lerp(get_global_mouse_position(), DRAG_LERP_SPEED * delta)
+	global_position = global_position.lerp(get_global_mouse_position(), drag_follow_speed * delta)
 
 
 func _input(event: InputEvent) -> void:

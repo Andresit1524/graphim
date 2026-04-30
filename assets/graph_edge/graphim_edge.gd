@@ -2,34 +2,7 @@
 class_name GraphimEdge extends Node2D
 
 
-# TODO: recomendado mover estas constantes a un autoload
-
-## Escala al rebotar el nodo
-const BUMP_SCALE := 2
-## Tiempo de rebote
-const EFFECT_TIME := 0.2
-## Epsilon para optimizaciones
-const EPSILON := 1
-
-
-## Primer nodo a unir
-@export var node_a: GraphimNode
-## Segundo nodo a unir
-@export var node_b: GraphimNode
-## Hace la arista dirigida
-@export var directed: bool = false:
-	set(value):
-		directed = value
-		queue_redraw()
-
 @export_group("Visualización")
-## Color del trazo
-@export var color: Color = Color.WHITE:
-	set(value):
-		if not is_node_ready(): await ready
-		color = value
-		_bump()
-		_set_color(value, true)
 ## Grosor del trazo
 @export var thickness: float = 5.0:
 	set(value):
@@ -45,29 +18,41 @@ const EPSILON := 1
 
 
 @onready var curve: Line2D = $Curve
+@onready var data: EdgeData = $Data
 
 
-var last_a_pos: Vector2
-var last_b_pos: Vector2
+# Variables para optimizar el redibujado (en coordenadas globales)
+var last_start_global: Vector2
+var last_end_global: Vector2
+
+
+func _ready() -> void:
+	data.directed_changed.connect(queue_redraw)
+	data.color_changed.connect(_set_color)
+
+	# Refresca los datos
+	data.refresh()
 
 
 func _physics_process(_delta: float) -> void:
-	if not node_a or not node_b: return
+	if not data.has_valid_extremes(): return
 
-	# Añade los puntos entre los nodos para conectarlos
-	var points := []
-	var a_pos := to_local(node_a.global_position)
-	var b_pos := to_local(node_b.global_position)
+	var start_global := data.start_node.global_position
+	var end_global := data.end_node.global_position
 
-	# Omite el procesamiento si el punto no es suficientemente lejos
-	if ((a_pos - last_a_pos).length_squared() < EPSILON
-	and (b_pos - last_b_pos).length_squared() < EPSILON): return
+	# Omite el procesamiento si no hubo movimiento significativo
+	if not data.has_significant_movement(last_start_global, last_end_global): return
 
-	last_a_pos = a_pos
-	last_b_pos = b_pos
+	last_start_global = start_global
+	last_end_global = end_global
 
-	curve.points = PackedVector2Array([a_pos, b_pos])
-	if directed: queue_redraw()
+	# Actualiza los puntos del Line2D y las variables de clase para el dibujo (en local)
+	curve.points = PackedVector2Array([
+		to_local(last_start_global), to_local(last_end_global)
+	])
+
+	# Exije el dibujado de las cabezas de flecha si es el caso
+	if data.directed: queue_redraw()
 
 
 #region Visuales
@@ -75,22 +60,27 @@ func _physics_process(_delta: float) -> void:
 
 ## Dibuja una cabeza de flecha para la arista dirigida
 func _draw() -> void:
+	# Extremos de la recta
+	# ? Importante: Usa las posiciones LOCALES para dibujar
+	var start_pos := curve.points[0]
+	var end_pos := curve.points[1]
+
 	# No dibujar si no es dirigida o si no hay puntos válidos
-	if not directed or last_a_pos == last_b_pos: return
+	if not data.directed or start_pos.is_equal_approx(end_pos): return
 
 	# Dirección unitaria de la arista (vector director)
-	var director := (last_b_pos - last_a_pos).normalized()
+	var director := (end_pos - start_pos).normalized()
 
 	# Longitud de la flecha (lado del triángulo)
 	var actual_size := thickness * arrowhead_size * 2
 
 	# Mueve el triángulo hacia atras dependiendo del radio del nodo objetivo
-	var node_size := node_b.sprite.get_rect().size.x * node_b.scale.x
-	var radius := director * node_size / 2
+	var node_radius := data.get_node_radius()
+	var radius := director * node_radius
 
 	# Omite el dibujo si el punto no está suficientemente lejos
-	if (last_b_pos - last_a_pos).length() < actual_size: return
-	var actual_position := last_b_pos - radius
+	if (end_pos - start_pos).length() < actual_size: return
+	var actual_position := end_pos - radius
 
 	draw_polygon(
 		# Rota 30 grados en ambas direcciones para armar el triángulo
@@ -104,14 +94,14 @@ func _draw() -> void:
 
 
 ## Establece el color de la arista
-func _set_color(_color: Color, tweened := false) -> void:
+func _change_color(_color: Color, tweened := false) -> void:
 	if not tweened:
 		curve.default_color = _color
 		queue_redraw()
 		return
 
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(curve, "default_color", _color, EFFECT_TIME)
+	tween.tween_property(curve, "default_color", _color, Constants.EFFECT_TIME)
 	tween.finished.connect(queue_redraw, CONNECT_ONE_SHOT)
 
 
@@ -122,7 +112,7 @@ func _set_thickness(value: float, tweened := false) -> void:
 		return
 
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(curve, "width", value, EFFECT_TIME)
+	tween.tween_property(curve, "width", value, Constants.EFFECT_TIME)
 
 
 #endregion
@@ -140,15 +130,27 @@ func _bump() -> void:
 ## Expande el nodo
 func _expand() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(curve, "width", thickness * BUMP_SCALE, EFFECT_TIME)
+	tween.tween_property(curve, "width", thickness * Constants.BUMP_SCALE, Constants.EFFECT_TIME)
 	return tween
 
 
 ## Contrae el nodo a su tamaño original
 func _contract() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(curve, "width", thickness, EFFECT_TIME)
+	tween.tween_property(curve, "width", thickness, Constants.EFFECT_TIME)
 	return tween
+
+
+#endregion
+
+
+#region Setters
+
+
+## Establece el color de la arista
+func _set_color(_color: Color) -> void:
+	_bump()
+	_change_color(_color, true)
 
 
 #endregion

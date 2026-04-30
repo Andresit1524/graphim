@@ -8,28 +8,33 @@
 
 [node name="Edges" type="Node2D" parent="." unique_id=2056861580]
 
-[node name="GraphimEdge" parent="Edges" unique_id=379864618 node_paths=PackedStringArray("node_a", "node_b") instance=ExtResource("2_65205")]
-node_a = NodePath("../../Nodes/GraphimNode")
-node_b = NodePath("../../Nodes/GraphimNode2")
-directed = true
-color = Color(1, 0.6862745, 0, 1)
+[node name="GraphimEdge" parent="Edges" unique_id=379864618 instance=ExtResource("2_65205")]
 
-[node name="GraphimEdge2" parent="Edges" unique_id=1955806043 node_paths=PackedStringArray("node_a", "node_b") instance=ExtResource("2_65205")]
-node_a = NodePath("../../Nodes/GraphimNode2")
-node_b = NodePath("../../Nodes/GraphimNode3")
-directed = true
-color = Color(1, 0.7137255, 0, 1)
+[node name="Data" parent="Edges/GraphimEdge" index="0" unique_id=1389238358 node_paths=PackedStringArray("start_node", "end_node")]
+start_node = NodePath("../../../Nodes/GraphimNode")
+end_node = NodePath("../../../Nodes/GraphimNode2")
 
-[node name="GraphimEdge3" parent="Edges" unique_id=1685588467 node_paths=PackedStringArray("node_a", "node_b") instance=ExtResource("2_65205")]
-node_a = NodePath("../../Nodes/GraphimNode3")
-node_b = NodePath("../../Nodes/GraphimNode4")
-directed = true
-color = Color(1, 0.6862745, 0, 1)
+[node name="GraphimEdge2" parent="Edges" unique_id=1955806043 instance=ExtResource("2_65205")]
 
-[node name="GraphimEdge4" parent="Edges" unique_id=1192754699 node_paths=PackedStringArray("node_a", "node_b") instance=ExtResource("2_65205")]
-node_a = NodePath("../../Nodes/GraphimNode")
-node_b = NodePath("../../Nodes/GraphimNode4")
+[node name="Data" parent="Edges/GraphimEdge2" index="0" unique_id=1389238358 node_paths=PackedStringArray("start_node", "end_node")]
+start_node = NodePath("../../../Nodes/GraphimNode3")
+end_node = NodePath("../../../Nodes/GraphimNode4")
 directed = true
+color = Color(0.7433311, 0.5119733, 0.28856057, 1)
+
+[node name="GraphimEdge3" parent="Edges" unique_id=1685588467 instance=ExtResource("2_65205")]
+
+[node name="Data" parent="Edges/GraphimEdge3" index="0" unique_id=1389238358 node_paths=PackedStringArray("start_node", "end_node")]
+start_node = NodePath("../../../Nodes/GraphimNode2")
+end_node = NodePath("../../../Nodes/GraphimNode4")
+
+[node name="GraphimEdge4" parent="Edges" unique_id=1192754699 instance=ExtResource("2_65205")]
+
+[node name="Data" parent="Edges/GraphimEdge4" index="0" unique_id=1389238358 node_paths=PackedStringArray("start_node", "end_node")]
+start_node = NodePath("../../../Nodes/GraphimNode4")
+end_node = NodePath("../../../Nodes/GraphimNode")
+directed = true
+color = Color(0.98008555, 0, 0, 1)
 
 [node name="Nodes" type="Node2D" parent="." unique_id=1159337228]
 
@@ -56,3 +61,8 @@ disable_property_name = &"input_pickable"
 inverse_disable_value = true
 instance_size = 3.0
 reset_instance_size = true
+
+[editable path="Edges/GraphimEdge"]
+[editable path="Edges/GraphimEdge2"]
+[editable path="Edges/GraphimEdge3"]
+[editable path="Edges/GraphimEdge4"]
