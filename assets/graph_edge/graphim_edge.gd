@@ -21,8 +21,9 @@ class_name GraphimEdge extends Node2D
 @onready var data: EdgeData = $Data
 
 
-var last_start_pos: Vector2
-var last_end_pos: Vector2
+# Variables para optimizar el redibujado (en coordenadas globales)
+var last_start_global: Vector2
+var last_end_global: Vector2
 
 
 func _ready() -> void:
@@ -36,18 +37,19 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	if not data.has_valid_extremes(): return
 
-	# Añade los puntos entre los nodos para conectarlos
-	var points := []
-	var start_pos := to_local(data.start_node.global_position)
-	var end_pos := to_local(data.end_node.global_position)
+	var start_global := data.start_node.global_position
+	var end_global := data.end_node.global_position
 
-	# Omite el procesamiento si el punto no es suficientemente lejos
-	if not data.has_significant_movement(last_start_pos, last_end_pos): return
+	# Omite el procesamiento si no hubo movimiento significativo
+	if not data.has_significant_movement(last_start_global, last_end_global): return
 
-	last_start_pos = start_pos
-	last_end_pos = end_pos
+	last_start_global = start_global
+	last_end_global = end_global
 
-	curve.points = PackedVector2Array([start_pos, end_pos])
+	# Actualiza los puntos del Line2D y las variables de clase para el dibujo (en local)
+	curve.points = PackedVector2Array([
+		to_local(last_start_global), to_local(last_end_global)
+	])
 
 	# Exije el dibujado de las cabezas de flecha si es el caso
 	if data.directed: queue_redraw()
@@ -58,11 +60,16 @@ func _physics_process(_delta: float) -> void:
 
 ## Dibuja una cabeza de flecha para la arista dirigida
 func _draw() -> void:
+	# Extremos de la recta
+	# ? Importante: Usa las posiciones LOCALES para dibujar
+	var start_pos := curve.points[0]
+	var end_pos := curve.points[1]
+
 	# No dibujar si no es dirigida o si no hay puntos válidos
-	if not data.directed or last_start_pos == last_end_pos: return
+	if not data.directed or start_pos.is_equal_approx(end_pos): return
 
 	# Dirección unitaria de la arista (vector director)
-	var director := (last_end_pos - last_start_pos).normalized()
+	var director := (end_pos - start_pos).normalized()
 
 	# Longitud de la flecha (lado del triángulo)
 	var actual_size := thickness * arrowhead_size * 2
@@ -72,8 +79,8 @@ func _draw() -> void:
 	var radius := director * node_radius
 
 	# Omite el dibujo si el punto no está suficientemente lejos
-	if (last_end_pos - last_start_pos).length() < actual_size: return
-	var actual_position := last_end_pos - radius
+	if (end_pos - start_pos).length() < actual_size: return
+	var actual_position := end_pos - radius
 
 	draw_polygon(
 		# Rota 30 grados en ambas direcciones para armar el triángulo

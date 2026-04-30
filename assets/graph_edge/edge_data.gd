@@ -82,11 +82,11 @@ func has_valid_extremes() -> bool:
 	)
 
 
-## Determina si la arista ha cambiado de posición de forma significativa dadas las posiciones anteriores
-func has_significant_movement(last_start: Vector2, last_end: Vector2) -> bool:
+## Determina si la arista ha cambiado de posición de forma significativa dadas las posiciones anteriores (en global)
+func has_significant_movement(last_start_global: Vector2, last_end_global: Vector2) -> bool:
 	return (
-		(start_node.global_position - last_start).length_squared() > Constants.EPSILON
-		or (end_node.global_position - last_end).length_squared() > Constants.EPSILON
+		(start_node.global_position - last_start_global).length_squared() > Constants.EPSILON
+		or (end_node.global_position - last_end_global).length_squared() > Constants.EPSILON
 	)
 
 
