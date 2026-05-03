@@ -12,12 +12,12 @@ const GRAVITY_MIN_RADIUS_SQUARED := 2000
 ## Fricción del movimiento
 @export var damping: float = 0.2
 
+
 @onready var data: NodeData = $Data
 @onready var sprite: Sprite2D = $Sprite
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var label: Label = %Label
 @onready var last_global_pos := global_position
-@onready var center := get_viewport_rect().size / 2
 
 
 ## Desactiva el nodo y sus físicas. Usado para el DragInstancer
@@ -161,9 +161,9 @@ func _apply_repulsion(delta: float) -> void:
 	move_and_collide(displacement)
 
 
-## Aplica la gravedad a la inversa, empujando hacia el centro del nodo
+## Aplica la gravedad a la inversa, empujando hacia el centro del mundo 2D
 func _apply_inverse_gravity() -> Vector2:
-	var distance := center - global_position
+	var distance := -global_position
 	if distance.length_squared() < GRAVITY_MIN_RADIUS_SQUARED: return Vector2.ZERO
 
 	return distance.normalized() * center_repulsion * distance.length_squared()
