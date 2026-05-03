@@ -21,11 +21,18 @@ const GRAVITY_MIN_RADIUS_SQUARED := 2000
 
 
 ## Desactiva el nodo y sus físicas. Usado para el DragInstancer
+# TODO: hacer un metodo para el setter
 var disabled := false:
 	set(value):
 		disabled = value
 		input_pickable = not value
-		if not value: _reset_physics()
+		if not value:
+			_reset_physics()
+		else:
+			remove_from_group(&"nodes")
+
+## Fuerza de la arista por la ley de Hooke
+var hooke_force: Vector2
 
 
 func _ready() -> void:
@@ -128,11 +135,15 @@ func _apply_repulsion(delta: float) -> void:
 
 	# Calculamos la sumatoria de cada repulsión de los otros nodos
 	for node: GraphimNode in nodes:
-		if node == self or node.disabled: continue
+		if node == self: continue
 		force += _coulomb(node.global_position)
 
 	# Aplicamos la fuerza de gravedad al centro
 	force += _apply_gravity()
+	force += hooke_force
+
+	# Limpiamos la fuerza para la siguiente iteración de las aristas
+	hooke_force = Vector2.ZERO
 
 	# Aplica Verlet con fricción sobre la velocidad (el desplazamiento)
 	var inertia := (global_position - last_global_pos) * (1.0 - damping)
