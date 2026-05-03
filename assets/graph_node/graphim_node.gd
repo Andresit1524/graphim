@@ -2,8 +2,13 @@
 class_name GraphimNode extends DraggableObject
 
 
+const GRAVITY_MIN_RADIUS_SQUARED := 2000
+
+
 ## Fuerza de repulsión. Constante de Coulomb modificada
-@export var repulsion_force: float = 9e7
+@export var repulsion_force: float = 2e6
+## Fuerza de gravedad al centro. Constante de gravitación universal modificada
+@export var center_gravity: float = 9e5
 ## Fricción del movimiento
 @export var damping: float = 0.1
 
@@ -12,6 +17,7 @@ class_name GraphimNode extends DraggableObject
 @onready var label: Label = %Label
 @onready var data: NodeData = $Data
 @onready var last_global_pos := global_position
+@onready var center := get_viewport_rect().size / 2
 
 
 ## Desactiva el nodo y sus físicas. Usado para el DragInstancer
@@ -36,7 +42,7 @@ func _physics_process(delta: float) -> void:
 	var current_pos := global_position
 
 	# Aplica la fuerza sobre si mísmo y actualiza la posición
-	_apply_force(delta)
+	_apply_repulsion(delta)
 	last_global_pos = current_pos
 
 	# Necesario para que funcione el arrastre con el mouse
@@ -114,14 +120,19 @@ func _reset_physics() -> void:
 
 
 ## Aplica las fuerzas sobre el objeto
-func _apply_force(delta: float) -> void:
+func _apply_repulsion(delta: float) -> void:
 	if disabled: return
 
-	# Calculamos la sumatoria de cada repulsión de los otros nodos
+	var nodes := get_tree().get_nodes_in_group(&"nodes")
 	var force := Vector2.ZERO
-	for node: GraphimNode in get_tree().get_nodes_in_group(&"nodes"):
+
+	# Calculamos la sumatoria de cada repulsión de los otros nodos
+	for node: GraphimNode in nodes:
 		if node == self or node.disabled: continue
 		force += _coulomb(node.global_position)
+
+	# Aplicamos la fuerza de gravedad al centro
+	force += _apply_gravity()
 
 	# Aplica Verlet con fricción sobre la velocidad (el desplazamiento)
 	var inertia := (global_position - last_global_pos) * (1.0 - damping)
@@ -129,6 +140,14 @@ func _apply_force(delta: float) -> void:
 
 	# Usamos el motor de Godot para mover y detenernos si hay colisión
 	move_and_collide(displacement)
+
+
+## Aplica la gravedad al centro del viewport
+func _apply_gravity() -> Vector2:
+	var distance := center - global_position
+	if distance.length_squared() < GRAVITY_MIN_RADIUS_SQUARED: return Vector2.ZERO
+
+	return distance.normalized() * center_gravity / distance.length_squared()
 
 
 ## Calcula la repulsión usando la ley de Coulomb para un punto dado (posición global)
