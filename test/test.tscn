@@ -6,6 +6,44 @@
 
 [node name="World" type="Node2D" unique_id=1487274566]
 
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=753878379]
+
+[node name="UI" type="Control" parent="CanvasLayer" unique_id=695217652]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="DragInstancer" parent="CanvasLayer/UI" unique_id=704335588 node_paths=PackedStringArray("instances_node") instance=ExtResource("2_8a8pi")]
+layout_mode = 1
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 42.0
+offset_top = 42.0
+offset_right = 163.0
+offset_bottom = 163.0
+grow_horizontal = 1
+grow_vertical = 1
+scene = ExtResource("1_65205")
+instances_node = NodePath("../../../Nodes")
+disable_property_name = &"disabled"
+instance_size = 3.0
+reset_instance_size = true
+
+[node name="Boundaries" type="StaticBody2D" parent="." unique_id=2025964593]
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Boundaries" unique_id=403646153]
+build_mode = 1
+polygon = PackedVector2Array(0, 0, 1152, 0, 1152, 648, 0, 648)
+
 [node name="Edges" type="Node2D" parent="." unique_id=2056861580]
 
 [node name="GraphimEdge" parent="Edges" unique_id=379864618 instance=ExtResource("2_65205")]
@@ -49,18 +87,6 @@ position = Vector2(707, 394)
 
 [node name="GraphimNode4" parent="Nodes" unique_id=744704783 instance=ExtResource("1_65205")]
 position = Vector2(383, 398)
-
-[node name="DragInstancer" parent="." unique_id=704335588 node_paths=PackedStringArray("instances_node") instance=ExtResource("2_8a8pi")]
-offset_left = 23.0
-offset_top = 22.0
-offset_right = 144.0
-offset_bottom = 143.0
-scene = ExtResource("1_65205")
-instances_node = NodePath("../Nodes")
-disable_property_name = &"input_pickable"
-inverse_disable_value = true
-instance_size = 3.0
-reset_instance_size = true
 
 [editable path="Edges/GraphimEdge"]
 [editable path="Edges/GraphimEdge2"]
