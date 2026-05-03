@@ -32,6 +32,10 @@ folder_colors={
 "res://test/": "red"
 }
 
+[global_group]
+
+nodes=""
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

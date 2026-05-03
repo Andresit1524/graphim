@@ -15,6 +15,10 @@ class_name GraphimEdge extends Node2D
 		if not is_node_ready(): await ready
 		arrowhead_size = value
 		if value: queue_redraw()
+## Longitud de la arista
+@export var length: float = 200.0
+## Fuerza de Hooke para los nodos que conecta
+@export var hooke_force: float = 50
 
 
 @onready var curve: Line2D = $Curve
@@ -33,6 +37,13 @@ func _ready() -> void:
 	# Refresca los datos
 	data.refresh()
 
+	# ! Debug: conectarse al azar a otro nodo
+	var available_nodes := get_tree().get_nodes_in_group(&"nodes")
+	data.end_node = available_nodes.pick_random()
+	available_nodes.erase(data.end_node)
+	data.start_node = get_tree().get_nodes_in_group(&"nodes").pick_random()
+	data.directed = [true, false].pick_random()
+
 
 func _physics_process(_delta: float) -> void:
 	if not data.has_valid_extremes(): return
@@ -42,6 +53,9 @@ func _physics_process(_delta: float) -> void:
 
 	# Omite el procesamiento si no hubo movimiento significativo
 	if not data.has_significant_movement(last_start_global, last_end_global): return
+
+	# Aplica las fuerzas físicas de atracción
+	_apply_hooke(_delta)
 
 	last_start_global = start_global
 	last_end_global = end_global
@@ -60,6 +74,8 @@ func _physics_process(_delta: float) -> void:
 
 ## Dibuja una cabeza de flecha para la arista dirigida
 func _draw() -> void:
+	if curve.points.is_empty(): return
+
 	# Extremos de la recta
 	# ? Importante: Usa las posiciones LOCALES para dibujar
 	var start_pos := curve.points[0]
@@ -139,6 +155,21 @@ func _contract() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
 	tween.tween_property(curve, "width", thickness, Constants.EFFECT_TIME)
 	return tween
+
+
+#endregion
+
+
+#region Físicas
+
+
+## Atrae a los nodos que conecta usando la ley de hooke
+func _apply_hooke(_delta: float) -> void:
+	var distance := (data.end_node.global_position - data.start_node.global_position)
+	var force := (distance.normalized() * length - distance) * hooke_force
+
+	data.end_node.hooke_force += force / 2
+	data.start_node.hooke_force -= force / 2
 
 
 #endregion
