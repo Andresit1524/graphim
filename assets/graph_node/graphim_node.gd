@@ -5,12 +5,12 @@ class_name GraphimNode extends DraggableObject
 const GRAVITY_MIN_RADIUS_SQUARED := 2000
 
 
-## Fuerza de repulsión. Constante de Coulomb modificada
-@export var repulsion_force: float = 2e6
-## Fuerza de gravedad al centro. Constante de gravitación universal modificada
-@export var center_gravity: float = 9e5
+## Fuerza de repulsión
+@export var repulsion_force: float = 4e6
+## Fuerza de repulsión al centro
+@export var center_repulsion: float = 0.05
 ## Fricción del movimiento
-@export var damping: float = 0.1
+@export var damping: float = 0.2
 
 
 @onready var sprite: Sprite2D = $Sprite
@@ -139,7 +139,7 @@ func _apply_repulsion(delta: float) -> void:
 		force += _coulomb(node.global_position)
 
 	# Aplicamos la fuerza de gravedad al centro
-	force += _apply_gravity()
+	force += _apply_inverse_gravity()
 	force += hooke_force
 
 	# Limpiamos la fuerza para la siguiente iteración de las aristas
@@ -153,12 +153,12 @@ func _apply_repulsion(delta: float) -> void:
 	move_and_collide(displacement)
 
 
-## Aplica la gravedad al centro del viewport
-func _apply_gravity() -> Vector2:
+## Aplica la gravedad a la inversa, empujando hacia el centro del nodo
+func _apply_inverse_gravity() -> Vector2:
 	var distance := center - global_position
 	if distance.length_squared() < GRAVITY_MIN_RADIUS_SQUARED: return Vector2.ZERO
 
-	return distance.normalized() * center_gravity / distance.length_squared()
+	return distance.normalized() * center_repulsion * distance.length_squared()
 
 
 ## Calcula la repulsión usando la ley de Coulomb para un punto dado (posición global)
