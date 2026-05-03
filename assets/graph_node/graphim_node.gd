@@ -12,24 +12,20 @@ const GRAVITY_MIN_RADIUS_SQUARED := 2000
 ## Fricción del movimiento
 @export var damping: float = 0.2
 
-
-@onready var sprite: Sprite2D = $Sprite
-@onready var label: Label = %Label
 @onready var data: NodeData = $Data
+@onready var sprite: Sprite2D = $Sprite
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var label: Label = %Label
 @onready var last_global_pos := global_position
 @onready var center := get_viewport_rect().size / 2
 
 
 ## Desactiva el nodo y sus físicas. Usado para el DragInstancer
-# TODO: hacer un metodo para el setter
 var disabled := false:
 	set(value):
+		if not is_node_ready(): await ready
 		disabled = value
-		input_pickable = not value
-		if not value:
-			_reset_physics()
-		else:
-			remove_from_group(&"nodes")
+		_disable(value)
 
 ## Fuerza de la arista por la ley de Hooke
 var hooke_force: Vector2
@@ -54,6 +50,18 @@ func _physics_process(delta: float) -> void:
 
 	# Necesario para que funcione el arrastre con el mouse
 	handle_dragging(delta)
+
+
+## Activa o desactiva el nodo
+func _disable(value: bool) -> void:
+	input_pickable = not value
+	collision_shape.disabled = value
+
+	if value:
+		remove_from_group(&"nodes")
+	else:
+		add_to_group(&"nodes")
+		_reset_physics()
 
 
 #region Visuales
