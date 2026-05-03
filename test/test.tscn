@@ -38,14 +38,6 @@ instance_size = 3.0
 reset_instance_size = true
 metadata/_edit_use_anchors_ = true
 
-[node name="Boundaries" type="StaticBody2D" parent="." unique_id=2025964593]
-metadata/_edit_lock_ = true
-metadata/_edit_group_ = true
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Boundaries" unique_id=403646153]
-build_mode = 1
-polygon = PackedVector2Array(0, 0, 1152, 0, 1152, 648, 0, 648)
-
 [node name="Edges" type="Node2D" parent="." unique_id=2056861580]
 
 [node name="GraphimEdge" parent="Edges" unique_id=379864618 instance=ExtResource("2_65205")]
