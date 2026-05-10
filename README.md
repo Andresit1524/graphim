@@ -6,5 +6,4 @@ Graphim es un editor visual de grafos y algoritmos. Desarrollado como proyecto f
 > ## Integrantes del proyecto
 >
 > - Hayran Andrés López
-> - Joan Requena Burgos
 > - Helberth Rodriguez
