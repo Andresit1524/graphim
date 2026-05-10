@@ -37,8 +37,14 @@ func _ready() -> void:
 	# Instancia una versión del objeto para mostrar en el panel
 	var instance: Node = scene.instantiate()
 	add_child(instance)
-	instance.position = size / 2
-	instance.scale = Vector2(instance_size, instance_size)
+
+	# Posiciona la instancia en el centro automáticamente cuando se redimensiona el panel
+	if instance is Node2D:
+		instance.position = size / 2
+		instance.scale = Vector2(1, 1) * instance_size
+
+		# Actualización automática de la posición
+		resized.connect(func(): instance.position = size / 2)
 
 	# Desactiva el objeto dentro del panel
 	instance.set(disable_property_name, true != inverse_disable_value)
