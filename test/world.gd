@@ -6,10 +6,13 @@ class_name World extends Node2D
 ## Texto de lista de nodos
 @onready var list: RichTextLabel = %Text
 
-## Lista de aristas
-@onready var edges: Node2D = %Edges
 ## Lista de nodos del grafo
 @onready var nodes: Node2D = %Nodes
+## Lista de aristas
+@onready var edges: Node2D = %Edges
+
+## Datoa actuales del grafo
+@onready var current_graph_data := GraphData.new()
 
 
 ## Nombres de los nodos
@@ -29,12 +32,12 @@ func _ready() -> void:
 	# TODO: Resto de señales de los botones
 
 	# Conecta la lista de nodos y de aristas
-	edges.child_order_changed.connect(_update_edges)
 	nodes.child_order_changed.connect(_update_nodes)
+	edges.child_order_changed.connect(_update_edges)
 
 	# Actualiza a la fuerza
-	_update_edges()
 	_update_nodes()
+	_update_edges()
 
 
 #region Manejo del grafo
@@ -42,6 +45,7 @@ func _ready() -> void:
 
 ## Elimina el grafo actual
 func _delete_graph() -> void:
+	# Elimina. No es necesario actualizar porque cada eliminación lo hace
 	for child in edges.get_children():
 		child.queue_free()
 
@@ -52,17 +56,23 @@ func _delete_graph() -> void:
 ## Actualiza la lista de nodos
 func _update_nodes() -> void:
 	print("[World] Nodos actualizados")
-	nodes_names = _nodes_to_string(nodes.get_children())
 
-	# TODO: implementación en el grafo abstracto
+	# Actualiza los datos actuales del grafo, en el texto y en el recurso
+	var children := nodes.get_children()
+
+	nodes_names = _nodes_to_string(children)
+	current_graph_data.nodes.assign(children)
 
 
 ## Actualiza la lista de aristas
 func _update_edges() -> void:
 	print("[World] Aristas actualizadas")
-	edges_names = _nodes_to_string(edges.get_children())
 
-	# TODO: implementación en el grafo abstracto
+	# Actualiza los datos actuales del grafo, en el texto y en el recurso
+	var children := edges.get_children()
+
+	edges_names = _nodes_to_string(children)
+	current_graph_data.edges.assign(children)
 
 
 ## Auxiliar: convierte la lista de nodos en una lista
@@ -81,7 +91,7 @@ func _nodes_to_string(nodes_list: Array[Node]) -> String:
 
 ## Actualiza la lista de textos
 func _update_list() -> void:
-	list.text = "[center][b]Nodes[/b][/center]" + nodes_names + "\n\n[center][b]Aristas[/b][/center]" + edges_names
+	list.text = "[center][b]Nodos[/b][/center]" + nodes_names + "\n\n[center][b]Aristas[/b][/center]" + edges_names
 
 
 #endregion
