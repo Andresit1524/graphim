@@ -76,6 +76,7 @@ layout_mode = 2
 text = "Cargar"
 
 [node name="Edges" type="Node2D" parent="." unique_id=2056861580]
+unique_name_in_owner = true
 
 [node name="GraphimEdge" parent="Edges" unique_id=379864618 instance=ExtResource("5_f47bs")]
 position = Vector2(-309, -32)
@@ -186,6 +187,7 @@ position = Vector2(-309, -32)
 position = Vector2(-309, -32)
 
 [node name="Nodes" type="Node2D" parent="." unique_id=1159337228]
+unique_name_in_owner = true
 
 [node name="GraphimNode37" parent="Nodes" unique_id=2017895944 instance=ExtResource("3_hqvew")]
 position = Vector2(-170, -184)
