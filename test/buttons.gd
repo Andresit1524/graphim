@@ -8,6 +8,7 @@ signal load_graph
 
 
 @onready var delete_button: Button = %DeleteButton
+@onready var save_button: Button = %SaveButton
 
 
 ## Bandera que determina si el botón de borrar está presionado
@@ -17,12 +18,13 @@ var has_delete_button_pressed := false:
 		delete_button.text = "Borrar todo" if not value else "¿Seguro?"
 
 
-#region Botones y entrada
+#region Botones
 
 
 ## Guarda el grafo en el archivo actual
 func _on_save_button_pressed() -> void:
 	save_graph_on_current.emit()
+	mark_as_not_saved(false)
 	has_delete_button_pressed = false
 
 
@@ -30,6 +32,7 @@ func _on_save_button_pressed() -> void:
 func _on_save_as_button_pressed() -> void:
 	push_warning("[Buttons] Función no implementada: Guardar como")
 	save_graph_as.emit()
+	mark_as_not_saved(false)
 	has_delete_button_pressed = false
 
 
@@ -48,6 +51,17 @@ func _on_load_button_pressed() -> void:
 	push_warning("[Buttons] Función no implementada: Cargar")
 	load_graph.emit()
 	has_delete_button_pressed = false
+
+
+#endregion
+
+
+#region Interfaz
+
+
+## Marca el botón de guardar como cambios sin guardar
+func mark_as_not_saved(value: bool) -> void:
+	save_button.text = "%s Guardar" % ["(*) " if value else ""]
 
 
 #endregion

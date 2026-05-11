@@ -80,14 +80,13 @@ text = "Cargar"
 
 [node name="NodesList" type="ScrollContainer" parent="CanvasLayer/UI" unique_id=126763049]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
+anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 50.0
-offset_top = -324.0
+offset_top = 324.0
 offset_right = 266.0
 offset_bottom = -48.0
-grow_vertical = 0
+grow_vertical = 2
 
 [node name="Text" type="RichTextLabel" parent="CanvasLayer/UI/NodesList" unique_id=1085653325]
 unique_name_in_owner = true

@@ -37,6 +37,9 @@ func _ready() -> void:
 	nodes.child_order_changed.connect(_update_nodes)
 	edges.child_order_changed.connect(_update_edges)
 
+	nodes.child_order_changed.connect(buttons.mark_as_not_saved.bind(true))
+	edges.child_order_changed.connect(buttons.mark_as_not_saved.bind(true))
+
 	# Actualiza a la fuerza
 	_update_nodes()
 	_update_edges()
@@ -88,17 +91,18 @@ func _update_list() -> void:
 	list.text = "[center][b]Nodos[/b][/center]" + nodes_names + "\n\n[center][b]Aristas[/b][/center]" + edges_names
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	# Resetea el botón de borrar si se clica por fuera
-	if event is InputEventMouseButton and event.is_pressed():
-		buttons.has_delete_button_pressed = false
-
-
 ## Auxiliar: convierte la lista de nodos en una lista
 func _nodes_to_string(nodes_list: Array[Node]) -> String:
 	return nodes_list.reduce(func(current_text: String, node: Node):
 		return (current_text + "\n- %s" % node.name),
 		""
 	)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	# Resetea el botón de borrar si se clica por fuera
+	if event is InputEventMouseButton and event.is_pressed():
+		buttons.has_delete_button_pressed = false
+
 
 #endregion
