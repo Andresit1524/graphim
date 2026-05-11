@@ -29,6 +29,8 @@ var edges_names: String:
 
 func _ready() -> void:
 	buttons.delete_graph.connect(_delete_graph)
+	buttons.save_graph_on_current.connect(_save_graph_data)
+
 	# TODO: Resto de señales de los botones
 
 	# Conecta la lista de nodos y de aristas
@@ -57,22 +59,22 @@ func _delete_graph() -> void:
 func _update_nodes() -> void:
 	print("[World] Nodos actualizados")
 
-	# Actualiza los datos actuales del grafo, en el texto y en el recurso
-	var children := nodes.get_children()
-
-	nodes_names = _nodes_to_string(children)
-	current_graph_data.nodes.assign(children)
+	nodes_names = _nodes_to_string(nodes.get_children())
 
 
 ## Actualiza la lista de aristas
 func _update_edges() -> void:
 	print("[World] Aristas actualizadas")
 
-	# Actualiza los datos actuales del grafo, en el texto y en el recurso
-	var children := edges.get_children()
+	edges_names = _nodes_to_string(edges.get_children())
 
-	edges_names = _nodes_to_string(children)
-	current_graph_data.edges.assign(children)
+
+## Actualiza el recurso de grafo actual
+func _save_graph_data() -> void:
+	print("[World] Datos actualizados")
+
+	current_graph_data.nodes.assign(nodes.get_children())
+	current_graph_data.edges.assign(edges.get_children())
 
 
 ## Auxiliar: convierte la lista de nodos en una lista
@@ -86,18 +88,12 @@ func _nodes_to_string(nodes_list: Array[Node]) -> String:
 #endregion
 
 
-#region Interfaz
+#region Interfaz y entrada
 
 
 ## Actualiza la lista de textos
 func _update_list() -> void:
 	list.text = "[center][b]Nodos[/b][/center]" + nodes_names + "\n\n[center][b]Aristas[/b][/center]" + edges_names
-
-
-#endregion
-
-
-#region Entrada
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -22,9 +22,7 @@ var has_delete_button_pressed := false:
 
 ## Guarda el grafo en el archivo actual
 func _on_save_button_pressed() -> void:
-	push_warning("[Buttons] Función no implementada: Guardar")
 	save_graph_on_current.emit()
-
 	has_delete_button_pressed = false
 
 
