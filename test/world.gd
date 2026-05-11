@@ -42,7 +42,15 @@ func _ready() -> void:
 	_update_edges()
 
 
-#region Manejo del grafo
+#region Manejo del GraphData
+
+
+## Actualiza el recurso de grafo actual
+func _save_graph_data() -> void:
+	print("[World] Datos actualizados")
+
+	current_graph_data.nodes.assign(nodes.get_children())
+	current_graph_data.edges.assign(edges.get_children())
 
 
 ## Elimina el grafo actual
@@ -55,40 +63,24 @@ func _delete_graph() -> void:
 		child.queue_free()
 
 
-## Actualiza la lista de nodos
+#endregion
+
+
+#region Interfaz y entrada
+
+
+## Actualiza el texto de la lista de nodos
 func _update_nodes() -> void:
 	print("[World] Nodos actualizados")
 
 	nodes_names = _nodes_to_string(nodes.get_children())
 
 
-## Actualiza la lista de aristas
+## Actualiza el texto de la lista de aristas
 func _update_edges() -> void:
 	print("[World] Aristas actualizadas")
 
 	edges_names = _nodes_to_string(edges.get_children())
-
-
-## Actualiza el recurso de grafo actual
-func _save_graph_data() -> void:
-	print("[World] Datos actualizados")
-
-	current_graph_data.nodes.assign(nodes.get_children())
-	current_graph_data.edges.assign(edges.get_children())
-
-
-## Auxiliar: convierte la lista de nodos en una lista
-func _nodes_to_string(nodes_list: Array[Node]) -> String:
-	return nodes_list.reduce(func(current_text: String, node: Node):
-		return (current_text + "\n- %s" % node.name),
-		""
-	)
-
-
-#endregion
-
-
-#region Interfaz y entrada
 
 
 ## Actualiza la lista de textos
@@ -101,5 +93,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.is_pressed():
 		buttons.has_delete_button_pressed = false
 
+
+## Auxiliar: convierte la lista de nodos en una lista
+func _nodes_to_string(nodes_list: Array[Node]) -> String:
+	return nodes_list.reduce(func(current_text: String, node: Node):
+		return (current_text + "\n- %s" % node.name),
+		""
+	)
 
 #endregion

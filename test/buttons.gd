@@ -30,7 +30,6 @@ func _on_save_button_pressed() -> void:
 func _on_save_as_button_pressed() -> void:
 	push_warning("[Buttons] Función no implementada: Guardar como")
 	save_graph_as.emit()
-
 	has_delete_button_pressed = false
 
 
@@ -48,7 +47,6 @@ func _on_delete_button_pressed() -> void:
 func _on_load_button_pressed() -> void:
 	push_warning("[Buttons] Función no implementada: Cargar")
 	load_graph.emit()
-
 	has_delete_button_pressed = false
 
 
