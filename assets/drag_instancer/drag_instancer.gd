@@ -37,8 +37,14 @@ func _ready() -> void:
 	# Instancia una versión del objeto para mostrar en el panel
 	var instance: Node = scene.instantiate()
 	add_child(instance)
-	instance.position = size / 2
-	instance.scale = Vector2(instance_size, instance_size)
+
+	# Posiciona la instancia en el centro automáticamente cuando se redimensiona el panel
+	if instance is Node2D:
+		instance.position = size / 2
+		instance.scale = Vector2(1, 1) * instance_size
+
+		# Actualización automática de la posición
+		resized.connect(func(): instance.position = size / 2)
 
 	# Desactiva el objeto dentro del panel
 	instance.set(disable_property_name, true != inverse_disable_value)
@@ -61,7 +67,7 @@ func _input(event: InputEvent) -> void:
 	if not preview_node or not preview_node is Node2D: return
 
 	# Mueve el objeto mientras lo sigamos arrastrando
-	preview_node.global_position = get_global_mouse_position()
+	preview_node.global_position = preview_node.get_global_mouse_position()
 
 
 ## Inicia al arrastre creando una instancia del objeto para mostrar temporalmente
@@ -80,13 +86,13 @@ func _start_drag() -> void:
 
 	# Añadir a la raíz para evitar recortes de contenedores UI
 	get_tree().root.add_child(preview_node)
-	preview_node.global_position = get_global_mouse_position()
+	preview_node.global_position = preview_node.get_global_mouse_position()
 
 
 ## Finaliza el arrastre creando el objeto definitivo y poniéndole en su sitio
 func _end_drag() -> void:
 	is_dragging = false
-	var final_pos = get_global_mouse_position()
+	var mouse_pos = get_global_mouse_position()
 
 	# Elimina la instancia temporal
 	if preview_node:
@@ -94,7 +100,7 @@ func _end_drag() -> void:
 		preview_node = null
 
 	# Aborta el proceso si soltamos el mouse dentro del panel
-	if get_global_rect().has_point(final_pos): return
+	if get_global_rect().has_point(mouse_pos): return
 
 	# Instancia de forma definitiva y añade al nodo indicado
 	var final_instance = scene.instantiate()
@@ -103,7 +109,7 @@ func _end_drag() -> void:
 	instances_node.add_child(final_instance)
 
 	# Configura el objeto final
-	final_instance.global_position = final_pos
+	final_instance.global_position = final_instance.get_global_mouse_position()
 	final_instance.scale = Vector2(1, 1)
 	final_instance.set(disable_property_name, false != inverse_disable_value)
 
