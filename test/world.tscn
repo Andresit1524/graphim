@@ -11,6 +11,8 @@
 
 [node name="World" type="Node2D" unique_id=1487274566]
 script = ExtResource("1_hxqi4")
+node_scene = ExtResource("3_hqvew")
+edge_scene = ExtResource("5_f47bs")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=753878379]
 

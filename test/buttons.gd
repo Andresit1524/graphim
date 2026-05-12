@@ -48,7 +48,6 @@ func _on_delete_button_pressed() -> void:
 
 ## Carga un grafo desde un archivo
 func _on_load_button_pressed() -> void:
-	push_warning("[Buttons] Función no implementada: Cargar")
 	load_graph.emit()
 	has_delete_button_pressed = false
 
