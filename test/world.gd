@@ -48,12 +48,17 @@ func _ready() -> void:
 #region Manejo del GraphData
 
 
-## Actualiza el recurso de grafo actual
+## Actualiza el recurso de grafo actual usando los datos del nodo
 func _save_graph_data() -> void:
 	print("[World] Datos actualizados")
 
-	current_graph_data.nodes.assign(nodes.get_children())
-	current_graph_data.edges.assign(edges.get_children())
+	# TODO: snapshots
+	current_graph_data.nodes.assign(nodes.get_children().map(func(c: GraphimNode):
+		return c.get_data()
+	))
+	current_graph_data.edges.assign(edges.get_children().map(func(c: GraphimEdge):
+		return c.get_data()
+	))
 
 
 ## Elimina el grafo actual

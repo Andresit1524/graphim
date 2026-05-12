@@ -12,7 +12,6 @@ signal directed_changed()
 ## Emitida cuando el peso cambia
 # TODO: implementar este
 signal weight_changed(new_weight: float)
-
 ## Emitida cuando el color cambia
 signal color_changed(new_color: Color)
 
@@ -33,14 +32,12 @@ signal color_changed(new_color: Color)
 	set(value):
 		directed = value
 		directed_changed.emit()
-## Define el peso de la arista
+## Peso de la arista
 @export var weight: float = 1.0:
 	set(value):
 		weight = value
 		weight_changed.emit(value)
-
 ## Color de la arista
-# ! Tiene sentido que esté acá?
 @export var color: Color = Color.WHITE:
 	set(value):
 		color = value

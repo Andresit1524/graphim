@@ -175,13 +175,18 @@ func _apply_hooke(_delta: float) -> void:
 #endregion
 
 
-#region Setters
+#region Setters y getters
 
 
 ## Establece el color de la arista
 func _set_color(_color: Color) -> void:
 	_bump()
 	_change_color(_color, true)
+
+
+## Crea una copia de los datos de la arista para su almacenamiento
+func get_data() -> EdgeData:
+	return data.duplicate()
 
 
 #endregion

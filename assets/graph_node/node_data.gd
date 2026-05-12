@@ -12,9 +12,7 @@ signal color_changed(new_color: Color)
 	set(value):
 		weight = value
 		weight_changed.emit(value)
-
 ## Color del nodo
-# ! Tiene sentido que esté aca?
 @export var color: Color = Color.WHITE:
 	set(value):
 		color = value
