@@ -1,9 +1,13 @@
-# Graphim
-Graphim es un editor visual de grafos y algoritmos. Desarrollado como proyecto final de matemáticas discretas para 2026-1.
+<div align="center">
+    <img src="./icon.png" width="100" height="100" />
+    <h1>Graphim</h1>
+</div>
 
-¡Más detalles en el futuro!
+![demostración](.readme_content/demo.png)
 
-> ## Integrantes del proyecto
->
-> - Hayran Andrés López
-> - Helberth Rodriguez
+Graphim es un editor visual de grafos y algoritmos hecho en Godot. Desarrollado como proyecto final de matemáticas discretas para 2026-1.
+
+## Integrantes del proyecto
+
+1. Hayran Andrés López
+1. Helberth Rodriguez
