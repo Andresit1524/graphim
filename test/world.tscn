@@ -9,9 +9,20 @@
 [node name="World" type="Node2D" unique_id=1487274566]
 script = ExtResource("1_hxqi4")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=753878379]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=247115206]
+layer = -1
 
-[node name="UI" type="Control" parent="CanvasLayer" unique_id=695217652]
+[node name="Background" type="ColorRect" parent="CanvasLayer" unique_id=1291307398]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.053999998, 0.10753335, 0.2, 1)
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=753878379]
+
+[node name="UI" type="Control" parent="CanvasLayer2" unique_id=695217652]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +33,7 @@ mouse_filter = 1
 metadata/_edit_use_anchors_ = true
 metadata/_edit_lock_ = true
 
-[node name="DragInstancer" parent="CanvasLayer/UI" unique_id=704335588 node_paths=PackedStringArray("instances_node") instance=ExtResource("2_lh2ud")]
+[node name="DragInstancer" parent="CanvasLayer2/UI" unique_id=704335588 node_paths=PackedStringArray("instances_node") instance=ExtResource("2_lh2ud")]
 layout_mode = 1
 anchors_preset = 0
 anchor_left = 0.0
@@ -42,7 +53,7 @@ instance_size = 3.0
 reset_instance_size = true
 metadata/_edit_use_anchors_ = true
 
-[node name="Buttons" type="VBoxContainer" parent="CanvasLayer/UI" unique_id=1010987770]
+[node name="Buttons" type="VBoxContainer" parent="CanvasLayer2/UI" unique_id=1010987770]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1
@@ -55,22 +66,22 @@ offset_bottom = 269.0
 grow_horizontal = 0
 script = ExtResource("4_truut")
 
-[node name="SaveButton" type="Button" parent="CanvasLayer/UI/Buttons" unique_id=1891996649]
+[node name="SaveButton" type="Button" parent="CanvasLayer2/UI/Buttons" unique_id=1891996649]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Guardar"
 
-[node name="SaveAsButton" type="Button" parent="CanvasLayer/UI/Buttons" unique_id=1456769782]
+[node name="SaveAsButton" type="Button" parent="CanvasLayer2/UI/Buttons" unique_id=1456769782]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Guardar como"
 
-[node name="DeleteButton" type="Button" parent="CanvasLayer/UI/Buttons" unique_id=2133434705]
+[node name="DeleteButton" type="Button" parent="CanvasLayer2/UI/Buttons" unique_id=2133434705]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Borrar todo"
 
-[node name="LoadButton" type="Button" parent="CanvasLayer/UI/Buttons" unique_id=1490635578]
+[node name="LoadButton" type="Button" parent="CanvasLayer2/UI/Buttons" unique_id=1490635578]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Cargar"
@@ -309,7 +320,7 @@ position = Vector2(182, 184)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1279360004]
 
-[connection signal="pressed" from="CanvasLayer/UI/Buttons/SaveButton" to="CanvasLayer/UI/Buttons" method="_on_save_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/UI/Buttons/SaveAsButton" to="CanvasLayer/UI/Buttons" method="_on_save_as_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/UI/Buttons/DeleteButton" to="CanvasLayer/UI/Buttons" method="_on_delete_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/UI/Buttons/LoadButton" to="CanvasLayer/UI/Buttons" method="_on_load_button_pressed"]
+[connection signal="pressed" from="CanvasLayer2/UI/Buttons/SaveButton" to="CanvasLayer2/UI/Buttons" method="_on_save_button_pressed"]
+[connection signal="pressed" from="CanvasLayer2/UI/Buttons/SaveAsButton" to="CanvasLayer2/UI/Buttons" method="_on_save_as_button_pressed"]
+[connection signal="pressed" from="CanvasLayer2/UI/Buttons/DeleteButton" to="CanvasLayer2/UI/Buttons" method="_on_delete_button_pressed"]
+[connection signal="pressed" from="CanvasLayer2/UI/Buttons/LoadButton" to="CanvasLayer2/UI/Buttons" method="_on_load_button_pressed"]
