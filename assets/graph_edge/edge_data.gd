@@ -60,6 +60,8 @@ func refresh() -> void:
 ## Obtiene el radio del sprite del nodo. Asumimos que los nodos son del mismo tamaño, y calculamos
 ## sobre el extremo final
 func get_node_radius() -> float:
+	if not is_instance_valid(end_node): return 0
+
 	# Asumimos un sprite cuadrado que toca a los bordes de su espacio
 	return end_node.sprite.get_rect().size.x * end_node.scale.x / 2
 

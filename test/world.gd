@@ -108,15 +108,15 @@ func _load_graph_data() -> void:
 	# Instancia todos los nodos
 	for node_data in current_graph_data.nodes:
 		var new_node: GraphimNode = node_scene.instantiate()
-		nodes.add_child(new_node)
+		nodes.add_child(new_node, true)
 		new_node.data = node_data
-		new_node.global_position = Vector2(randf_range(-100, 100), randf_range(-100, 100))
+		new_node.global_position = Vector2(randf_range(-1000, 1000), randf_range(-1000, 1000))
 
 	# Instancia todas las aristas
 	# TODO: lograr que esto funcione (actualmente no lo hace)
 	for edge in current_graph_data.edges:
 		var new_edge: GraphimEdge = edge_scene.instantiate()
-		edges.add_child(new_edge)
+		edges.add_child(new_edge, true)
 		new_edge.data = edge
 
 
@@ -149,6 +149,10 @@ func _make_and_apply_forces(delta: float) -> void:
 	for edge: GraphimEdge in graph_edges:
 		var start := edge.data.start_node
 		var end := edge.data.end_node
+
+		# Validamos que los nodos de la arista sigan existiendo en memoria
+		if not is_instance_valid(start) or not is_instance_valid(end): continue
+
 		var current_force := _hooke(start, end)
 
 		start.force -= current_force / 2

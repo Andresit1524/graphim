@@ -106,7 +106,7 @@ func _end_drag() -> void:
 	var final_instance = scene.instantiate()
 	if not final_instance is Node2D: return
 
-	instances_node.add_child(final_instance)
+	instances_node.add_child(final_instance, true)
 
 	# Configura el objeto final
 	final_instance.global_position = final_instance.get_global_mouse_position()
