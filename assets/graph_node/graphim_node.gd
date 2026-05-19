@@ -2,17 +2,6 @@
 class_name GraphimNode extends DraggableObject
 
 
-const GRAVITY_MIN_RADIUS_SQUARED := 2000
-
-
-## Fuerza de repulsión
-@export var repulsion_force: float = 4e6
-## Fuerza de repulsión al centro
-@export var center_repulsion: float = 0.05
-## Fricción del movimiento
-@export var damping: float = 0.2
-
-
 @onready var data: NodeData = $Data
 @onready var sprite: Sprite2D = $Sprite
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -27,8 +16,8 @@ var disabled := false:
 		disabled = value
 		_disable(value)
 
-## Fuerza de la arista por la ley de Hooke
-var hooke_force: Vector2
+## Fuerza aplicada sobre el nodo
+var force: Vector2
 
 
 func _ready() -> void:
@@ -44,8 +33,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	var current_pos := global_position
 
-	# Aplica la fuerza sobre si mísmo y actualiza la posición
-	_apply_repulsion(delta)
+	# Actualiza la última posición
 	last_global_pos = current_pos
 
 	# Necesario para que funcione el arrastre con el mouse
@@ -134,24 +122,9 @@ func _reset_physics() -> void:
 	last_global_pos = global_position
 
 
-## Aplica las fuerzas sobre el objeto
-func _apply_repulsion(delta: float) -> void:
+## Aplica las fuerzas sobre el objeto dada la fricción a usar. Se usa desde afuera
+func apply_forces(delta: float, damping: float) -> void:
 	if disabled: return
-
-	var nodes := get_tree().get_nodes_in_group(&"nodes")
-	var force := Vector2.ZERO
-
-	# Calculamos la sumatoria de cada repulsión de los otros nodos
-	for node: GraphimNode in nodes:
-		if node == self: continue
-		force += _coulomb(node.global_position)
-
-	# Aplicamos la fuerza de gravedad al centro
-	force += _apply_inverse_gravity()
-	force += hooke_force
-
-	# Limpiamos la fuerza para la siguiente iteración de las aristas
-	hooke_force = Vector2.ZERO
 
 	# Aplica Verlet con fricción sobre la velocidad (el desplazamiento)
 	var inertia := (global_position - last_global_pos) * (1.0 - damping)
@@ -159,22 +132,6 @@ func _apply_repulsion(delta: float) -> void:
 
 	# Usamos el motor de Godot para mover y detenernos si hay colisión
 	move_and_collide(displacement)
-
-
-## Aplica la gravedad a la inversa, empujando hacia el centro del mundo 2D
-func _apply_inverse_gravity() -> Vector2:
-	var distance := -global_position
-	if distance.length_squared() < GRAVITY_MIN_RADIUS_SQUARED: return Vector2.ZERO
-
-	return distance.normalized() * center_repulsion * distance.length_squared()
-
-
-## Calcula la repulsión usando la ley de Coulomb para un punto dado (posición global)
-func _coulomb(point_pos: Vector2) -> Vector2:
-	var distance := global_position - point_pos
-
-	# Evitamos división por cero y suavizamos la fuerza en distancias cortas (+ 100)
-	return distance.normalized() * repulsion_force / (distance.length_squared() + 100.0)
 
 
 #endregion

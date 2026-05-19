@@ -15,10 +15,6 @@ class_name GraphimEdge extends Node2D
 		if not is_node_ready(): await ready
 		arrowhead_size = value
 		if value: queue_redraw()
-## Longitud de la arista
-@export var length: float = 200.0
-## Fuerza de Hooke para los nodos que conecta
-@export var hooke_force: float = 50
 
 
 @onready var curve: Line2D = $Curve
@@ -53,9 +49,6 @@ func _physics_process(_delta: float) -> void:
 
 	# Omite el procesamiento si no hubo movimiento significativo
 	if not data.has_significant_movement(last_start_global, last_end_global): return
-
-	# Aplica las fuerzas físicas de atracción
-	_apply_hooke(_delta)
 
 	last_start_global = start_global
 	last_end_global = end_global
@@ -155,21 +148,6 @@ func _contract() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
 	tween.tween_property(curve, "width", thickness, Constants.EFFECT_TIME)
 	return tween
-
-
-#endregion
-
-
-#region Físicas
-
-
-## Atrae a los nodos que conecta usando la ley de hooke
-func _apply_hooke(_delta: float) -> void:
-	var distance := (data.end_node.global_position - data.start_node.global_position)
-	var force := (distance.normalized() * length - distance) * hooke_force
-
-	data.end_node.hooke_force += force / 2
-	data.start_node.hooke_force -= force / 2
 
 
 #endregion
