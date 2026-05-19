@@ -1,25 +1,29 @@
 class_name World extends Node2D
 
 
+## Constante de repulsión para simplificar el valor de la fuerza
+const REPULSION_CONST = 1e6
+
+
+@export_group("Nodes physics")
+## Fuerza de repulsión
+@export var nodes_repulsion: float = 4
+## Fuerza de repulsión al centro
+@export var center_atraction: float = 0.05
+## Fricción del movimiento
+@export var friction: float = 0.2
+
+@export_group("Edges physics")
+## Longitud de la arista
+@export var edge_length: float = 200.0
+## Fuerza de Hooke para los nodos que conecta
+@export var edge_force: float = 50
+
 @export_group("Dependencies")
 ## Escena de un nodo
 @export var node_scene: PackedScene
 ## Escena de una arista
 @export var edge_scene: PackedScene
-
-@export_group("Nodes physics")
-## Fuerza de repulsión
-@export var repulsion_force: float = 4e6
-## Fuerza de repulsión al centro
-@export var center_repulsion: float = 0.05
-## Fricción del movimiento
-@export var damping: float = 0.2
-
-@export_group("Edges physics")
-## Longitud de la arista
-@export var length: float = 200.0
-## Fuerza de Hooke para los nodos que conecta
-@export var hooke_force: float = 50
 
 
 ## Lista de botones
@@ -32,7 +36,7 @@ class_name World extends Node2D
 ## Lista de aristas
 @onready var edges: Node2D = %Edges
 
-## Datoa actuales del grafo
+## Datos actuales del grafo
 @onready var current_graph_data := GraphData.new()
 
 
@@ -152,7 +156,7 @@ func _make_and_apply_forces(delta: float) -> void:
 
 	# Aplica la fuerza a cada nodo
 	for node: GraphimNode in graph_nodes:
-		node.apply_forces(delta, damping)
+		node.apply_forces(delta, friction)
 
 
 ## Calcula la repulsión usando la ley de Coulomb para un par de posiciones globales
@@ -160,13 +164,13 @@ func _coulomb(from: Vector2, to: Vector2) -> Vector2:
 	var distance := to - from
 
 	# Evitamos división por cero y suavizamos la fuerza en distancias cortas (+ 100)
-	return distance.normalized() * repulsion_force / (distance.length_squared() + 100.0)
+	return distance.normalized() * nodes_repulsion * REPULSION_CONST / (distance.length_squared() + 100.0)
 
 
 ## Calcula la fuerza que conecta dos nodos usando la ley de hooke
 func _hooke(from: GraphimNode, to: GraphimNode) -> Vector2:
 	var distance := to.global_position - from.global_position
-	var force := (distance.normalized() * length - distance) * hooke_force
+	var force := (distance.normalized() * edge_length - distance) * edge_force
 
 	return force
 
@@ -176,7 +180,7 @@ func _apply_inverse_gravity(node: GraphimNode) -> Vector2:
 	var distance := -node.global_position
 	if distance.length_squared() < Constants.EPSILON: return Vector2.ZERO
 
-	return distance.normalized() * center_repulsion * distance.length_squared()
+	return distance.normalized() * center_atraction * distance.length_squared()
 
 
 #endregion
