@@ -180,7 +180,7 @@ func _coulomb(point_pos: Vector2) -> Vector2:
 #endregion
 
 
-#region Setters
+#region Setters y getters
 
 
 ## Cambia el peso del nodo
@@ -192,6 +192,11 @@ func _set_weight(value: float) -> void:
 func _set_color(new_color: Color) -> void:
 	_bump()
 	_change_color(new_color, true)
+
+
+## Crea una copia de los datos del nodo para su almacenamiento
+func get_data() -> NodeData:
+	return data.duplicate()
 
 
 #endregion

@@ -5,9 +5,14 @@
 [ext_resource type="PackedScene" uid="uid://dxe84k80np1vp" path="res://assets/graph_node/graphim_node.tscn" id="3_hqvew"]
 [ext_resource type="Script" uid="uid://eyy44t471n22" path="res://test/buttons.gd" id="4_truut"]
 [ext_resource type="PackedScene" uid="uid://dslxtc5emgxkc" path="res://assets/graph_edge/graphim_edge.tscn" id="5_f47bs"]
+[ext_resource type="Script" uid="uid://drwguby0c3nsq" path="res://test/fps.gd" id="5_lh2ud"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_lh2ud"]
 
 [node name="World" type="Node2D" unique_id=1487274566]
 script = ExtResource("1_hxqi4")
+node_scene = ExtResource("3_hqvew")
+edge_scene = ExtResource("5_f47bs")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=247115206]
 layer = -1
@@ -86,7 +91,43 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Cargar"
 
+[node name="NodesList" type="ScrollContainer" parent="CanvasLayer/UI" unique_id=126763049]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = 324.0
+offset_right = 266.0
+offset_bottom = -48.0
+grow_vertical = 2
+
+[node name="Text" type="RichTextLabel" parent="CanvasLayer/UI/NodesList" unique_id=1085653325]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[center][b]Nodes[/b][/center]"
+
+[node name="FPS" type="Label" parent="CanvasLayer/UI" unique_id=1089338449]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -35.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "FPS: XX"
+label_settings = SubResource("LabelSettings_lh2ud")
+script = ExtResource("5_lh2ud")
+
 [node name="Edges" type="Node2D" parent="." unique_id=2056861580]
+unique_name_in_owner = true
 
 [node name="GraphimEdge" parent="Edges" unique_id=379864618 instance=ExtResource("5_f47bs")]
 position = Vector2(-309, -32)
@@ -197,6 +238,7 @@ position = Vector2(-309, -32)
 position = Vector2(-309, -32)
 
 [node name="Nodes" type="Node2D" parent="." unique_id=1159337228]
+unique_name_in_owner = true
 
 [node name="GraphimNode37" parent="Nodes" unique_id=2017895944 instance=ExtResource("3_hqvew")]
 position = Vector2(-170, -184)
