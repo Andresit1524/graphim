@@ -1,9 +1,6 @@
 class_name EdgeData extends Node
 
 
-#region Variables y señales
-
-
 ## Emitida cuando alguno de los dos extremos cambia
 # TODO: implementar este
 signal extremes_changed(new_start: GraphimNode, new_end: GraphimNode)
@@ -20,11 +17,13 @@ signal color_changed(new_color: Color)
 @export var start_node: GraphimNode:
 	set(value):
 		start_node = value
+		start_uid = value.data.uid if is_instance_valid(value) and is_instance_valid(value.data) else 0
 		extremes_changed.emit(value, end_node)
 ## Nodo del final de la arista
 @export var end_node: GraphimNode:
 	set(value):
 		end_node = value
+		end_uid = value.data.uid if is_instance_valid(value) and is_instance_valid(value.data) else 0
 		extremes_changed.emit(start_node, value)
 
 ## Define si la arista es dirigida o no
@@ -44,7 +43,14 @@ signal color_changed(new_color: Color)
 		color_changed.emit(value)
 
 
-#endregion
+## Identificador del nodo de inicio
+var start_uid: int
+## Identificador del nodo de final
+var end_uid: int
+
+
+func _ready() -> void:
+	refresh()
 
 
 #region Manejo de datos externos

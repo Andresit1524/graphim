@@ -19,6 +19,15 @@ signal color_changed(new_color: Color)
 		color_changed.emit(value)
 
 
+## Identificador
+@onready var uid: int = _generate_uid()
+
+
+## Genera un UID nuevo solo si no existe
+func _generate_uid() -> int:
+	return uid if uid else hash(get_instance_id() + Time.get_ticks_msec())
+
+
 ## Refresca los datos
 func refresh() -> void:
 	weight_changed.emit(weight)

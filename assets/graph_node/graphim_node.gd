@@ -159,7 +159,7 @@ func _set_color(new_color: Color) -> void:
 
 
 ## Crea una copia de los datos del nodo para su almacenamiento
-func get_data() -> NodeData:
+func get_data_copy() -> NodeData:
 	return data.duplicate()
 
 

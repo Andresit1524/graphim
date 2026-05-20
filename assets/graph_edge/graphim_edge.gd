@@ -162,7 +162,7 @@ func _set_color(_color: Color) -> void:
 
 
 ## Crea una copia de los datos de la arista para su almacenamiento
-func get_data() -> EdgeData:
+func get_data_copy() -> EdgeData:
 	return data.duplicate()
 
 
