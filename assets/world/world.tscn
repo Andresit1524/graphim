@@ -129,6 +129,20 @@ grow_vertical = 0
 text = "FPS: XX"
 label_settings = SubResource("LabelSettings_lh2ud")
 
+[node name="CurrentFile" type="Label" parent="CanvasLayer/UI" unique_id=2140831175]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -214.0
+offset_top = 21.0
+offset_right = 214.0
+offset_bottom = 44.0
+grow_horizontal = 2
+text = "Grafo en escena"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Physics" type="Node" parent="." unique_id=1290079163]
 script = ExtResource("7_hqvew")
 

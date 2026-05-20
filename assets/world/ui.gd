@@ -7,6 +7,8 @@ class_name UI extends Control
 @onready var nodes_list_text: RichTextLabel = %Text
 ## Etiqueta de FPS
 @onready var fps_label = %FPS
+## Etiqueta de archivo actual
+@onready var current_file: Label = $CurrentFile
 
 ## Lista de nodos del grafo
 @onready var nodes: Node2D = %Nodes
@@ -75,6 +77,11 @@ func _nodes_to_string(nodes_list: Array[Node]) -> String:
 
 
 #endregion
+
+
+## Actualiza el nombre de archivo
+func set_file_name(file_name := "") -> void:
+	current_file.text = file_name if file_name else "Grafo en escena"
 
 
 func _unhandled_input(event: InputEvent) -> void:
