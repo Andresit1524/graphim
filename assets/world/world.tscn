@@ -132,6 +132,14 @@ label_settings = SubResource("LabelSettings_lh2ud")
 [node name="Physics" type="Node" parent="." unique_id=1290079163]
 script = ExtResource("7_hqvew")
 
+[node name="SaveDialog" type="FileDialog" parent="." unique_id=1962484975]
+unique_name_in_owner = true
+display_mode = 1
+access = 1
+root_subfolder = "user://graphs"
+filters = PackedStringArray("*.tres")
+hidden_files_toggle_enabled = false
+
 [node name="Edges" type="Node2D" parent="." unique_id=2056861580]
 unique_name_in_owner = true
 

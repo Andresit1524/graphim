@@ -30,7 +30,6 @@ func _on_save_button_pressed() -> void:
 
 ## Guarda en grafo en un archivo nuevo
 func _on_save_as_button_pressed() -> void:
-	push_warning("[Buttons] Función no implementada: Guardar como")
 	save_graph_as.emit()
 	mark_as_not_saved(false)
 	has_delete_button_pressed = false

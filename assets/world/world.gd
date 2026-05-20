@@ -10,6 +10,8 @@ class_name World extends Node2D
 
 ## Interfaz
 @onready var ui: UI = %UI
+## Ventana de guardado
+@onready var save_load_dialog: FileDialog = %SaveDialog
 
 ## Lista de nodos del grafo
 @onready var nodes: Node2D = %Nodes
@@ -24,15 +26,15 @@ func _ready() -> void:
 	# Conecta la interfaz a las funciones del grafo
 	ui.buttons.delete_graph.connect(_delete_graph)
 	ui.buttons.save_graph_on_current.connect(_save_graph_data)
+	ui.buttons.save_graph_as.connect(_save_graph_data_as)
 	ui.buttons.load_graph.connect(_load_graph_data)
-	# TODO: Resto de señales de los botones
 
 
 #region Manejo del GraphData
 
 
 ## Actualiza el recurso de grafo actual usando los datos del nodo
-func _save_graph_data() -> void:
+func _save_graph_data(path := "") -> void:
 	print("[World] Datos actualizados")
 
 	current_graph_data.nodes.assign(nodes.get_children().map(func(c: GraphimNode):
@@ -41,6 +43,18 @@ func _save_graph_data() -> void:
 	current_graph_data.edges.assign(edges.get_children().map(func(c: GraphimEdge):
 		return c.get_data_copy()
 	))
+
+	if path: ResourceSaver.save(current_graph_data, path)
+
+
+## Guarda los datos de grafo actual en un nuevo archivo
+func _save_graph_data_as() -> void:
+	print("[World] Guardando datos")
+	save_load_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	save_load_dialog.popup_centered()
+
+	await save_load_dialog.file_selected
+	_save_graph_data(save_load_dialog.current_path)
 
 
 ## Elimina el grafo actual
@@ -56,15 +70,21 @@ func _delete_graph() -> void:
 
 
 ## Carga el grafo desde un archivo
-# ! Temporal: cargar desde el archivo actual
 func _load_graph_data() -> void:
-	# Borra primero
+	# Busca en el menú de archivos a por el archivo que el usuario quiera y lo carga
+	save_load_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	save_load_dialog.popup_centered()
+	await save_load_dialog.file_selected
+	current_graph_data = ResourceLoader.load(save_load_dialog.current_path)
+
+	# Borra el grafo actual primero
 	_delete_graph()
+
 	# Lista de UIDs para poder encontrar más rápido
 	var uids := {}
 
 	# Instancia todos los nodos
-	for node_data in current_graph_data.nodes:
+	for node_data: NodeData in current_graph_data.nodes:
 		var new_node: GraphimNode = node_scene.instantiate()
 		new_node.data = node_data
 		nodes.add_child(new_node, true)
@@ -73,7 +93,7 @@ func _load_graph_data() -> void:
 		new_node.global_position = Vector2(randf_range(-200, 200), randf_range(-200, 200))
 
 	# Instancia todas las aristas
-	for edge_data in current_graph_data.edges:
+	for edge_data: EdgeData in current_graph_data.edges:
 		var new_edge: GraphimEdge = edge_scene.instantiate()
 		new_edge.data = edge_data
 		edges.add_child(new_edge, true)
