@@ -60,12 +60,16 @@ func _delete_graph() -> void:
 func _load_graph_data() -> void:
 	# Borra primero
 	_delete_graph()
+	# Lista de UIDs para poder encontrar más rápido
+	var uids := {}
 
 	# Instancia todos los nodos
 	for node_data in current_graph_data.nodes:
 		var new_node: GraphimNode = node_scene.instantiate()
 		new_node.data = node_data
 		nodes.add_child(new_node, true)
+
+		uids[new_node.data.uid] = new_node
 		new_node.global_position = Vector2(randf_range(-200, 200), randf_range(-200, 200))
 
 	# Instancia todas las aristas
@@ -75,18 +79,9 @@ func _load_graph_data() -> void:
 		edges.add_child(new_edge, true)
 
 		# Busca los nodos por su UID y vincula los extremos
-		new_edge.data.start_node = _find_node_by_uid(new_edge.data.start_uid)
-		new_edge.data.end_node = _find_node_by_uid(new_edge.data.end_uid)
+		new_edge.data.start_node = uids.get(new_edge.data.start_uid)
+		new_edge.data.end_node = uids.get(new_edge.data.end_uid)
 		new_edge.data.refresh()
-
-
-## Auxiliar: busca un nodo por su UID
-func _find_node_by_uid(uid: int) -> GraphimNode:
-	for node in nodes.get_children():
-		if not is_instance_valid(node) or not is_instance_valid(node.data): continue
-		if node.data.uid == uid: return node
-
-	return null
 
 
 #endregion
