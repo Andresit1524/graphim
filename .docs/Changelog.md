@@ -3,6 +3,8 @@
 ## Mayo de 2026
 
 ### Semana del 18 al 24 de mayo
+- [20 may 2026] Carga de grafos con aristas funcionales, sistema de archivos y nombre de archivo actual
+- [20 may 2026] Rediseño de los datos para meyor eficiencia
 - [19 may 2026] Refactorización masiva de físicas: centralización y optimización
 - [19 may 2026] Mejoras de robustez con validaciones de validez de instancias en procesos físicos y carga de datos
 - [19 may 2026] Refactor en la organización de la interfaz y el manejo de datos y físicas

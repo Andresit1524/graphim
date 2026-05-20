@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://dxe84k80np1vp"]
 
 [ext_resource type="Script" uid="uid://ckfncohh5djdm" path="res://assets/graph_node/graphim_node.gd" id="1_54dhc"]
-[ext_resource type="Script" uid="uid://w43caibbx24e" path="res://assets/graph_node/node_data.gd" id="2_00afy"]
 [ext_resource type="Texture2D" uid="uid://bldlc2khhc5db" path="res://assets/graph_node/sprite.svg" id="2_h0j33"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_h0j33"]
@@ -14,9 +13,6 @@ font_color = Color(0, 0, 0, 1)
 [node name="GraphimNode" type="StaticBody2D" unique_id=56422329 groups=["nodes"]]
 input_pickable = true
 script = ExtResource("1_54dhc")
-
-[node name="Data" type="Node" parent="." unique_id=1824780926]
-script = ExtResource("2_00afy")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=215753269]
 texture = ExtResource("2_h0j33")

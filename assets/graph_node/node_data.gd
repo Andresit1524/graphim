@@ -1,5 +1,5 @@
-class_name NodeData extends Node
-
+## [code]NodeData[/code] contiene los datos de un nodo, listo para serializar
+class_name NodeData extends Resource
 
 ## Señal que avisa de que el peso se ha actualizado
 signal weight_changed(new_value: float)
@@ -18,9 +18,8 @@ signal color_changed(new_color: Color)
 		color = value
 		color_changed.emit(value)
 
-
 ## Identificador
-@onready var uid: int = _generate_uid()
+@export var uid: int = _generate_uid()
 
 
 ## Genera un UID nuevo solo si no existe

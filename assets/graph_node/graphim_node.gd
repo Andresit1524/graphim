@@ -10,7 +10,7 @@ class_name GraphimNode extends DraggableObject
 @onready var label: Label = %Label
 
 ## Datos del nodo
-@onready var data: NodeData = $Data
+@onready var data: NodeData = NodeData.new()
 
 ## Última posición del nodo (para Verlet)
 @onready var last_global_pos := global_position

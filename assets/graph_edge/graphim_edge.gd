@@ -21,7 +21,7 @@ class_name GraphimEdge extends Node2D
 @onready var curve: Line2D = $Curve
 
 ## Datos de la arista
-@onready var data: EdgeData = $Data
+@onready var data: EdgeData = EdgeData.new()
 
 
 # Variables para optimizar el redibujado (en coordenadas globales)
