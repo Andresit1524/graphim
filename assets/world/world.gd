@@ -34,9 +34,10 @@ func _ready() -> void:
 
 
 ## Actualiza el recurso de grafo actual usando los datos del nodo
-func _save_graph_data(path := "") -> void:
+func _save_graph_data() -> void:
 	print("[World] Datos actualizados")
 
+	# Guarda en los datos de grafo
 	current_graph_data.nodes.assign(nodes.get_children().map(func(c: GraphimNode):
 		return c.get_data_copy()
 	))
@@ -44,7 +45,14 @@ func _save_graph_data(path := "") -> void:
 		return c.get_data_copy()
 	))
 
-	if path: ResourceSaver.save(current_graph_data, path)
+	print("[World] Guardado en escena")
+
+	# Guarda en archivo si es el caso
+	var save_path := current_graph_data.resource_path
+	if not save_path.begins_with("user://"): return
+
+	print("[World] Guardado en archivo %s" % save_path.trim_prefix("user://graphs/"))
+	ResourceSaver.save(current_graph_data)
 
 
 ## Guarda los datos de grafo actual en un nuevo archivo
@@ -54,11 +62,15 @@ func _save_graph_data_as() -> void:
 	save_load_dialog.popup_centered()
 
 	await save_load_dialog.file_selected
-	_save_graph_data(save_load_dialog.current_path)
+	current_graph_data.resource_path = save_load_dialog.current_path
+	_save_graph_data()
+	print("[World] Guardado")
 
 
 ## Elimina el grafo actual
 func _delete_graph() -> void:
+	print("[World] Borrando grafo")
+
 	# Elimina. No es necesario actualizar porque cada eliminación lo hace
 	for child in edges.get_children():
 		edges.remove_child(child)
@@ -68,6 +80,8 @@ func _delete_graph() -> void:
 		nodes.remove_child(child)
 		child.queue_free()
 
+	print("[World] Borrado")
+
 
 ## Carga el grafo desde un archivo
 func _load_graph_data() -> void:
@@ -76,6 +90,8 @@ func _load_graph_data() -> void:
 	save_load_dialog.popup_centered()
 	await save_load_dialog.file_selected
 	current_graph_data = ResourceLoader.load(save_load_dialog.current_path)
+
+	print("[World] Cargando datos desde %s" % save_load_dialog.current_path.trim_prefix("user://graphs/"))
 
 	# Borra el grafo actual primero
 	_delete_graph()
@@ -102,6 +118,8 @@ func _load_graph_data() -> void:
 		new_edge.data.start_node = uids.get(new_edge.data.start_uid)
 		new_edge.data.end_node = uids.get(new_edge.data.end_uid)
 		new_edge.data.refresh()
+
+	print("[World] Cargado")
 
 
 #endregion
