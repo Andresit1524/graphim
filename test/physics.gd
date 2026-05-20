@@ -20,11 +20,11 @@ const REPULSION_CONST = 1e6
 ## Fuerza de Hooke para los nodos que conecta
 @export var edge_force: float = 50
 
-@export_group("Dependencies")
+
 ## Lista de nodos
-@export var nodes: Node2D
+@onready var nodes: Node2D = %Nodes
 ## Lista de aristas
-@export var edges: Node2D
+@onready var edges: Node2D = %Edges
 
 
 func _physics_process(delta: float) -> void:

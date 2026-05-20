@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://f3csy6sshvvs" path="res://test/world.gd" id="1_hxqi4"]
 [ext_resource type="PackedScene" uid="uid://dmnkt781qie5t" path="res://assets/drag_instancer/drag_instancer.tscn" id="2_lh2ud"]
 [ext_resource type="PackedScene" uid="uid://dxe84k80np1vp" path="res://assets/graph_node/graphim_node.tscn" id="3_hqvew"]
+[ext_resource type="Script" uid="uid://q7g0us3v13pc" path="res://test/ui.gd" id="4_f47bs"]
 [ext_resource type="Script" uid="uid://eyy44t471n22" path="res://test/buttons.gd" id="4_truut"]
 [ext_resource type="PackedScene" uid="uid://dslxtc5emgxkc" path="res://assets/graph_edge/graphim_edge.tscn" id="5_f47bs"]
 [ext_resource type="Script" uid="uid://drwguby0c3nsq" path="res://test/fps.gd" id="5_lh2ud"]
@@ -29,6 +30,7 @@ color = Color(0.053999998, 0.10753335, 0.2, 1)
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=753878379]
 
 [node name="UI" type="Control" parent="CanvasLayer" unique_id=695217652]
+unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,6 +38,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+script = ExtResource("4_f47bs")
 metadata/_edit_use_anchors_ = true
 metadata/_edit_lock_ = true
 
@@ -127,10 +130,8 @@ text = "FPS: XX"
 label_settings = SubResource("LabelSettings_lh2ud")
 script = ExtResource("5_lh2ud")
 
-[node name="Physics" type="Node" parent="." unique_id=1290079163 node_paths=PackedStringArray("nodes", "edges")]
+[node name="Physics" type="Node" parent="." unique_id=1290079163]
 script = ExtResource("7_hqvew")
-nodes = NodePath("../Nodes")
-edges = NodePath("../Edges")
 
 [node name="Edges" type="Node2D" parent="." unique_id=2056861580]
 unique_name_in_owner = true
