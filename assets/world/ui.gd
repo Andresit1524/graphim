@@ -5,6 +5,8 @@ class_name UI extends Control
 @onready var buttons: Buttons = %Buttons
 ## Texto de la lista de objetos
 @onready var nodes_list_text: RichTextLabel = %Text
+## Etiqueta de FPS
+@onready var fps_label = %FPS
 
 ## Lista de nodos del grafo
 @onready var nodes: Node2D = %Nodes
@@ -37,6 +39,14 @@ func _ready() -> void:
 	_update_edge_names()
 
 
+func _physics_process(_delta) -> void:
+	# Actualiza los FPS
+	fps_label.text = "FPS: %s" % Engine.get_frames_per_second()
+
+
+#region Objects list
+
+
 ## Actualiza el texto de la lista de nodos
 func _update_node_names() -> void:
 	print("[World] Nodos actualizados")
@@ -62,6 +72,9 @@ func _nodes_to_string(nodes_list: Array[Node]) -> String:
 		return (current_text + "\n- %s" % node.name),
 		""
 	)
+
+
+#endregion
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -3,8 +3,9 @@
 ## Mayo de 2026
 
 ### Semana del 18 al 24 de mayo
-- [19 may 2026] Refactorización masiva de físicas: centralización del cálculo de fuerzas en el World para optimizar el rendimiento (O(n²) -> O(n·log n) conceptualmente, aprovechando simetría)
+- [19 may 2026] Refactorización masiva de físicas: centralización y optimización
 - [19 may 2026] Mejoras de robustez con validaciones de validez de instancias en procesos físicos y carga de datos
+- [19 may 2026] Refactor en la organización de la interfaz y el manejo de datos y físicas
 
 ### Semana del 11 al 17 de mayo
 - [14 may 2026] Nuevo README con demostración visual y soporte para personalización del fondo

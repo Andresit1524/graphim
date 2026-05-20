@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://q7g0us3v13pc" path="res://assets/world/ui.gd" id="4_f47bs"]
 [ext_resource type="Script" uid="uid://eyy44t471n22" path="res://assets/world/buttons.gd" id="4_truut"]
 [ext_resource type="PackedScene" uid="uid://dslxtc5emgxkc" path="res://assets/graph_edge/graphim_edge.tscn" id="5_f47bs"]
-[ext_resource type="Script" uid="uid://drwguby0c3nsq" path="res://assets/world/fps.gd" id="5_lh2ud"]
 [ext_resource type="Script" uid="uid://dewdt8vncxwdp" path="res://assets/world/physics.gd" id="7_hqvew"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_lh2ud"]
@@ -114,6 +113,7 @@ bbcode_enabled = true
 text = "[center][b]Nodes[/b][/center]"
 
 [node name="FPS" type="Label" parent="CanvasLayer/UI" unique_id=1089338449]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -128,7 +128,6 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "FPS: XX"
 label_settings = SubResource("LabelSettings_lh2ud")
-script = ExtResource("5_lh2ud")
 
 [node name="Physics" type="Node" parent="." unique_id=1290079163]
 script = ExtResource("7_hqvew")
