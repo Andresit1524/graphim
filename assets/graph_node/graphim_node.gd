@@ -2,10 +2,17 @@
 class_name GraphimNode extends DraggableObject
 
 
-@onready var data: NodeData = $Data
+## Sprite del nodo
 @onready var sprite: Sprite2D = $Sprite
+## Forma de colisión del nodo
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
+## Etiqueta del nodo para el peso
 @onready var label: Label = %Label
+
+## Datos del nodo
+@onready var data: NodeData = $Data
+
+## Última posición del nodo (para Verlet)
 @onready var last_global_pos := global_position
 
 
@@ -55,6 +62,14 @@ func _disable(value: bool) -> void:
 #region Visuales
 
 
+## Establece el efecto visual al arrastrar el objeto
+func _set_drag_visuals(value: bool) -> void:
+	_highlight(value, true)
+
+	if value: _expand()
+	else: _contract()
+
+
 ## Cambia el color del nodo con posibilidad de tween para suavizado
 func _change_color(_color: Color, tweened := false) -> void:
 	if not tweened:
@@ -75,14 +90,6 @@ func _highlight(value: bool, tweened := false) -> void:
 
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
 	tween.tween_property(self, "modulate", _color, Constants.EFFECT_TIME)
-
-
-## Establece el efecto visual al arrastrar el objeto
-func _set_drag_visuals(value: bool) -> void:
-	_highlight(value, true)
-
-	if value: _expand()
-	else: _contract()
 
 
 #endregion

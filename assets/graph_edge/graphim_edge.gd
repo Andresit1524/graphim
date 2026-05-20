@@ -17,7 +17,10 @@ class_name GraphimEdge extends Node2D
 		if value: queue_redraw()
 
 
+## Curva (para la arista)
 @onready var curve: Line2D = $Curve
+
+## Datos de la arista
 @onready var data: EdgeData = $Data
 
 
@@ -42,18 +45,14 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	# Omite el procesamiento si no se puede o si hubo movimiento significativo
 	if not data.has_valid_extremes(): return
-
-	var start_global := data.start_node.global_position
-	var end_global := data.end_node.global_position
-
-	# Omite el procesamiento si no hubo movimiento significativo
 	if not data.has_significant_movement(last_start_global, last_end_global): return
 
-	last_start_global = start_global
-	last_end_global = end_global
+	last_start_global = data.start_node.global_position
+	last_end_global = data.end_node.global_position
 
-	# Actualiza los puntos del Line2D y las variables de clase para el dibujo (en local)
+	# Actualiza con los puntos (locales por las necesidades de Curve2D)
 	curve.points = PackedVector2Array([
 		to_local(last_start_global), to_local(last_end_global)
 	])
@@ -114,6 +113,12 @@ func _change_color(_color: Color, tweened := false) -> void:
 	tween.finished.connect(queue_redraw, CONNECT_ONE_SHOT)
 
 
+#endregion
+
+
+#region Grosor de la arista
+
+
 ## Establece el grosor de la arista
 func _set_thickness(value: float, tweened := false) -> void:
 	if not tweened:
@@ -122,12 +127,6 @@ func _set_thickness(value: float, tweened := false) -> void:
 
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
 	tween.tween_property(curve, "width", value, Constants.EFFECT_TIME)
-
-
-#endregion
-
-
-#region Grosor de la arista
 
 
 ## Aumenta el tamaño del nodo y lo deja como antes
