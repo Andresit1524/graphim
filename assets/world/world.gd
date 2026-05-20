@@ -33,7 +33,14 @@ func _ready() -> void:
 	ui.buttons.save_graph_as.connect(_save_graph_data_as)
 	ui.buttons.load_graph.connect(_load_graph_data)
 
+	# Conecta el archivo actual a la interfaz
 	current_file.connect(ui.set_file_name)
+
+	# Conecta la lista de nodos y de aristas a la actualización de interfaz
+	nodes.child_order_changed.connect(ui.update_node_names)
+	edges.child_order_changed.connect(ui.update_edge_names)
+	nodes.child_order_changed.connect(ui.mark_as_not_saved.bind(true))
+	edges.child_order_changed.connect(ui.mark_as_not_saved.bind(true))
 
 
 #region Manejo del GraphData
