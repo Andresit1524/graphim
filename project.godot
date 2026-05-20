@@ -28,8 +28,7 @@ enabled=PackedStringArray("res://addons/vector_display_2d/plugin.cfg")
 
 folder_colors={
 "res://addons/": "teal",
-"res://assets/": "yellow",
-"res://test/": "red"
+"res://assets/": "yellow"
 }
 
 [global_group]

@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://i7fektpxxnq7"]
 
-[ext_resource type="Script" uid="uid://f3csy6sshvvs" path="res://test/world.gd" id="1_hxqi4"]
+[ext_resource type="Script" uid="uid://f3csy6sshvvs" path="res://assets/world/world.gd" id="1_hxqi4"]
 [ext_resource type="PackedScene" uid="uid://dmnkt781qie5t" path="res://assets/drag_instancer/drag_instancer.tscn" id="2_lh2ud"]
 [ext_resource type="PackedScene" uid="uid://dxe84k80np1vp" path="res://assets/graph_node/graphim_node.tscn" id="3_hqvew"]
-[ext_resource type="Script" uid="uid://q7g0us3v13pc" path="res://test/ui.gd" id="4_f47bs"]
-[ext_resource type="Script" uid="uid://eyy44t471n22" path="res://test/buttons.gd" id="4_truut"]
+[ext_resource type="Script" uid="uid://q7g0us3v13pc" path="res://assets/world/ui.gd" id="4_f47bs"]
+[ext_resource type="Script" uid="uid://eyy44t471n22" path="res://assets/world/buttons.gd" id="4_truut"]
 [ext_resource type="PackedScene" uid="uid://dslxtc5emgxkc" path="res://assets/graph_edge/graphim_edge.tscn" id="5_f47bs"]
-[ext_resource type="Script" uid="uid://drwguby0c3nsq" path="res://test/fps.gd" id="5_lh2ud"]
-[ext_resource type="Script" uid="uid://dewdt8vncxwdp" path="res://test/physics.gd" id="7_hqvew"]
+[ext_resource type="Script" uid="uid://drwguby0c3nsq" path="res://assets/world/fps.gd" id="5_lh2ud"]
+[ext_resource type="Script" uid="uid://dewdt8vncxwdp" path="res://assets/world/physics.gd" id="7_hqvew"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_lh2ud"]
 
