@@ -3,6 +3,7 @@
 ## Mayo de 2026
 
 ### Semana del 18 al 24 de mayo
+- [24 may 2026] Prototipo de dibujado de aristas
 - [20 may 2026] Carga de grafos con aristas funcionales, sistema de archivos y nombre de archivo actual
 - [20 may 2026] Rediseño de los datos para meyor eficiencia
 - [19 may 2026] Refactorización masiva de físicas: centralización y optimización

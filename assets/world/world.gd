@@ -26,6 +26,15 @@ signal current_file(new_name: String)
 @onready var current_graph_data := GraphData.new()
 
 
+## Indica si estamos dibujando aristas
+var drawing_edges := false
+
+
+# Variables temporales para el dibujado de aristas
+var current_start_for_new_edge: GraphimNode
+var current_end_for_new_edge: GraphimNode
+
+
 func _ready() -> void:
 	# Conecta la interfaz a las funciones del grafo
 	ui.buttons.delete_graph.connect(_delete_graph)
@@ -41,6 +50,14 @@ func _ready() -> void:
 	edges.child_order_changed.connect(ui.update_edge_names)
 	nodes.child_order_changed.connect(ui.mark_as_not_saved.bind(true))
 	edges.child_order_changed.connect(ui.mark_as_not_saved.bind(true))
+
+	# Conecta la lista de nodos a la actualización de señales
+	edges.child_order_changed.connect(_update_edges)
+	nodes.child_order_changed.connect(_update_nodes)
+
+	# Actualiza a la fuerza
+	_update_nodes()
+	_update_edges()
 
 
 #region Manejo del GraphData
@@ -145,3 +162,52 @@ func _get_graph_data_path() -> String:
 
 
 #endregion
+
+
+#region Manejo del grafo interno
+
+
+## Actualiza las señales de los nodos
+func _update_nodes() -> void:
+	for node: GraphimNode in nodes.get_children():
+		if not node.is_connected(&"clicked", _draw_edge): node.clicked.connect(_draw_edge)
+
+
+## Actualiza las señales de las aristas
+# ! No implementado
+func _update_edges() -> void:
+	pass
+
+
+## Dibuja una arista entre los dos nodos cuando se seleccionan
+func _draw_edge(new_node: GraphimNode) -> void:
+	if not drawing_edges: return
+
+	# Añade el inicio si es el caso
+	if not current_start_for_new_edge:
+		current_start_for_new_edge = new_node
+		return
+
+	current_end_for_new_edge = new_node
+
+	# Crea
+	var new_edge: GraphimEdge = edge_scene.instantiate()
+	edges.add_child(new_edge, true)
+	new_edge.data.start_node = current_start_for_new_edge
+	new_edge.data.end_node = current_end_for_new_edge
+	new_edge.data.refresh()
+
+	# Resetea
+	current_start_for_new_edge = null
+	current_end_for_new_edge = null
+
+
+#endregion
+
+
+## Actualiza el estado del dibujado de grafos
+func _on_draw_button_pressed() -> void:
+	drawing_edges = not drawing_edges
+	if not drawing_edges:
+		current_end_for_new_edge = null
+		current_start_for_new_edge = null

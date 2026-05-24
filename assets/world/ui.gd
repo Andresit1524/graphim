@@ -39,7 +39,7 @@ func _physics_process(_delta) -> void:
 	fps_label.text = "FPS: %s" % Engine.get_frames_per_second()
 
 
-#region Objects list
+#region Lista de objetos
 
 
 ## Actualiza el texto de la lista de nodos
@@ -72,6 +72,9 @@ func _nodes_to_string(nodes_list: Array[Node]) -> String:
 #endregion
 
 
+#region Archivo e interfaz asociada
+
+
 ## Actualiza el nombre de archivo
 func set_file_name(file_name := "") -> void:
 	current_file.text = file_name if file_name else "Grafo en escena"
@@ -87,3 +90,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Resetea el botón de borrar si se clica por fuera
 	if event is InputEventMouseButton and event.is_pressed():
 		buttons.has_delete_button_pressed = false
+
+
+#endregion

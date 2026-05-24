@@ -37,3 +37,5 @@ text = "0.0"
 label_settings = SubResource("LabelSettings_g6t7m")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
