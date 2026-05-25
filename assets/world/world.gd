@@ -2,7 +2,7 @@ class_name World extends Node2D
 
 
 ## Se emite cuando se cambia el archivo actual
-signal current_file(new_name: String)
+signal current_file_changed(new_name: String)
 
 
 @export_group("Dependencies")
@@ -37,19 +37,17 @@ var current_end_for_new_edge: GraphimNode
 
 func _ready() -> void:
 	# Conecta la interfaz a las funciones del grafo
-	ui.buttons.delete_graph.connect(_delete_graph)
-	ui.buttons.save_graph_on_current.connect(_save_graph_data)
-	ui.buttons.save_graph_as.connect(_save_graph_data_as)
-	ui.buttons.load_graph.connect(_load_graph_data)
+	ui.buttons.delete.connect(_delete_graph)
+	ui.buttons.save.connect(_save_graph)
+	ui.buttons.save_as.connect(_save_graph_as)
+	ui.buttons.load.connect(_load_graph)
 
 	# Conecta el archivo actual a la interfaz
-	current_file.connect(ui.set_file_name)
+	current_file_changed.connect(ui.set_file_name)
 
 	# Conecta la lista de nodos y de aristas a la actualización de interfaz
 	nodes.child_order_changed.connect(ui.update_node_names)
 	edges.child_order_changed.connect(ui.update_edge_names)
-	nodes.child_order_changed.connect(ui.mark_as_not_saved.bind(true))
-	edges.child_order_changed.connect(ui.mark_as_not_saved.bind(true))
 
 	# Conecta la lista de nodos a la actualización de señales
 	edges.child_order_changed.connect(_update_edges)
@@ -64,7 +62,7 @@ func _ready() -> void:
 
 
 ## Actualiza el recurso de grafo actual usando los datos del nodo
-func _save_graph_data() -> void:
+func _save_graph() -> void:
 	# Guarda en los datos de grafo
 	current_graph_data.nodes.assign(nodes.get_children().map(func(c: GraphimNode):
 		return c.get_data_copy()
@@ -77,7 +75,7 @@ func _save_graph_data() -> void:
 	var save_path := current_graph_data.resource_path
 	if not save_path.begins_with("user://"):
 		print("[World] Guardado en escena")
-		current_file.emit("Grafo en escena")
+		current_file_changed.emit("Grafo en escena")
 		return
 
 	# Guarda en archivo
@@ -86,18 +84,18 @@ func _save_graph_data() -> void:
 		"[World] Guardado en archivo %s con código de error %s"
 		% [_get_graph_data_path(), error]
 	)
-	current_file.emit(_get_graph_data_path())
+	current_file_changed.emit(_get_graph_data_path())
 
 
 ## Guarda los datos de grafo actual en un nuevo archivo
-func _save_graph_data_as() -> void:
+func _save_graph_as() -> void:
 	save_load_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	save_load_dialog.popup_centered()
 
 	await save_load_dialog.file_selected
 	current_graph_data.resource_path = save_load_dialog.current_path
 	print("[World] Guardando datos en %s" % _get_graph_data_path())
-	_save_graph_data()
+	_save_graph()
 
 
 ## Elimina el grafo actual
@@ -117,7 +115,7 @@ func _delete_graph() -> void:
 
 
 ## Carga el grafo desde un archivo
-func _load_graph_data() -> void:
+func _load_graph() -> void:
 	# Busca en el menú de archivos a por el archivo que el usuario quiera y lo carga
 	save_load_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	save_load_dialog.popup_centered()
@@ -125,7 +123,7 @@ func _load_graph_data() -> void:
 	current_graph_data = ResourceLoader.load(save_load_dialog.current_path)
 
 	print("[World] Cargando datos desde %s" % _get_graph_data_path())
-	current_file.emit(_get_graph_data_path())
+	current_file_changed.emit(_get_graph_data_path())
 
 	# Borra el grafo actual primero
 	_delete_graph()

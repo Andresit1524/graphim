@@ -47,6 +47,7 @@ func update_node_names() -> void:
 	print("[World] Nodos actualizados")
 
 	nodes_names = _nodes_to_string(nodes.get_children())
+	mark_as_not_saved(true)
 
 
 ## Actualiza el texto de la lista de aristas
@@ -54,6 +55,7 @@ func update_edge_names() -> void:
 	print("[World] Aristas actualizadas")
 
 	edges_names = _nodes_to_string(edges.get_children())
+	mark_as_not_saved(true)
 
 
 ## Actualiza la lista de textos

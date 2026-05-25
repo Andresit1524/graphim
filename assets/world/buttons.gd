@@ -1,10 +1,10 @@
 class_name Buttons extends VBoxContainer
 
 
-signal delete_graph
-signal save_graph_on_current
-signal save_graph_as
-signal load_graph
+signal delete
+signal save
+signal save_as
+signal load
 
 
 @onready var delete_button: Button = %DeleteButton
@@ -20,13 +20,13 @@ var has_delete_button_pressed := false:
 
 ## Guarda el grafo en el archivo actual
 func _on_save_button_pressed() -> void:
-	save_graph_on_current.emit()
+	save.emit()
 	has_delete_button_pressed = false
 
 
 ## Guarda en grafo en un archivo nuevo
 func _on_save_as_button_pressed() -> void:
-	save_graph_as.emit()
+	save_as.emit()
 	has_delete_button_pressed = false
 
 
@@ -36,11 +36,11 @@ func _on_delete_button_pressed() -> void:
 		has_delete_button_pressed = true
 		return
 
-	delete_graph.emit()
+	delete.emit()
 	has_delete_button_pressed = false
 
 
 ## Carga un grafo desde un archivo
 func _on_load_button_pressed() -> void:
-	load_graph.emit()
+	load.emit()
 	has_delete_button_pressed = false
