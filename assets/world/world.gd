@@ -186,18 +186,48 @@ func _draw_edge(new_node: GraphimNode) -> void:
 		current_start_for_new_edge = new_node
 		return
 
+	# Añade el final
+	# ? Aún no se soportan aristas redundantes. Así que se omiten
 	current_end_for_new_edge = new_node
+	if current_start_for_new_edge == current_end_for_new_edge: return
 
-	# Crea
+	# Verifica que la arista no este existiendo ya
+	# ? Se separan los métodos para que sea fácil implementar bucles en el futuro
+	if _find_edge(current_start_for_new_edge, current_end_for_new_edge): return
+	if _find_edge_reverse(current_start_for_new_edge, current_end_for_new_edge): return
+
+	# Crea y configura
 	var new_edge: GraphimEdge = edge_scene.instantiate()
 	edges.add_child(new_edge, true)
 	new_edge.data.start_node = current_start_for_new_edge
 	new_edge.data.end_node = current_end_for_new_edge
 	new_edge.data.refresh()
 
-	# Resetea
+	# Resetea los nodos para nueva arista
 	current_start_for_new_edge = null
 	current_end_for_new_edge = null
+
+
+## Auxiliar: busca una arista que contenga los dos nodos dados y la retorna
+func _find_edge(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
+	for edge in edges.get_children():
+		if edge.data.start_node == start_node and edge.data.end_node == end_node: return edge
+
+	return null
+
+
+## Auxiliar: busca una arista que contenga los dos nodos dados (en reversa) y lo retorna.
+## Esto solo es válido si la arista no es dirigida.
+func _find_edge_reverse(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
+	for edge in edges.get_children():
+		# Coinciden en el orden inverso (solo pasa si no es dirigido)
+		if (
+			edge.data.start_node == end_node
+			and edge.data.end_node == start_node
+			and not edge.data.directed
+		): return edge
+
+	return null
 
 
 #endregion
