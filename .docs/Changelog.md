@@ -7,6 +7,10 @@
 ### Semana del 22 al 28 de junio
 - 24 jun 2026:
     - Eliminación de `VectorDisplay2D`
+    - Actualización a Godot 4.7
+    - Actualizaciones en el changelog y lista de tareas
+    - Eliminación de la inicialización al azar de los nodos
+    - Señales sin uso en edge_data eliminadas
 
 ## Mayo de 2026
 
