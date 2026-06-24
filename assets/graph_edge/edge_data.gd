@@ -2,14 +2,8 @@
 class_name EdgeData extends Resource
 
 
-## Emitida cuando alguno de los dos extremos cambia
-# TODO: implementar este
-signal extremes_changed(new_start: GraphimNode, new_end: GraphimNode)
 ## Emitida cuando cambia el caracter de arista dirigida
 signal directed_changed()
-## Emitida cuando el peso cambia
-# TODO: implementar este
-signal weight_changed(new_weight: float)
 ## Emitida cuando el color cambia
 signal color_changed(new_color: Color)
 
@@ -23,7 +17,6 @@ signal color_changed(new_color: Color)
 @export var weight: float = 1.0:
 	set(value):
 		weight = value
-		weight_changed.emit(value)
 ## Color de la arista
 @export var color: Color = Color.WHITE:
 	set(value):
@@ -41,13 +34,11 @@ var start_node: GraphimNode:
 	set(value):
 		start_node = value
 		start_uid = value.data.uid if is_instance_valid(value) and is_instance_valid(value.data) else 0
-		extremes_changed.emit(value, end_node)
 ## Nodo del final de la arista
 var end_node: GraphimNode:
 	set(value):
 		end_node = value
 		end_uid = value.data.uid if is_instance_valid(value) and is_instance_valid(value.data) else 0
-		extremes_changed.emit(start_node, value)
 
 
 func _ready() -> void:
@@ -59,7 +50,6 @@ func _ready() -> void:
 
 ## Refresca los datos
 func refresh() -> void:
-	extremes_changed.emit(start_node, end_node)
 	directed_changed.emit()
 	color_changed.emit(color)
 
