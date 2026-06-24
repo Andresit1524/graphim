@@ -36,13 +36,6 @@ func _ready() -> void:
 	# Refresca los datos
 	data.refresh()
 
-	# ! Debug: conectarse al azar a otro nodo
-	var available_nodes := get_tree().get_nodes_in_group(&"nodes")
-	data.end_node = available_nodes.pick_random()
-	available_nodes.erase(data.end_node)
-	data.start_node = get_tree().get_nodes_in_group(&"nodes").pick_random()
-	data.directed = [true, false].pick_random()
-
 
 func _physics_process(_delta: float) -> void:
 	# Omite el procesamiento si no se puede o si hubo movimiento significativo
