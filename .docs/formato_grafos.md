@@ -16,13 +16,11 @@ Esto nos daría un grafo como este:
 ```mermaid
 graph LR
 
-A((A)) --> B
-A((A)) --> C
-B((B)) --- A
-B((B)) --> D
-C((C)) --- A
-C((C)) --> D
-D((D)) --- A
+A((a)) <--> B
+A((a)) <--> C
+B((b)) --> D
+C((c)) --> D
+D((d)) --> A
 ```
 
 Un grafo dirigido puede tener los nodos en una dirección pero no en la otra. Pero los no dirigidos son mutuos: el nodo A apunta al B y viceversa. ¿Pero y los nodos no dirigidos cómo se escriben?
@@ -38,8 +36,6 @@ Para los grafos en Graphim, usaremos una estructura de datos en texto propios: u
 # Comentarios en línea
 # Cada instrucción debe ir en una línea
 
-A # Nodo
-[A, B] # Lista de nodos
 A -> B # Nodo dirigido
 A -- B # Nodo no dirigido
 A -> [B, C, D] # Listas de adyacencia

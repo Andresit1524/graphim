@@ -2,7 +2,13 @@
 
 ---
 
-# Mayo de 2026
+## Junio de 2026
+
+### Semana del 22 al 28 de junio
+- 24 jun 2026:
+    - Eliminación de `VectorDisplay2D`
+
+## Mayo de 2026
 
 ### Semana del 18 al 24 de mayo
 - 24 may 2026: Prototipo de dibujado de aristas
@@ -28,7 +34,7 @@
 
 ---
 
-# Abril de 2026
+## Abril de 2026
 
 ### Semana del 27 de abril al 3 de mayo
 - 3 may 2026: Mejoras en el sistema de centrado y optimización del sistema de desactivación
