@@ -22,7 +22,7 @@ project/assembly_name="Graphim"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/vector_display_2d/plugin.cfg")
+enabled=PackedStringArray()
 
 [file_customization]
 

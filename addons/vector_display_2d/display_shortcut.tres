@@ -1,7 +1,0 @@
-[gd_resource type="InputEventKey" format=3 uid="uid://cogmfdolwspi1"]
-
-[resource]
-device = -1
-shift_pressed = true
-keycode = 86
-unicode = 86
