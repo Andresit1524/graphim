@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bllr2a3vqjlj" path="res://assets/graph_edge/graphim_edge.gd" id="1_ewrya"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_n63bc"]
+font_size = 11
+
 [node name="GraphimEdge" type="Node2D" unique_id=379864618]
 script = ExtResource("1_ewrya")
 arrowhead_size = 2.0
@@ -11,17 +14,17 @@ width = 5.0
 default_color = Color(1, 0.6870301, 0, 1)
 
 [node name="Weight" type="Label" parent="." unique_id=1869160487]
-anchors_preset = 8
+anchors_preset = -1
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -5.0
-offset_top = -12.0
-offset_right = 5.0
-offset_bottom = 11.0
+offset_left = -3.0
+offset_top = -8.0
+offset_right = 4.0
+offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "0"
+label_settings = SubResource("LabelSettings_n63bc")
 horizontal_alignment = 1
 vertical_alignment = 1

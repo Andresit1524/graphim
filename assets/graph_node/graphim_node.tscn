@@ -2,13 +2,10 @@
 
 [ext_resource type="Script" uid="uid://ckfncohh5djdm" path="res://assets/graph_node/graphim_node.gd" id="1_54dhc"]
 [ext_resource type="Texture2D" uid="uid://bldlc2khhc5db" path="res://assets/graph_node/sprite.svg" id="2_h0j33"]
+[ext_resource type="LabelSettings" uid="uid://dt8sghrvof045" path="res://assets/utils/label_settings.tres" id="3_r3uwp"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_h0j33"]
 radius = 13.25
-
-[sub_resource type="LabelSettings" id="LabelSettings_g6t7m"]
-font_size = 11
-font_color = Color(0, 0, 0, 1)
 
 [node name="GraphimNode" type="StaticBody2D" unique_id=56422329 groups=["nodes"]]
 input_pickable = true
@@ -34,7 +31,7 @@ offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "0.0"
-label_settings = SubResource("LabelSettings_g6t7m")
+label_settings = ExtResource("3_r3uwp")
 horizontal_alignment = 1
 vertical_alignment = 1
 

@@ -107,11 +107,13 @@ func _draw() -> void:
 func _change_color(_color: Color, tweened := false) -> void:
 	if not tweened:
 		curve.default_color = _color
+		weight_label.label_settings.font_color = _color
 		queue_redraw()
 		return
 
-	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(curve, "default_color", _color, Constants.EFFECT_TIME)
+	var tween := create_tween().set_trans(Tween.TRANS_SINE).set_parallel()
+	tween.tween_property(curve, ^"default_color", _color, Constants.EFFECT_TIME)
+	tween.tween_property(weight_label.label_settings, ^"font_color", _color, Constants.EFFECT_TIME)
 	tween.finished.connect(queue_redraw, CONNECT_ONE_SHOT)
 
 
@@ -154,7 +156,7 @@ func _set_thickness(value: float, tweened := false) -> void:
 		return
 
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(curve, "width", value, Constants.EFFECT_TIME)
+	tween.tween_property(curve, ^"width", value, Constants.EFFECT_TIME)
 
 
 ## Aumenta el tamaño del nodo y lo deja como antes
@@ -166,14 +168,14 @@ func _bump() -> void:
 ## Expande el nodo
 func _expand() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(curve, "width", thickness * Constants.BUMP_SCALE, Constants.EFFECT_TIME)
+	tween.tween_property(curve, ^"width", thickness * Constants.BUMP_SCALE, Constants.EFFECT_TIME)
 	return tween
 
 
 ## Contrae el nodo a su tamaño original
 func _contract() -> Tween:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(curve, "width", thickness, Constants.EFFECT_TIME)
+	tween.tween_property(curve, ^"width", thickness, Constants.EFFECT_TIME)
 	return tween
 
 
