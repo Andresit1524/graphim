@@ -1,9 +1,10 @@
 ## [code]EdgeData[/code] contiene los datos de una arista, listo para serializar
 class_name EdgeData extends Resource
 
-
 ## Emitida cuando cambia el caracter de arista dirigida
 signal directed_changed()
+## Emitida cuando se cambia el peso del nodo
+signal weight_changed(new_weight: float)
 ## Emitida cuando el color cambia
 signal color_changed(new_color: Color)
 
@@ -33,12 +34,18 @@ signal color_changed(new_color: Color)
 var start_node: GraphimNode:
 	set(value):
 		start_node = value
-		start_uid = value.data.uid if is_instance_valid(value) and is_instance_valid(value.data) else 0
+		if is_instance_valid(value) and is_instance_valid(value.data):
+			start_uid = value.data.uid
+		else:
+			start_uid = 0
 ## Nodo del final de la arista
 var end_node: GraphimNode:
 	set(value):
 		end_node = value
-		end_uid = value.data.uid if is_instance_valid(value) and is_instance_valid(value.data) else 0
+		if is_instance_valid(value) and is_instance_valid(value.data):
+			end_uid = value.data.uid
+		else:
+			end_uid = 0
 
 
 func _ready() -> void:
@@ -52,6 +59,7 @@ func _ready() -> void:
 func refresh() -> void:
 	directed_changed.emit()
 	color_changed.emit(color)
+	weight_changed.emit(weight)
 
 
 ## Obtiene el radio del sprite del nodo. Asumimos que los nodos son del mismo tamaño, y calculamos

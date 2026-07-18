@@ -19,12 +19,14 @@ class_name GraphimEdge extends Node2D
 
 ## Curva (para la arista)
 @onready var curve: Line2D = $Curve
+## Etiqueta para el peso
+@onready var weight_label: Label = $Weight
 
 ## Datos de la arista
 @onready var data: EdgeData = EdgeData.new()
 
 
-# Variables para optimizar el redibujado (en coordenadas globales)
+# Posiciones globales
 var last_start_global: Vector2
 var last_end_global: Vector2
 
@@ -32,25 +34,27 @@ var last_end_global: Vector2
 func _ready() -> void:
 	data.directed_changed.connect(queue_redraw)
 	data.color_changed.connect(_set_color)
+	data.weight_changed.connect(_change_weight)
 
 	# Refresca los datos
 	data.refresh()
 
 
 func _physics_process(_delta: float) -> void:
-	# Omite el procesamiento si no se puede o si hubo movimiento significativo
+	# Omite el procesamiento si no es relevante
 	if not data.has_valid_extremes(): return
 	if not data.has_significant_movement(last_start_global, last_end_global): return
 
 	last_start_global = data.start_node.global_position
 	last_end_global = data.end_node.global_position
+	global_position = (last_end_global + last_start_global) / 2
 
 	# Actualiza con los puntos (locales por las necesidades de Curve2D)
 	curve.points = PackedVector2Array([
 		to_local(last_start_global), to_local(last_end_global)
 	])
 
-	# Exije el dibujado de las cabezas de flecha si es el caso
+	# Dibujado de la punta de la flecha
 	if data.directed: queue_redraw()
 
 
@@ -62,7 +66,6 @@ func _draw() -> void:
 	if curve.points.is_empty(): return
 
 	# Extremos de la recta
-	# ? Importante: Usa las posiciones LOCALES para dibujar
 	var start_pos := curve.points[0]
 	var end_pos := curve.points[1]
 
@@ -104,6 +107,11 @@ func _change_color(_color: Color, tweened := false) -> void:
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
 	tween.tween_property(curve, "default_color", _color, Constants.EFFECT_TIME)
 	tween.finished.connect(queue_redraw, CONNECT_ONE_SHOT)
+
+
+## Establace el peso de la arista
+func _change_weight(weight: float) -> void:
+	weight_label.text = str(weight)
 
 
 #endregion
