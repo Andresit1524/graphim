@@ -2,6 +2,9 @@
 class_name GraphimEdge extends Node2D
 
 
+const LABEL_OFFSET = 20.0
+
+
 @export_group("Visualización")
 ## Grosor del trazo
 @export var thickness: float = 5.0:
@@ -56,6 +59,9 @@ func _physics_process(_delta: float) -> void:
 
 	# Dibujado de la punta de la flecha
 	if data.directed: queue_redraw()
+
+	# Actualización de la posición del peso
+	_update_label_pos()
 
 
 #region Visuales
@@ -112,6 +118,27 @@ func _change_color(_color: Color, tweened := false) -> void:
 ## Establace el peso de la arista
 func _change_weight(weight: float) -> void:
 	weight_label.text = str(weight)
+
+
+## Cambia la posición de la etiqueta si es necesario
+func _update_label_pos() -> void:
+	var rotation_index := _get_rotation_index()
+	var new_label_pos := Vector2.ZERO
+
+	# > 0.5: Arista hacia arriba, etiqueta a la derecha
+	if rotation_index > 0.5: new_label_pos = Vector2.RIGHT
+	# < 0.5: Arista en lateral, etiqueta arriba
+	if rotation_index < 0.5: new_label_pos = Vector2.UP
+	# < -0.5: Arsita hacia abajo, etiqueta a la izquierda
+	if rotation_index < -0.5: new_label_pos = Vector2.LEFT
+
+	weight_label.position = new_label_pos * LABEL_OFFSET - weight_label.size / 2
+
+
+## Obtiene un índice de rotación en base al producto punto con el vector hacia arriba
+func _get_rotation_index() -> float:
+	var direction := (data.end_node.position - data.start_node.position).normalized()
+	return Vector2.UP.dot(direction)
 
 
 #endregion
