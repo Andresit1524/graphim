@@ -1,30 +1,12 @@
-class_name EdgeData extends Node
+## [code]EdgeData[/code] contiene los datos de una arista, listo para serializar
+class_name EdgeData extends Resource
 
 
-## Emitida cuando alguno de los dos extremos cambia
-# TODO: implementar este
-signal extremes_changed(new_start: GraphimNode, new_end: GraphimNode)
 ## Emitida cuando cambia el caracter de arista dirigida
 signal directed_changed()
-## Emitida cuando el peso cambia
-# TODO: implementar este
-signal weight_changed(new_weight: float)
 ## Emitida cuando el color cambia
 signal color_changed(new_color: Color)
 
-
-## Nodo del inicio de la arista
-@export var start_node: GraphimNode:
-	set(value):
-		start_node = value
-		start_uid = value.data.uid if is_instance_valid(value) and is_instance_valid(value.data) else 0
-		extremes_changed.emit(value, end_node)
-## Nodo del final de la arista
-@export var end_node: GraphimNode:
-	set(value):
-		end_node = value
-		end_uid = value.data.uid if is_instance_valid(value) and is_instance_valid(value.data) else 0
-		extremes_changed.emit(start_node, value)
 
 ## Define si la arista es dirigida o no
 @export var directed: bool = false:
@@ -35,18 +17,28 @@ signal color_changed(new_color: Color)
 @export var weight: float = 1.0:
 	set(value):
 		weight = value
-		weight_changed.emit(value)
 ## Color de la arista
 @export var color: Color = Color.WHITE:
 	set(value):
 		color = value
 		color_changed.emit(value)
 
-
 ## Identificador del nodo de inicio
-var start_uid: int
+@export var start_uid: int
 ## Identificador del nodo de final
-var end_uid: int
+@export var end_uid: int
+
+
+## Nodo del inicio de la arista
+var start_node: GraphimNode:
+	set(value):
+		start_node = value
+		start_uid = value.data.uid if is_instance_valid(value) and is_instance_valid(value.data) else 0
+## Nodo del final de la arista
+var end_node: GraphimNode:
+	set(value):
+		end_node = value
+		end_uid = value.data.uid if is_instance_valid(value) and is_instance_valid(value.data) else 0
 
 
 func _ready() -> void:
@@ -58,7 +50,6 @@ func _ready() -> void:
 
 ## Refresca los datos
 func refresh() -> void:
-	extremes_changed.emit(start_node, end_node)
 	directed_changed.emit()
 	color_changed.emit(color)
 

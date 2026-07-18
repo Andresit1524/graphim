@@ -7,6 +7,8 @@ class_name UI extends Control
 @onready var nodes_list_text: RichTextLabel = %Text
 ## Etiqueta de FPS
 @onready var fps_label = %FPS
+## Etiqueta de archivo actual
+@onready var current_file: Label = $CurrentFile
 
 ## Lista de nodos del grafo
 @onready var nodes: Node2D = %Nodes
@@ -27,16 +29,9 @@ var edges_names: String:
 
 
 func _ready() -> void:
-	# Conecta la lista de nodos y de aristas a la actualización de interfaz
-	nodes.child_order_changed.connect(_update_node_names)
-	nodes.child_order_changed.connect(buttons.mark_as_not_saved.bind(true))
-
-	edges.child_order_changed.connect(_update_edge_names)
-	edges.child_order_changed.connect(buttons.mark_as_not_saved.bind(true))
-
 	# Actualiza a la fuerza
-	_update_node_names()
-	_update_edge_names()
+	update_node_names()
+	update_edge_names()
 
 
 func _physics_process(_delta) -> void:
@@ -44,21 +39,23 @@ func _physics_process(_delta) -> void:
 	fps_label.text = "FPS: %s" % Engine.get_frames_per_second()
 
 
-#region Objects list
+#region Lista de objetos
 
 
 ## Actualiza el texto de la lista de nodos
-func _update_node_names() -> void:
+func update_node_names() -> void:
 	print("[World] Nodos actualizados")
 
 	nodes_names = _nodes_to_string(nodes.get_children())
+	mark_as_not_saved(true)
 
 
 ## Actualiza el texto de la lista de aristas
-func _update_edge_names() -> void:
+func update_edge_names() -> void:
 	print("[World] Aristas actualizadas")
 
 	edges_names = _nodes_to_string(edges.get_children())
+	mark_as_not_saved(true)
 
 
 ## Actualiza la lista de textos
@@ -77,7 +74,24 @@ func _nodes_to_string(nodes_list: Array[Node]) -> String:
 #endregion
 
 
+#region Archivo e interfaz asociada
+
+
+## Actualiza el nombre de archivo
+func set_file_name(file_name := "") -> void:
+	current_file.text = file_name if file_name else "Grafo en escena"
+
+
+## Establece el grafo como no guardado
+func mark_as_not_saved(value: bool) -> void:
+	if value and not current_file.text.begins_with("(*) "):
+		current_file.text = "(*) %s" % current_file.text
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	# Resetea el botón de borrar si se clica por fuera
 	if event is InputEventMouseButton and event.is_pressed():
 		buttons.has_delete_button_pressed = false
+
+
+#endregion

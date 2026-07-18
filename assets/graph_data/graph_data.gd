@@ -3,7 +3,7 @@ class_name GraphData extends Resource
 
 
 ## Lista de nodos
-var nodes: Array[NodeData]
+@export var nodes: Array
 
 ## Lista de aristas
-var edges: Array[EdgeData]
+@export var edges: Array

@@ -13,7 +13,7 @@ config_version=5
 config/name="Graphim"
 config/tags=PackedStringArray("unal")
 run/main_scene="uid://i7fektpxxnq7"
-config/features=PackedStringArray("4.6")
+config/features=PackedStringArray("4.7")
 config/icon="uid://p50qwu20juc8"
 
 [dotnet]
@@ -22,7 +22,7 @@ project/assembly_name="Graphim"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/vector_display_2d/plugin.cfg")
+enabled=PackedStringArray()
 
 [file_customization]
 

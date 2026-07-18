@@ -23,7 +23,7 @@ var is_dragging: bool = false:
 		if is_dragging == value: return
 		is_dragging = value
 		dragging.emit(value) # Emitimos solo cuando el estado cambia
-		print("[DraggableObject] Dragging is %s" % value)
+		# print("[DraggableObject] Dragging is %s" % value)
 
 
 ## Maneja el arrastre del objeto con el mouse. Debes incluirlo en el método [code]physics_process[/code]
