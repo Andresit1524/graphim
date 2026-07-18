@@ -3,6 +3,8 @@ class_name EdgeData extends Resource
 
 ## Emitida cuando cambia el caracter de arista dirigida
 signal directed_changed()
+## Emitida cuando se cambia el peso del nodo
+signal weight_changed(new_weight: float)
 ## Emitida cuando el color cambia
 signal color_changed(new_color: Color)
 
@@ -13,7 +15,10 @@ signal color_changed(new_color: Color)
 		directed = value
 		directed_changed.emit()
 ## Peso de la arista
-@export var weight: float = 1.0
+@export var weight: float = 1.0:
+	set(value):
+		weight = value
+		weight_changed.emit(value)
 ## Color de la arista
 @export var color: Color = Color.WHITE:
 	set(value):
@@ -55,6 +60,7 @@ func _ready() -> void:
 func refresh() -> void:
 	directed_changed.emit()
 	color_changed.emit(color)
+	weight_changed.emit(weight)
 
 
 ## Obtiene el radio del sprite del nodo. Asumimos que los nodos son del mismo tamaño, y calculamos
