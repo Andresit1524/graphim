@@ -50,12 +50,10 @@ func _ready() -> void:
 	edges.child_order_changed.connect(ui.update_edge_names)
 
 	# Conecta la lista de nodos a la actualización de señales
-	edges.child_order_changed.connect(_update_edges)
 	nodes.child_order_changed.connect(_update_nodes)
 
 	# Actualiza a la fuerza
 	_update_nodes()
-	_update_edges()
 
 
 #region Manejo del GraphData
@@ -169,12 +167,6 @@ func _get_graph_data_path() -> String:
 func _update_nodes() -> void:
 	for node: GraphimNode in nodes.get_children():
 		if not node.is_connected(&"clicked", _draw_edge): node.clicked.connect(_draw_edge)
-
-
-## Actualiza las señales de las aristas
-# ! No implementado
-func _update_edges() -> void:
-	pass
 
 
 ## Dibuja una arista entre los dos nodos cuando se seleccionan
