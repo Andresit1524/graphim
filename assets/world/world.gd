@@ -33,30 +33,27 @@ var drawing_edges := false
 ## Indica si estamos dibujando aristas dirigidas o no
 var drawing_directed := false
 
-
 # Variables temporales para el dibujado de aristas
 var current_new_edge_start: GraphimNode
 var current_new_edge_end: GraphimNode
 
 
 func _ready() -> void:
-	# Conecta la interfaz a las funciones del grafo
+	# Botones de acción (borrar, guardar, ...)
 	ui.action_buttons.delete.connect(_delete_graph)
 	ui.action_buttons.save.connect(_save_graph)
 	ui.action_buttons.save_as.connect(_save_graph_as)
 	ui.action_buttons.load.connect(_load_graph)
 
-	# Conecta el archivo actual a la interfaz
+	# Cambio de nombre de archivo en la UI
 	current_file_changed.connect(ui.set_file_name)
 
-	# Conecta la lista de nodos y de aristas a la actualización de interfaz
+	# Actualización de la lista de nodos y aristas
 	nodes.child_order_changed.connect(ui.update_node_names)
 	edges.child_order_changed.connect(ui.update_edge_names)
 
-	# Conecta la lista de nodos a la actualización de señales
+	# Actualización de los nodos
 	nodes.child_order_changed.connect(_update_nodes)
-
-	# Actualiza a la fuerza
 	_update_nodes()
 
 
@@ -184,10 +181,9 @@ func _draw_edge(new_node: GraphimNode) -> void:
 		return
 
 	# Añade el extremo final
-	# ? Aún no se soportan aristas en bucle. Así que se omiten
 	current_new_edge_end = new_node
-	current_new_edge_start.data.color = Color.WHITE
 	if current_new_edge_start == current_new_edge_end:
+		# ? Aún no se soportan aristas en bucle. Así que se omiten
 		_abort_new_edge()
 		return
 
@@ -195,6 +191,8 @@ func _draw_edge(new_node: GraphimNode) -> void:
 	# ? Se separan los métodos para que sea fácil implementar bucles en el futuro
 	if _find_edge(current_new_edge_start, current_new_edge_end): return
 	if _find_edge_reverse(current_new_edge_start, current_new_edge_end): return
+
+	current_new_edge_start.data.color = Color.WHITE
 
 	# Crea y configura
 	var new_edge: GraphimEdge = edge_scene.instantiate()
@@ -211,9 +209,10 @@ func _draw_edge(new_node: GraphimNode) -> void:
 
 ## Aborta el dibujado de la nueva arista
 func _abort_new_edge() -> void:
-	current_new_edge_start.data.color = Color.WHITE
-	current_new_edge_start = null
 	current_new_edge_end = null
+	if current_new_edge_start != null:
+		current_new_edge_start.data.color = Color.WHITE
+		current_new_edge_start = null
 
 
 ## Auxiliar: busca una arista que contenga los dos nodos dados y la retorna
