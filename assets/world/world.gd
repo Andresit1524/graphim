@@ -15,7 +15,7 @@ signal current_file_changed(new_name: String)
 ## Interfaz
 @onready var ui: UI = %UI
 ## Botón para dibujar aristas
-@onready var directed_button: Button = %DirectedButton
+@onready var directed_button: Button = %DirectedEdgesButton
 ## Ventana de guardado
 @onready var save_load_dialog: FileDialog = %SaveDialog
 
@@ -35,8 +35,8 @@ var drawing_directed := false
 
 
 # Variables temporales para el dibujado de aristas
-var current_start_for_new_edge: GraphimNode
-var current_end_for_new_edge: GraphimNode
+var current_new_edge_start: GraphimNode
+var current_new_edge_end: GraphimNode
 
 
 func _ready() -> void:
@@ -177,32 +177,43 @@ func _update_nodes() -> void:
 func _draw_edge(new_node: GraphimNode) -> void:
 	if not drawing_edges: return
 
-	# Añade el inicio si es el caso
-	if not current_start_for_new_edge:
-		current_start_for_new_edge = new_node
+	# Añade el extremo inicial si es el caso
+	if not current_new_edge_start:
+		current_new_edge_start = new_node
+		current_new_edge_start.data.color = Color.LIGHT_SKY_BLUE
 		return
 
-	# Añade el final
-	# ? Aún no se soportan aristas redundantes. Así que se omiten
-	current_end_for_new_edge = new_node
-	if current_start_for_new_edge == current_end_for_new_edge: return
+	# Añade el extremo final
+	# ? Aún no se soportan aristas en bucle. Así que se omiten
+	current_new_edge_end = new_node
+	current_new_edge_start.data.color = Color.WHITE
+	if current_new_edge_start == current_new_edge_end:
+		_abort_new_edge()
+		return
 
 	# Verifica que la arista no este existiendo ya
 	# ? Se separan los métodos para que sea fácil implementar bucles en el futuro
-	if _find_edge(current_start_for_new_edge, current_end_for_new_edge): return
-	if _find_edge_reverse(current_start_for_new_edge, current_end_for_new_edge): return
+	if _find_edge(current_new_edge_start, current_new_edge_end): return
+	if _find_edge_reverse(current_new_edge_start, current_new_edge_end): return
 
 	# Crea y configura
 	var new_edge: GraphimEdge = edge_scene.instantiate()
 	edges.add_child(new_edge, true)
-	new_edge.data.start_node = current_start_for_new_edge
-	new_edge.data.end_node = current_end_for_new_edge
+	new_edge.data.start_node = current_new_edge_start
+	new_edge.data.end_node = current_new_edge_end
 	new_edge.data.directed = drawing_directed
 	new_edge.data.refresh()
 
 	# Resetea los nodos para nueva arista
-	current_start_for_new_edge = null
-	current_end_for_new_edge = null
+	current_new_edge_start = null
+	current_new_edge_end = null
+
+
+## Aborta el dibujado de la nueva arista
+func _abort_new_edge() -> void:
+	current_new_edge_start.data.color = Color.WHITE
+	current_new_edge_start = null
+	current_new_edge_end = null
 
 
 ## Auxiliar: busca una arista que contenga los dos nodos dados y la retorna
@@ -238,10 +249,7 @@ func _on_draw_button_pressed() -> void:
 	drawing_edges = not drawing_edges
 	directed_button.disabled = not drawing_edges
 
-	if not drawing_edges:
-		current_end_for_new_edge = null
-		current_start_for_new_edge = null
-
+	if not drawing_edges: _abort_new_edge()
 
 func _on_directed_button_pressed() -> void:
 	drawing_directed = not drawing_directed
