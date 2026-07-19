@@ -14,6 +14,8 @@ signal current_file_changed(new_name: String)
 
 ## Interfaz
 @onready var ui: UI = %UI
+## Botón para dibujar aristas
+@onready var directed_button: Button = %DirectedButton
 ## Ventana de guardado
 @onready var save_load_dialog: FileDialog = %SaveDialog
 
@@ -28,6 +30,8 @@ signal current_file_changed(new_name: String)
 
 ## Indica si estamos dibujando aristas
 var drawing_edges := false
+## Indica si estamos dibujando aristas dirigidas o no
+var drawing_directed := false
 
 
 # Variables temporales para el dibujado de aristas
@@ -37,10 +41,10 @@ var current_end_for_new_edge: GraphimNode
 
 func _ready() -> void:
 	# Conecta la interfaz a las funciones del grafo
-	ui.buttons.delete.connect(_delete_graph)
-	ui.buttons.save.connect(_save_graph)
-	ui.buttons.save_as.connect(_save_graph_as)
-	ui.buttons.load.connect(_load_graph)
+	ui.action_buttons.delete.connect(_delete_graph)
+	ui.action_buttons.save.connect(_save_graph)
+	ui.action_buttons.save_as.connect(_save_graph_as)
+	ui.action_buttons.load.connect(_load_graph)
 
 	# Conecta el archivo actual a la interfaz
 	current_file_changed.connect(ui.set_file_name)
@@ -193,6 +197,7 @@ func _draw_edge(new_node: GraphimNode) -> void:
 	edges.add_child(new_edge, true)
 	new_edge.data.start_node = current_start_for_new_edge
 	new_edge.data.end_node = current_end_for_new_edge
+	new_edge.data.directed = drawing_directed
 	new_edge.data.refresh()
 
 	# Resetea los nodos para nueva arista
@@ -225,9 +230,21 @@ func _find_edge_reverse(start_node: GraphimNode, end_node: GraphimNode) -> Graph
 #endregion
 
 
+#region Botones
+
+
 ## Actualiza el estado del dibujado de grafos
 func _on_draw_button_pressed() -> void:
 	drawing_edges = not drawing_edges
+	directed_button.disabled = not drawing_edges
+
 	if not drawing_edges:
 		current_end_for_new_edge = null
 		current_start_for_new_edge = null
+
+
+func _on_directed_button_pressed() -> void:
+	drawing_directed = not drawing_directed
+
+
+#endregion

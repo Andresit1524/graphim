@@ -41,14 +41,14 @@ script = ExtResource("4_f47bs")
 metadata/_edit_use_anchors_ = true
 metadata/_edit_lock_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI" unique_id=1736146907]
+[node name="Tools" type="VBoxContainer" parent="CanvasLayer/UI" unique_id=1736146907]
 layout_mode = 0
 offset_left = 42.0
 offset_top = 42.0
 offset_right = 82.0
 offset_bottom = 82.0
 
-[node name="DragInstancer" parent="CanvasLayer/UI/VBoxContainer" unique_id=704335588 node_paths=PackedStringArray("instances_node") instance=ExtResource("2_lh2ud")]
+[node name="DragInstancer" parent="CanvasLayer/UI/Tools" unique_id=704335588 node_paths=PackedStringArray("instances_node") instance=ExtResource("2_lh2ud")]
 custom_minimum_size = Vector2(121, 121)
 layout_mode = 2
 scene = ExtResource("3_hqvew")
@@ -58,13 +58,24 @@ instance_size = 3.0
 reset_instance_size = true
 metadata/_edit_use_anchors_ = true
 
-[node name="DrawButton" type="Button" parent="CanvasLayer/UI/VBoxContainer" unique_id=195797117]
+[node name="Space" type="Control" parent="CanvasLayer/UI/Tools" unique_id=256447797]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="DrawButton" type="Button" parent="CanvasLayer/UI/Tools" unique_id=195797117]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 text = "Dibujar aristas"
 
-[node name="Buttons" type="VBoxContainer" parent="CanvasLayer/UI" unique_id=1010987770]
+[node name="DirectedButton" type="Button" parent="CanvasLayer/UI/Tools" unique_id=1452687321]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+toggle_mode = true
+text = "Aristas dirigidas"
+
+[node name="Actions" type="VBoxContainer" parent="CanvasLayer/UI" unique_id=1010987770]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1
@@ -77,22 +88,22 @@ offset_bottom = 269.0
 grow_horizontal = 0
 script = ExtResource("4_truut")
 
-[node name="SaveButton" type="Button" parent="CanvasLayer/UI/Buttons" unique_id=1891996649]
+[node name="SaveButton" type="Button" parent="CanvasLayer/UI/Actions" unique_id=1891996649]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Guardar"
 
-[node name="SaveAsButton" type="Button" parent="CanvasLayer/UI/Buttons" unique_id=1456769782]
+[node name="SaveAsButton" type="Button" parent="CanvasLayer/UI/Actions" unique_id=1456769782]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Guardar como"
 
-[node name="DeleteButton" type="Button" parent="CanvasLayer/UI/Buttons" unique_id=2133434705]
+[node name="DeleteButton" type="Button" parent="CanvasLayer/UI/Actions" unique_id=2133434705]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Borrar todo"
 
-[node name="LoadButton" type="Button" parent="CanvasLayer/UI/Buttons" unique_id=1490635578]
+[node name="LoadButton" type="Button" parent="CanvasLayer/UI/Actions" unique_id=1490635578]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Cargar"
@@ -165,8 +176,9 @@ unique_name_in_owner = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1279360004]
 
-[connection signal="pressed" from="CanvasLayer/UI/VBoxContainer/DrawButton" to="." method="_on_draw_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/UI/Buttons/SaveButton" to="CanvasLayer/UI/Buttons" method="_on_save_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/UI/Buttons/SaveAsButton" to="CanvasLayer/UI/Buttons" method="_on_save_as_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/UI/Buttons/DeleteButton" to="CanvasLayer/UI/Buttons" method="_on_delete_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/UI/Buttons/LoadButton" to="CanvasLayer/UI/Buttons" method="_on_load_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/UI/Tools/DrawButton" to="." method="_on_draw_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/UI/Tools/DirectedButton" to="." method="_on_directed_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/UI/Actions/SaveButton" to="CanvasLayer/UI/Actions" method="_on_save_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/UI/Actions/SaveAsButton" to="CanvasLayer/UI/Actions" method="_on_save_as_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/UI/Actions/DeleteButton" to="CanvasLayer/UI/Actions" method="_on_delete_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/UI/Actions/LoadButton" to="CanvasLayer/UI/Actions" method="_on_load_button_pressed"]

@@ -2,7 +2,7 @@ class_name UI extends Control
 
 
 ## Lista de botones
-@onready var buttons: Buttons = %Buttons
+@onready var action_buttons: Buttons = %Actions
 ## Texto de la lista de objetos
 @onready var nodes_list_text: RichTextLabel = %Text
 ## Etiqueta de FPS
@@ -91,7 +91,7 @@ func mark_as_not_saved(value: bool) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	# Resetea el botón de borrar si se clica por fuera
 	if event is InputEventMouseButton and event.is_pressed():
-		buttons.has_delete_button_pressed = false
+		action_buttons.has_delete_button_pressed = false
 
 
 #endregion
