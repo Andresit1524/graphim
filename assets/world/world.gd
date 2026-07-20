@@ -48,9 +48,9 @@ func _ready() -> void:
 	# Cambio de nombre de archivo en la UI
 	current_file_changed.connect(ui.set_file_name)
 
-	# Actualización de la lista de nodos y aristas
-	nodes.child_order_changed.connect(ui.update_node_names)
-	edges.child_order_changed.connect(ui.update_edge_names)
+	# Actualización del conteo de nodos y aristas
+	nodes.child_order_changed.connect(ui.update_objects_count)
+	edges.child_order_changed.connect(ui.update_objects_count)
 
 	# Actualización de los nodos
 	nodes.child_order_changed.connect(_update_nodes)
@@ -102,12 +102,7 @@ func _delete_graph() -> void:
 	print("[World] Borrando grafo")
 
 	# Elimina. No es necesario actualizar porque cada eliminación lo hace
-	for child in edges.get_children():
-		edges.remove_child(child)
-		child.queue_free()
-
-	for child in nodes.get_children():
-		nodes.remove_child(child)
+	for child in nodes.get_children() + edges.get_children():
 		child.queue_free()
 
 	print("[World] Borrado")

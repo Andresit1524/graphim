@@ -4,7 +4,7 @@ class_name UI extends Control
 ## Lista de botones
 @onready var action_buttons: Buttons = %Actions
 ## Texto de la lista de objetos
-@onready var nodes_list_text: RichTextLabel = %Text
+@onready var count_text: RichTextLabel = %Count
 ## Etiqueta de FPS
 @onready var fps_label = %FPS
 ## Etiqueta de archivo actual
@@ -20,18 +20,12 @@ class_name UI extends Control
 var nodes_names: String:
 	set(value):
 		nodes_names = value
-		_update_objects_list()
+		update_objects_count()
 ## Nombres de las aristas
 var edges_names: String:
 	set(value):
 		edges_names = value
-		_update_objects_list()
-
-
-func _ready() -> void:
-	# Actualiza a la fuerza
-	update_node_names()
-	update_edge_names()
+		update_objects_count()
 
 
 func _physics_process(_delta) -> void:
@@ -39,42 +33,15 @@ func _physics_process(_delta) -> void:
 	fps_label.text = "FPS: %s" % Engine.get_frames_per_second()
 
 
-#region Lista de objetos
-
-
-## Actualiza el texto de la lista de nodos
-func update_node_names() -> void:
-	print("[World] Nodos actualizados")
-
-	nodes_names = _nodes_to_string(nodes.get_children())
-	mark_as_not_saved(true)
-
-
-## Actualiza el texto de la lista de aristas
-func update_edge_names() -> void:
-	print("[World] Aristas actualizadas")
-
-	edges_names = _nodes_to_string(edges.get_children())
-	mark_as_not_saved(true)
-
-
 ## Actualiza la lista de textos
-func _update_objects_list() -> void:
-	nodes_list_text.text = "[center][b]Nodos[/b][/center]" + nodes_names + "\n\n[center][b]Aristas[/b][/center]" + edges_names
-
-
-## Auxiliar: convierte la lista de nodos en una lista
-func _nodes_to_string(nodes_list: Array[Node]) -> String:
-	return nodes_list.reduce(func(current_text: String, node: Node):
-		return (current_text + "\n- %s" % node.name),
-		""
+func update_objects_count() -> void:
+	if not is_instance_valid(nodes) or not is_instance_valid(edges): return
+	count_text.text = (
+		"[b]Nodos[/b]: %d\n[b]Aristas[/b]: %d"
+		% [nodes.get_child_count(), edges.get_child_count()]
 	)
 
-
-#endregion
-
-
-#region Archivo e interfaz asociada
+	mark_as_not_saved()
 
 
 ## Actualiza el nombre de archivo
@@ -83,7 +50,7 @@ func set_file_name(file_name := "") -> void:
 
 
 ## Establece el grafo como no guardado
-func mark_as_not_saved(value: bool) -> void:
+func mark_as_not_saved(value := true) -> void:
 	if value and not current_file.text.begins_with("(*) "):
 		current_file.text = "(*) %s" % current_file.text
 
@@ -92,6 +59,3 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Resetea el botón de borrar si se clica por fuera
 	if event is InputEventMouseButton and event.is_pressed():
 		action_buttons.has_delete_button_pressed = false
-
-
-#endregion
