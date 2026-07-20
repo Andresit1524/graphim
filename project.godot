@@ -11,6 +11,8 @@ config_version=5
 [application]
 
 config/name="Graphim"
+config/description="Simulador interactivo de grafos y algoritmos de grafos"
+config/version="1.0"
 config/tags=PackedStringArray("unal")
 run/main_scene="uid://i7fektpxxnq7"
 config/features=PackedStringArray("4.7")

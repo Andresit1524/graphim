@@ -19,3 +19,6 @@ mono_crash.*.json
 .tmp
 .DS_store
 desktop.ini
+
+# Builds
+.builds/
