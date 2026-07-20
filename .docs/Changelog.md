@@ -5,6 +5,9 @@
 ## Julio de 2026
 
 ### Semana del 13 al 19 de julio
+- 19 de julio:
+    - Corrección del bug que hacia saltar los nodos cuando se trataban de dibujar dos aristas idénticas
+    - Botón para aleatorizar grafos
 - 18 de julio:
     - Eliminación de métodos innecesarios en `EdgeData` y `World`
     - Adición de un texto para el peso de las aristas, con color y posición autoajustable

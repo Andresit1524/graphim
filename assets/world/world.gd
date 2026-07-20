@@ -153,6 +153,46 @@ func _load_graph() -> void:
 	print("[World] Cargado")
 
 
+## Genera un grafo al azar
+func _randomize() -> void:
+	_delete_graph()
+
+	const RANDOM_SIZE = 50
+	const SPREAD_SIZE = 200
+
+	var count = randi_range(1, RANDOM_SIZE)
+
+	# Nodos
+	for i in count:
+		var new_node: GraphimNode = node_scene.instantiate()
+		nodes.add_child(new_node, true)
+		new_node.data.weight = randi_range(2, RANDOM_SIZE)
+		new_node.data.refresh()
+		new_node.position = Vector2(
+			randf_range(-SPREAD_SIZE, SPREAD_SIZE),
+			randf_range(-SPREAD_SIZE, SPREAD_SIZE)
+		)
+
+	# Conexiones
+	for i in count:
+		var node_a: GraphimNode = null
+		var node_b: GraphimNode = null
+
+		var max_attemps := 100000
+		for j in max_attemps:
+			node_a = nodes.get_children().pick_random()
+			node_b = nodes.get_children().pick_random()
+			if node_a != node_b: break
+
+		var new_edge: GraphimEdge = edge_scene.instantiate()
+		edges.add_child(new_edge, true)
+		new_edge.data.directed = [true, false].pick_random()
+		new_edge.data.weight = randi_range(1, RANDOM_SIZE)
+		new_edge.data.start_node = node_a
+		new_edge.data.end_node = node_b
+		new_edge.data.refresh()
+
+
 ## Auxiliar: limpia la ruta del archivo de guardado
 func _get_graph_data_path() -> String:
 	return current_graph_data.resource_path.trim_prefix("user://graphs/")
@@ -252,6 +292,10 @@ func _on_draw_button_pressed() -> void:
 
 func _on_directed_button_pressed() -> void:
 	drawing_directed = not drawing_directed
+
+
+func _on_randomize_button_pressed() -> void:
+	_randomize()
 
 
 #endregion
