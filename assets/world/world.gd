@@ -131,8 +131,8 @@ func _load_graph() -> void:
 	# Instancia todos los nodos
 	for node_data: NodeData in current_graph_data.nodes:
 		var new_node: GraphimNode = node_scene.instantiate()
-		new_node.data = node_data
 		nodes.add_child(new_node, true)
+		new_node.data = node_data
 
 		uids[new_node.data.uid] = new_node
 		new_node.global_position = Vector2(randf_range(-200, 200), randf_range(-200, 200))
@@ -140,8 +140,8 @@ func _load_graph() -> void:
 	# Instancia todas las aristas
 	for edge_data: EdgeData in current_graph_data.edges:
 		var new_edge: GraphimEdge = edge_scene.instantiate()
-		new_edge.data = edge_data
 		edges.add_child(new_edge, true)
+		new_edge.data = edge_data
 
 		# Busca los nodos por su UID y vincula los extremos
 		new_edge.data.start_node = uids.get(new_edge.data.start_uid)
