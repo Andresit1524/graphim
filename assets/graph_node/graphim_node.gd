@@ -3,7 +3,9 @@ class_name GraphimNode extends DraggableObject
 
 
 ## Emitida cuando se le hace clic al nodo. Útil para dibujar aristas
-signal clicked(graphim_node: GraphimNode)
+signal clicked(node: GraphimNode)
+## Emitida cuando se elimina este nodo
+signal deleted(node: GraphimNode)
 
 
 ## Sprite del nodo
@@ -172,11 +174,8 @@ func get_data_copy() -> NodeData:
 
 # Procesa los eventos (filtrando clics) para el dibujado de aristas
 func _on_input_event(_viewport, event: InputEvent, _shape_idx) -> void:
-	# Filtra los clics izquierdos
-	if not (
-		event is InputEventMouseButton
-		and event.is_pressed()
-		and event.button_index == MOUSE_BUTTON_LEFT
-	): return
+	# Clicado si es click izquierdo
+	if event.is_action_pressed(&"left_click"): clicked.emit(self)
 
-	clicked.emit(self)
+	# Eliminado si es clic derecho
+	if event.is_action_pressed(&"right_click"): deleted.emit(self)

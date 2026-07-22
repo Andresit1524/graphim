@@ -202,7 +202,11 @@ func _get_graph_data_path() -> String:
 ## Actualiza las señales de los nodos
 func _update_nodes() -> void:
 	for node: GraphimNode in nodes.get_children():
-		if not node.is_connected(&"clicked", _draw_edge): node.clicked.connect(_draw_edge)
+		if not node.is_connected(&"clicked", _draw_edge):
+			node.clicked.connect(_draw_edge)
+
+		if not node.is_connected(&"deleted", _draw_edge):
+			node.deleted.connect(_delete_node)
 
 
 ## Dibuja una arista entre los dos nodos cuando se seleccionan
@@ -270,6 +274,16 @@ func _find_edge_reverse(start_node: GraphimNode, end_node: GraphimNode) -> Graph
 		): return edge
 
 	return null
+
+
+## Elimina un nodo y todas las aristas que dependen de él
+func _delete_node(node: GraphimNode) -> void:
+	# Aristas conectadas
+	for edge: GraphimEdge in edges.get_children():
+		if edge.data.end_node == node or edge.data.start_node == node:
+			edge.queue_free()
+
+	node.queue_free()
 
 
 #endregion
