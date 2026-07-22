@@ -5,7 +5,10 @@
 [sub_resource type="LabelSettings" id="LabelSettings_n63bc"]
 font_size = 11
 
-[node name="GraphimEdge" type="Node2D" unique_id=379864618]
+[sub_resource type="CircleShape2D" id="CircleShape2D_ewrya"]
+radius = 21.023796
+
+[node name="GraphimEdge" type="Area2D" unique_id=154076572]
 script = ExtResource("1_ewrya")
 arrowhead_size = 2.0
 
@@ -28,3 +31,6 @@ text = "0"
 label_settings = SubResource("LabelSettings_n63bc")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1401325162]
+shape = SubResource("CircleShape2D_ewrya")

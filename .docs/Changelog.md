@@ -5,7 +5,7 @@
 ## Julio de 2026
 
 ### Semana del 20 al 26 de julio
-- 21 de julio: Eliminación de nodos con clic derecho
+- 21 de julio: Eliminación de nodos y aristas con clic derecho
 - 20 de julio: Sustitución de la lista de objetos por un conteo
 
 ### Semana del 13 al 19 de julio

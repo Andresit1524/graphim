@@ -53,8 +53,9 @@ func _ready() -> void:
 	edges.child_order_changed.connect(ui.update_objects_count)
 
 	# Actualización de los nodos
-	nodes.child_order_changed.connect(_update_nodes)
-	_update_nodes()
+	nodes.child_order_changed.connect(_update_object_signals)
+	edges.child_order_changed.connect(_update_object_signals)
+	_update_object_signals()
 
 
 #region Manejo del GraphData
@@ -200,13 +201,17 @@ func _get_graph_data_path() -> String:
 
 
 ## Actualiza las señales de los nodos
-func _update_nodes() -> void:
+func _update_object_signals() -> void:
 	for node: GraphimNode in nodes.get_children():
 		if not node.is_connected(&"clicked", _draw_edge):
 			node.clicked.connect(_draw_edge)
 
 		if not node.is_connected(&"deleted", _draw_edge):
 			node.deleted.connect(_delete_node)
+
+	for edge: GraphimEdge in edges.get_children():
+		if not edge.is_connected(&"deleted", _delete_edge):
+			edge.deleted.connect(_delete_edge)
 
 
 ## Dibuja una arista entre los dos nodos cuando se seleccionan
@@ -284,6 +289,11 @@ func _delete_node(node: GraphimNode) -> void:
 			edge.queue_free()
 
 	node.queue_free()
+
+
+## Elimina una arista
+func _delete_edge(edge: GraphimEdge) -> void:
+	edge.queue_free()
 
 
 #endregion

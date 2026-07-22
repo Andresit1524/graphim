@@ -1,8 +1,12 @@
 ## Nodo de arista que une grafos en línea recta con el color y grosor dados
-class_name GraphimEdge extends Node2D
+class_name GraphimEdge extends Area2D
 
 
 const LABEL_OFFSET = 20.0
+
+
+## Se emite cuando se elimina la arista
+signal deleted(node: GraphimEdge)
 
 
 @export_group("Visualización")
@@ -197,3 +201,9 @@ func get_data_copy() -> EdgeData:
 
 
 #endregion
+
+
+## Maneja los clics sobre la arista
+func _input_event(_viewport, event: InputEvent, _shape_idx) -> void:
+	if event.is_action_pressed(&"right_click"):
+		deleted.emit(self)
