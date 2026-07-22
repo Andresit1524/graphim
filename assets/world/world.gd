@@ -56,9 +56,8 @@ func _ready() -> void:
 	edges.child_order_changed.connect(ui.update_objects_count)
 
 	# Actualización de los nodos
-	nodes.child_order_changed.connect(_update_object_signals)
-	edges.child_order_changed.connect(_update_object_signals)
-	_update_object_signals()
+	nodes.child_entered_tree.connect(_connect_new_node)
+	edges.child_entered_tree.connect(_connect_new_edge)
 
 
 #region Manejo del GraphData
@@ -216,18 +215,25 @@ func _get_graph_data_path() -> String:
 #region Manejo del grafo interno
 
 
-## Actualiza las señales de los nodos
-func _update_object_signals() -> void:
-	for node: GraphimNode in nodes.get_children():
-		if not node.is_connected(&"clicked", _draw_edge):
-			node.clicked.connect(_draw_edge)
+## Actualiza las conexiones del nodo nuevo
+func _connect_new_node(node: Node) -> void:
+	var _node := node as GraphimNode
 
-		if not node.is_connected(&"deleted", _draw_edge):
-			node.deleted.connect(_delete_node)
+	if not _node.is_connected(&"clicked", _draw_edge):
+		_node.clicked.connect(_draw_edge)
 
-	for edge: GraphimEdge in edges.get_children():
-		if not edge.is_connected(&"deleted", _delete_edge):
-			edge.deleted.connect(_delete_edge)
+	if not _node.is_connected(&"deleted", _draw_edge):
+		_node.deleted.connect(_delete_node)
+
+
+## Actualiza las conexiones de una arista nueva
+func _connect_new_edge(edge: Node) -> void:
+	var _edge := edge as GraphimEdge
+
+	if not edge.is_connected(&"deleted", _delete_edge):
+		edge.deleted.connect(_delete_edge)
+
+	# TODO: Implementar clicked también
 
 
 ## Dibuja una arista entre los dos nodos cuando se seleccionan
