@@ -5,6 +5,9 @@ class_name GraphimEdge extends Area2D
 const LABEL_OFFSET = 20.0
 
 
+## Se emite cuando se clica el objeto
+# TODO: implementar algo para este método
+signal clicked(edge: GraphimEdge)
 ## Se emite cuando se elimina la arista
 signal deleted(node: GraphimEdge)
 
@@ -205,5 +208,8 @@ func get_data_copy() -> EdgeData:
 
 ## Maneja los clics sobre la arista
 func _input_event(_viewport, event: InputEvent, _shape_idx) -> void:
+	if event.is_action_pressed(&"left_click"):
+		clicked.emit(self)
+
 	if event.is_action_pressed(&"right_click"):
 		deleted.emit(self)
