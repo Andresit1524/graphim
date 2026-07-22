@@ -5,6 +5,8 @@
 ## Julio de 2026
 
 ### Semana del 20 al 26 de julio
+- 22 de julio:
+    - Corrección en los nodos volantes al aleatorizar
 - 21 de julio: 
     - Eliminación de nodos y aristas con clic derecho
     - Señal nueva para poder seleccionar aristas

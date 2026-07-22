@@ -37,6 +37,9 @@ var drawing_directed := false
 var current_new_edge_start: GraphimNode
 var current_new_edge_end: GraphimNode
 
+## Indica si se está aleatorizando
+var randomizing := false
+
 
 func _ready() -> void:
 	# Botones de acción (borrar, guardar, ...)
@@ -151,17 +154,26 @@ func _load_graph() -> void:
 
 ## Genera un grafo al azar
 func _randomize() -> void:
+	if randomizing: return
+
+	randomizing = true
 	_delete_graph()
 
 	const RANDOM_SIZE = 50
 	const SPREAD_SIZE = 200
+	const DELAY = 0.01
 
-	var count = randi_range(1, RANDOM_SIZE)
+	var node_count = randi_range(5, RANDOM_SIZE)
+	var edge_count = randi_range(node_count, node_count * 2)
 
 	# Nodos
-	for i in count:
+	var new_nodes: Array[GraphimNode]
+	for i in node_count:
+		await get_tree().create_timer(DELAY).timeout
 		var new_node: GraphimNode = node_scene.instantiate()
-		nodes.add_child(new_node, true)
+		nodes.add_child(new_node)
+		new_nodes.append(new_node)
+
 		new_node.data.weight = randi_range(2, RANDOM_SIZE)
 		new_node.data.refresh()
 		new_node.position = Vector2(
@@ -169,17 +181,19 @@ func _randomize() -> void:
 			randf_range(-SPREAD_SIZE, SPREAD_SIZE)
 		)
 
+	var pairs := []
+	for i in new_nodes.size():
+		for j in range(i + 1, new_nodes.size()):
+			pairs.append([new_nodes[i], new_nodes[j]])
+	pairs.shuffle()
+
 	# Conexiones
-	for i in count:
-		var node_a: GraphimNode = null
-		var node_b: GraphimNode = null
+	for i in edge_count:
+		var pair = pairs.pick_random()
+		var node_a: GraphimNode = pair[0]
+		var node_b: GraphimNode = pair[1]
 
-		var max_attemps := 100000
-		for j in max_attemps:
-			node_a = nodes.get_children().pick_random()
-			node_b = nodes.get_children().pick_random()
-			if node_a != node_b: break
-
+		await get_tree().create_timer(DELAY).timeout
 		var new_edge: GraphimEdge = edge_scene.instantiate()
 		edges.add_child(new_edge, true)
 		new_edge.data.directed = [true, false].pick_random()
@@ -187,6 +201,8 @@ func _randomize() -> void:
 		new_edge.data.start_node = node_a
 		new_edge.data.end_node = node_b
 		new_edge.data.refresh()
+
+	randomizing = false
 
 
 ## Auxiliar: limpia la ruta del archivo de guardado

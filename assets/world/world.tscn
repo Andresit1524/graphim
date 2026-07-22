@@ -176,6 +176,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Physics" type="Node" parent="." unique_id=1290079163]
+unique_name_in_owner = true
 script = ExtResource("7_hqvew")
 
 [node name="SaveDialog" type="FileDialog" parent="." unique_id=1962484975]
