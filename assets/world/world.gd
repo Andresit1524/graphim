@@ -5,6 +5,11 @@ class_name World extends Node2D
 signal current_file_changed(new_name: String)
 
 
+const RANDOM_SIZE = 50
+const SPREAD_SIZE = 300
+const DELAY = 0.01
+
+
 @export_group("Dependencies")
 ## Escena de un nodo
 @export var node_scene: PackedScene
@@ -130,12 +135,16 @@ func _load_graph() -> void:
 
 	# Instancia todos los nodos
 	for node_data: NodeData in current_graph_data.nodes:
+		await get_tree().create_timer(DELAY).timeout
 		var new_node: GraphimNode = node_scene.instantiate()
 		nodes.add_child(new_node, true)
 		new_node.data = node_data
 
 		uids[new_node.data.uid] = new_node
-		new_node.global_position = Vector2(randf_range(-200, 200), randf_range(-200, 200))
+		new_node.global_position = Vector2(
+			randf_range(-SPREAD_SIZE, SPREAD_SIZE),
+			randf_range(-SPREAD_SIZE, SPREAD_SIZE)
+		)
 
 	# Instancia todas las aristas
 	for edge_data: EdgeData in current_graph_data.edges:
@@ -153,14 +162,8 @@ func _load_graph() -> void:
 
 ## Genera un grafo al azar
 func _randomize() -> void:
-	if randomizing: return
-
 	randomizing = true
 	_delete_graph()
-
-	const RANDOM_SIZE = 50
-	const SPREAD_SIZE = 200
-	const DELAY = 0.01
 
 	var node_count = randi_range(5, RANDOM_SIZE)
 	var edge_count = randi_range(node_count, node_count * 2)
@@ -174,7 +177,6 @@ func _randomize() -> void:
 		new_nodes.append(new_node)
 
 		new_node.data.weight = randi_range(2, RANDOM_SIZE)
-		new_node.data.refresh()
 		new_node.position = Vector2(
 			randf_range(-SPREAD_SIZE, SPREAD_SIZE),
 			randf_range(-SPREAD_SIZE, SPREAD_SIZE)
@@ -189,6 +191,8 @@ func _randomize() -> void:
 	# Conexiones
 	for i in edge_count:
 		var pair = pairs.pick_random()
+		pairs.erase(pair)
+
 		var node_a: GraphimNode = pair[0]
 		var node_b: GraphimNode = pair[1]
 
@@ -336,6 +340,7 @@ func _on_directed_button_pressed() -> void:
 
 
 func _on_randomize_button_pressed() -> void:
+	if randomizing: return
 	_randomize()
 
 
