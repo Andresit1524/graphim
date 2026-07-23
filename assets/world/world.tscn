@@ -199,7 +199,7 @@ unique_name_in_owner = true
 
 [connection signal="pressed" from="CanvasLayer/UI/Tools/DrawEdgesButton" to="." method="_on_draw_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/UI/Tools/DirectedEdgesButton" to="." method="_on_directed_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/UI/Tools/RandomizeButton" to="." method="_on_randomize_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/UI/Tools/RandomizeButton" to="." method="_randomize"]
 [connection signal="pressed" from="CanvasLayer/UI/Actions/SaveButton" to="CanvasLayer/UI/Actions" method="_on_save_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/UI/Actions/SaveAsButton" to="CanvasLayer/UI/Actions" method="_on_save_as_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/UI/Actions/DeleteButton" to="CanvasLayer/UI/Actions" method="_on_delete_button_pressed"]

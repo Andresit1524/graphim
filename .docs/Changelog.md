@@ -5,11 +5,14 @@
 ## Julio de 2026
 
 ### Semana del 20 al 26 de julio
+- 23 de julio:
+    - Ahora los botones se desactivan cuando se esta aleatorizando un grafo
 - 22 de julio:
     - Corrección en los nodos volantes al aleatorizar
     - Optimización y corrección de las señales de los nodos, crasheando al cerrar
     - Corrección del bug donde las aristas no se conectan a sus nodos al cargar
     - Mejoras en el feedback visualy funcionamiento de la instanciación y randomización
+    - Ahora no se pueden eliminar elementos mientras se randomiza
 - 21 de julio: 
     - Eliminación de nodos y aristas con clic derecho
     - Señal nueva para poder seleccionar aristas

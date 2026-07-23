@@ -16,6 +16,18 @@ class_name UI extends Control
 @onready var edges: Node2D = %Edges
 
 
+# Botones para dibujar en el grafo
+@onready var draw_edges_button: Button = %DrawEdgesButton
+@onready var directed_edges_button: Button = %DirectedEdgesButton
+@onready var randomize_button: Button = %RandomizeButton
+
+# Botones de acciones
+@onready var save_button: Button = %SaveButton
+@onready var save_as_button: Button = %SaveAsButton
+@onready var delete_button: Button = %DeleteButton
+@onready var load_button: Button = %LoadButton
+
+
 ## Nombres de los nodos
 var nodes_names: String:
 	set(value):
@@ -27,10 +39,16 @@ var edges_names: String:
 		edges_names = value
 		update_objects_count()
 
+## Bandera que determina si el botón de aristas dirigidas está activado
+var directed_edges_enabled := false
+
 
 func _physics_process(_delta) -> void:
 	# Actualiza los FPS
 	fps_label.text = "FPS: %s" % Engine.get_frames_per_second()
+
+
+#region Interfaz
 
 
 ## Actualiza la lista de textos
@@ -58,4 +76,39 @@ func mark_as_not_saved(value := true) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	# Resetea el botón de borrar si se clica por fuera
 	if event is InputEventMouseButton and event.is_pressed():
-		action_buttons.has_delete_button_pressed = false
+		action_buttons.is_delete_button_pressed = false
+
+
+#endregion
+
+
+#region Botones
+
+
+## Desactiva todos los botones
+func disable_all() -> void:
+	directed_edges_enabled = directed_edges_button.button_pressed
+
+	draw_edges_button.disabled = true
+	directed_edges_button.disabled = true
+	randomize_button.disabled = true
+
+	save_button.disabled = true
+	save_as_button.disabled = true
+	delete_button.disabled = true
+	load_button.disabled = true
+
+
+## Activa todos los botones
+func enable_all() -> void:
+	draw_edges_button.disabled = false
+	directed_edges_button.disabled = directed_edges_enabled
+	randomize_button.disabled = false
+
+	save_button.disabled = false
+	save_as_button.disabled = false
+	delete_button.disabled = false
+	load_button.disabled = false
+
+
+#endregion

@@ -45,9 +45,6 @@ var drawing_directed := false
 var current_new_edge_start: GraphimNode
 var current_new_edge_end: GraphimNode
 
-## Indica si se está aleatorizando
-var randomizing := false
-
 
 func _ready() -> void:
 	# Botones de acción (borrar, guardar, ...)
@@ -161,7 +158,7 @@ func _load_graph() -> void:
 
 ## Genera un grafo al azar
 func _randomize() -> void:
-	randomizing = true
+	ui.disable_all()
 	_delete_graph()
 
 	var node_count = randi_range(5, RANDOM_SIZE)
@@ -205,7 +202,7 @@ func _randomize() -> void:
 		new_edge.data.end_node = node_b
 		new_edge.data.refresh()
 
-	randomizing = false
+	ui.enable_all()
 
 
 ## Auxiliar: limpia la ruta del archivo de guardado
@@ -308,8 +305,6 @@ func _find_edge_reverse(start_node: GraphimNode, end_node: GraphimNode) -> Graph
 
 ## Elimina un nodo y todas las aristas que dependen de él
 func _delete_node(node: GraphimNode) -> void:
-	if randomizing: return
-
 	# Elimina aristas conectadas
 	for edge: GraphimEdge in edges.get_children():
 		if edge.data.end_node == node or edge.data.start_node == node:
@@ -320,7 +315,6 @@ func _delete_node(node: GraphimNode) -> void:
 
 ## Elimina una arista
 func _delete_edge(edge: GraphimEdge) -> void:
-	if randomizing: return
 	edge.queue_free()
 
 
@@ -340,11 +334,6 @@ func _on_draw_button_pressed() -> void:
 
 func _on_directed_button_pressed() -> void:
 	drawing_directed = not drawing_directed
-
-
-func _on_randomize_button_pressed() -> void:
-	if randomizing: return
-	_randomize()
 
 
 #endregion
