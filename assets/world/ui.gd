@@ -28,17 +28,6 @@ class_name UI extends Control
 @onready var load_button: Button = %LoadButton
 
 
-## Nombres de los nodos
-var nodes_names: String:
-	set(value):
-		nodes_names = value
-		update_objects_count()
-## Nombres de las aristas
-var edges_names: String:
-	set(value):
-		edges_names = value
-		update_objects_count()
-
 ## Bandera que determina si el botón de aristas dirigidas está activado
 var directed_edges_enabled := false
 

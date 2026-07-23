@@ -71,10 +71,10 @@ func _ready() -> void:
 ## Actualiza el recurso de grafo actual usando los datos del nodo
 func _save_graph() -> void:
 	# Guarda en los datos de grafo
-	current_graph_data.nodes.assign(
+	current_graph_data.nodes_data.assign(
 		nodes.get_children().map(func(c: GraphimNode): return c.get_data_copy())
 	)
-	current_graph_data.edges.assign(
+	current_graph_data.edges_data.assign(
 		edges.get_children().map(func(c: GraphimEdge): return c.get_data_copy())
 	)
 
@@ -130,7 +130,7 @@ func _load_graph() -> void:
 
 	# Nodos
 	var uids := {}
-	for node_data: NodeData in current_graph_data.nodes:
+	for node_data: NodeData in current_graph_data.nodes_data:
 		await get_tree().create_timer(DELAY).timeout
 		var new_node: GraphimNode = node_scene.instantiate()
 		nodes.add_child(new_node, true)
@@ -143,7 +143,7 @@ func _load_graph() -> void:
 		)
 
 	# Aristas
-	for edge_data: EdgeData in current_graph_data.edges:
+	for edge_data: EdgeData in current_graph_data.edges_data:
 		var new_edge: GraphimEdge = edge_scene.instantiate()
 		edges.add_child(new_edge, true)
 		new_edge.data = edge_data
@@ -224,7 +224,7 @@ func _connect_new_node(node: Node) -> void:
 		_node.clicked.connect(_draw_edge)
 		# TODO: implementar menú contextual
 
-	if not _node.is_connected(&"deleted", _draw_edge):
+	if not _node.is_connected(&"deleted", _delete_node):
 		_node.deleted.connect(_delete_node)
 
 
@@ -234,7 +234,7 @@ func _connect_new_edge(edge: Node) -> void:
 
 	# TODO: Implementar clicked también
 
-	if not edge.is_connected(&"deleted", _delete_edge):
+	if not _edge.is_connected(&"deleted", _delete_edge):
 		edge.deleted.connect(_delete_edge)
 
 

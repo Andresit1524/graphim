@@ -18,6 +18,7 @@ signal color_changed(new_color: Color)
 @export var weight: float = 1.0:
 	set(value):
 		weight = value
+		weight_changed.emit(value)
 ## Color de la arista
 @export var color: Color = Color.WHITE:
 	set(value):

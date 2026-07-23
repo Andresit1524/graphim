@@ -7,6 +7,8 @@
 ### Semana del 20 al 26 de julio
 - 23 de julio:
     - Ahora los botones se desactivan cuando se esta aleatorizando un grafo
+    - Corrección en las adyacencias en GraphData
+    - Correcciones menores en general
 - 22 de julio:
     - Corrección en los nodos volantes al aleatorizar
     - Optimización y corrección de las señales de los nodos, crasheando al cerrar
