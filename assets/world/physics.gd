@@ -1,4 +1,4 @@
-## [code]Physics[/code] controla las físicas de la escena tales como la repulsión de los nodos
+## Controla las físicas de las nodos para su distribución
 class_name Physics extends Node
 
 
@@ -36,11 +36,11 @@ func _make_and_apply_forces(delta: float) -> void:
 	var graph_nodes := nodes.get_children()
 	var graph_edges := edges.get_children()
 
-	# Resetea y aplica gravedad inversa
+	# Gravedad inversa
 	for node: GraphimNode in graph_nodes:
 		node.force = _apply_inverse_gravity(node)
 
-	# Repulsión y gravedad inversa entre los nodos aprovechando la simetria de Coulomb
+	# Repulsión
 	for i in graph_nodes.size():
 		for j in i:
 			var node_a = graph_nodes[i]

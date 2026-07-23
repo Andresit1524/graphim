@@ -222,6 +222,7 @@ func _connect_new_node(node: Node) -> void:
 
 	if not _node.is_connected(&"clicked", _draw_edge):
 		_node.clicked.connect(_draw_edge)
+		# TODO: implementar menú contextual
 
 	if not _node.is_connected(&"deleted", _draw_edge):
 		_node.deleted.connect(_delete_node)

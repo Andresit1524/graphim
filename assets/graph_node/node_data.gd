@@ -1,4 +1,4 @@
-## [code]NodeData[/code] contiene los datos de un nodo, listo para serializar
+## Contiene los datos de un nodo, listo para serializar
 class_name NodeData extends Resource
 
 ## Señal que avisa de que el peso se ha actualizado

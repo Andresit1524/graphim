@@ -1,6 +1,6 @@
-## [code]DraggableObject[/code] es una clase que almacena la lógica para que un objeto sea
-## arrastable con el mouse. Asegúrate de incluir el método [code]handle_dragging[/code] en el
-## [code]physics_process[/code] y activar [code]input_pickable[/code] para que funcione. [br]
+## Clase que almacena la lógica para que un objeto sea arrastable con el mouse. Asegúrate de incluir
+## el método [code]handle_dragging[/code] en el [code]physics_process[/code] y activar
+## [code]input_pickable[/code] en el para que funcione. [br]
 ##
 ## DraggableObject no incluye las formas de colisión para el funcionamiento de las entradas.
 class_name DraggableObject extends PhysicsBody2D
@@ -26,7 +26,7 @@ var is_dragging: bool = false:
 		# print("[DraggableObject] Dragging is %s" % value)
 
 
-## Maneja el arrastre del objeto con el mouse. Debes incluirlo en el método [code]physics_process[/code]
+## Maneja el arrastre del objeto con el mouse. Debes incluirlo en el método
 func handle_dragging(delta: float) -> void:
 	if not draggable or not is_dragging: return
 	if global_position.distance_squared_to(get_global_mouse_position()) < 0.1: return

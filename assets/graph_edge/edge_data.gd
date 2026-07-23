@@ -1,4 +1,4 @@
-## [code]EdgeData[/code] contiene los datos de una arista, listo para serializar
+## Contiene los datos de una arista, listo para serializar
 class_name EdgeData extends Resource
 
 ## Emitida cuando cambia el caracter de arista dirigida
