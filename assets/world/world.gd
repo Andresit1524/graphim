@@ -5,8 +5,11 @@ class_name World extends Node2D
 signal current_file_changed(new_name: String)
 
 
+## Tamaño máximo de un grafo aleatorio
 const RANDOM_SIZE = 50
+## Espacio para aleatorizar la posición de los nodos
 const SPREAD_SIZE = 300
+## Retraso entre adición de nodos-aristas nuevos
 const DELAY = 0.01
 
 
@@ -60,7 +63,7 @@ func _ready() -> void:
 	nodes.child_order_changed.connect(ui.update_objects_count)
 	edges.child_order_changed.connect(ui.update_objects_count)
 
-	# Actualización de los nodos
+	# Conexión para nuevos nodos
 	nodes.child_entered_tree.connect(_connect_new_node)
 	edges.child_entered_tree.connect(_connect_new_edge)
 
@@ -71,12 +74,12 @@ func _ready() -> void:
 ## Actualiza el recurso de grafo actual usando los datos del nodo
 func _save_graph() -> void:
 	# Guarda en los datos de grafo
-	current_graph_data.nodes.assign(nodes.get_children().map(func(c: GraphimNode):
-		return c.get_data_copy()
-	))
-	current_graph_data.edges.assign(edges.get_children().map(func(c: GraphimEdge):
-		return c.get_data_copy()
-	))
+	current_graph_data.nodes.assign(
+		nodes.get_children().map(func(c: GraphimNode): return c.get_data_copy())
+	)
+	current_graph_data.edges.assign(
+		edges.get_children().map(func(c: GraphimEdge): return c.get_data_copy())
+	)
 
 	# Guarda en escena
 	var save_path := current_graph_data.resource_path
@@ -98,10 +101,10 @@ func _save_graph() -> void:
 func _save_graph_as() -> void:
 	save_load_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	save_load_dialog.popup_centered()
-
 	await save_load_dialog.file_selected
-	current_graph_data.resource_path = save_load_dialog.current_path
+
 	print("[World] Guardando datos en %s" % _get_graph_data_path())
+	current_graph_data.resource_path = save_load_dialog.current_path
 	_save_graph()
 
 
@@ -109,7 +112,6 @@ func _save_graph_as() -> void:
 func _delete_graph() -> void:
 	print("[World] Borrando grafo")
 
-	# Elimina. No es necesario actualizar porque cada eliminación lo hace
 	for child in nodes.get_children() + edges.get_children():
 		child.queue_free()
 
@@ -122,18 +124,15 @@ func _load_graph() -> void:
 	save_load_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	save_load_dialog.popup_centered()
 	await save_load_dialog.file_selected
-	current_graph_data = ResourceLoader.load(save_load_dialog.current_path)
 
 	print("[World] Cargando datos desde %s" % _get_graph_data_path())
+	current_graph_data = ResourceLoader.load(save_load_dialog.current_path)
 	current_file_changed.emit(_get_graph_data_path())
 
-	# Borra el grafo actual primero
 	_delete_graph()
 
-	# Lista de UIDs para poder encontrar más rápido
+	# Nodos
 	var uids := {}
-
-	# Instancia todos los nodos
 	for node_data: NodeData in current_graph_data.nodes:
 		await get_tree().create_timer(DELAY).timeout
 		var new_node: GraphimNode = node_scene.instantiate()
@@ -146,7 +145,7 @@ func _load_graph() -> void:
 			randf_range(-SPREAD_SIZE, SPREAD_SIZE)
 		)
 
-	# Instancia todas las aristas
+	# Aristas
 	for edge_data: EdgeData in current_graph_data.edges:
 		var new_edge: GraphimEdge = edge_scene.instantiate()
 		edges.add_child(new_edge, true)
@@ -182,13 +181,14 @@ func _randomize() -> void:
 			randf_range(-SPREAD_SIZE, SPREAD_SIZE)
 		)
 
+	# Pares de nodos
 	var pairs := []
 	for i in new_nodes.size():
 		for j in range(i + 1, new_nodes.size()):
 			pairs.append([new_nodes[i], new_nodes[j]])
 	pairs.shuffle()
 
-	# Conexiones
+	# Aristas
 	for i in edge_count:
 		var pair = pairs.pick_random()
 		pairs.erase(pair)
@@ -234,10 +234,10 @@ func _connect_new_node(node: Node) -> void:
 func _connect_new_edge(edge: Node) -> void:
 	var _edge := edge as GraphimEdge
 
+	# TODO: Implementar clicked también
+
 	if not edge.is_connected(&"deleted", _delete_edge):
 		edge.deleted.connect(_delete_edge)
-
-	# TODO: Implementar clicked también
 
 
 ## Dibuja una arista entre los dos nodos cuando se seleccionan
@@ -259,6 +259,7 @@ func _draw_edge(new_node: GraphimNode) -> void:
 
 	# Verifica que la arista no este existiendo ya
 	# ? Se separan los métodos para que sea fácil implementar bucles en el futuro
+	# ! que?
 	if _find_edge(current_new_edge_start, current_new_edge_end): return
 	if _find_edge_reverse(current_new_edge_start, current_new_edge_end): return
 
@@ -297,10 +298,8 @@ func _find_edge(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
 ## Esto solo es válido si la arista no es dirigida.
 func _find_edge_reverse(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
 	for edge in edges.get_children():
-		# Coinciden en el orden inverso (solo pasa si no es dirigido)
 		if (
-			edge.data.start_node == end_node
-			and edge.data.end_node == start_node
+			edge.data.start_node == end_node and edge.data.end_node == start_node
 			and not edge.data.directed
 		): return edge
 
@@ -309,7 +308,9 @@ func _find_edge_reverse(start_node: GraphimNode, end_node: GraphimNode) -> Graph
 
 ## Elimina un nodo y todas las aristas que dependen de él
 func _delete_node(node: GraphimNode) -> void:
-	# Aristas conectadas
+	if randomizing: return
+
+	# Elimina aristas conectadas
 	for edge: GraphimEdge in edges.get_children():
 		if edge.data.end_node == node or edge.data.start_node == node:
 			edge.queue_free()
@@ -319,6 +320,7 @@ func _delete_node(node: GraphimNode) -> void:
 
 ## Elimina una arista
 func _delete_edge(edge: GraphimEdge) -> void:
+	if randomizing: return
 	edge.queue_free()
 
 
@@ -334,6 +336,7 @@ func _on_draw_button_pressed() -> void:
 	directed_button.disabled = not drawing_edges
 
 	if not drawing_edges: _abort_new_edge()
+
 
 func _on_directed_button_pressed() -> void:
 	drawing_directed = not drawing_directed

@@ -9,7 +9,7 @@
     - Corrección en los nodos volantes al aleatorizar
     - Optimización y corrección de las señales de los nodos, crasheando al cerrar
     - Corrección del bug donde las aristas no se conectan a sus nodos al cargar
-    - Mejoras en el feedback visual de la instanciación y randomización
+    - Mejoras en el feedback visualy funcionamiento de la instanciación y randomización
 - 21 de julio: 
     - Eliminación de nodos y aristas con clic derecho
     - Señal nueva para poder seleccionar aristas
