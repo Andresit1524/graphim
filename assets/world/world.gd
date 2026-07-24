@@ -110,6 +110,7 @@ func _delete_graph() -> void:
 	print("[World] Borrando grafo")
 
 	for child in nodes.get_children() + edges.get_children():
+		Sounds.play_sound(&"delete")
 		child.queue_free()
 
 	print("[World] Borrado")
@@ -312,11 +313,13 @@ func _delete_node(node: GraphimNode) -> void:
 			edge.queue_free()
 
 	node.queue_free()
+	Sounds.play_sound(&"delete")
 
 
 ## Elimina una arista
 func _delete_edge(edge: GraphimEdge) -> void:
 	edge.queue_free()
+	Sounds.play_sound(&"delete")
 
 
 #endregion

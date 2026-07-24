@@ -42,6 +42,8 @@ func _ready() -> void:
 	# Fuerza a actualiizar los datos
 	data.refresh()
 
+	Sounds.play_sound(&"pop")
+
 
 func _physics_process(delta: float) -> void:
 	var current_pos := global_position

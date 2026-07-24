@@ -48,6 +48,8 @@ func _ready() -> void:
 	# Refresca los datos
 	data.refresh()
 
+	Sounds.play_sound(&"pencil")
+
 
 func _physics_process(_delta: float) -> void:
 	# Omite el procesamiento si no es relevante

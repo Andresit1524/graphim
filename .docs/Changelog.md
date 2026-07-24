@@ -5,6 +5,9 @@
 ## Julio de 2026
 
 ### Semana del 20 al 26 de julio
+- 24 de julio:
+    - Ahora el botón de aristas dirigidas es un checkbox
+    - Efectos de sonido añadidos
 - 23 de julio:
     - Ahora los botones se desactivan cuando se esta aleatorizando un grafo
     - Corrección en las adyacencias en GraphData
