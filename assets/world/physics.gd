@@ -8,17 +8,17 @@ const REPULSION_CONST = 1e6
 
 @export_group("Nodes physics")
 ## Fuerza de repulsión
-@export var nodes_repulsion: float = 4
+@export var nodes_repulsion: float = 30
 ## Fuerza de repulsión al centro
-@export var center_atraction: float = 0.05
+@export var center_atraction: float = 0.2
 ## Fricción del movimiento
 @export var friction: float = 0.2
 
 @export_group("Edges physics")
 ## Longitud de la arista
-@export var edge_length: float = 200.0
+@export var edge_length: float = 70.0
 ## Fuerza de Hooke para los nodos que conecta
-@export var edge_force: float = 50
+@export var edge_force: float = 200
 
 
 ## Lista de nodos

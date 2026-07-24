@@ -8,6 +8,7 @@
 - 23 de julio:
     - Ahora los botones se desactivan cuando se esta aleatorizando un grafo
     - Corrección en las adyacencias en GraphData
+    - Fuerzas calibradas
     - Correcciones menores en general
 - 22 de julio:
     - Corrección en los nodos volantes al aleatorizar
