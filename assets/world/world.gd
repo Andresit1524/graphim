@@ -23,7 +23,7 @@ const DELAY = 0.01
 ## Interfaz
 @onready var ui: UI = %UI
 ## Botón para dibujar aristas
-@onready var directed_button: Button = %DirectedEdgesButton
+@onready var directed_edges_checkbox: CheckBox = %DirectedEdgesCheckbox
 ## Ventana de guardado
 @onready var save_load_dialog: FileDialog = %SaveDialog
 
@@ -325,16 +325,20 @@ func _delete_edge(edge: GraphimEdge) -> void:
 #region Botones
 
 
-## Actualiza el estado del dibujado de grafos
-func _on_draw_button_pressed() -> void:
-	drawing_edges = not drawing_edges
-	directed_button.disabled = not drawing_edges
-
-	if not drawing_edges: _abort_new_edge()
+# TODO: mandar esto a la UI
 
 
-func _on_directed_button_pressed() -> void:
-	drawing_directed = not drawing_directed
+## Actualiza el estado del dibujado de aristas
+func _on_draw_edges_button_toggled(toggled_on: bool) -> void:
+	drawing_edges = toggled_on
+	directed_edges_checkbox.disabled = not toggled_on
+
+	if not toggled_on: _abort_new_edge()
+
+
+## Actualiza el estado del dibujado de aristas dirigidas
+func _on_directed_edges_checkbox_toggled(toggled_on: bool) -> void:
+	drawing_directed = toggled_on
 
 
 #endregion

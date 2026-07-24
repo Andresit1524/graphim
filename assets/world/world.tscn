@@ -68,11 +68,10 @@ layout_mode = 2
 toggle_mode = true
 text = "Dibujar aristas"
 
-[node name="DirectedEdgesButton" type="Button" parent="CanvasLayer/UI/Tools" unique_id=1452687321]
+[node name="DirectedEdgesCheckbox" type="CheckBox" parent="CanvasLayer/UI/Tools" unique_id=879711036]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
-toggle_mode = true
 text = "Aristas dirigidas"
 
 [node name="Space2" type="Control" parent="CanvasLayer/UI/Tools" unique_id=1390345702]
@@ -197,8 +196,8 @@ unique_name_in_owner = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1279360004]
 
-[connection signal="pressed" from="CanvasLayer/UI/Tools/DrawEdgesButton" to="." method="_on_draw_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/UI/Tools/DirectedEdgesButton" to="." method="_on_directed_button_pressed"]
+[connection signal="toggled" from="CanvasLayer/UI/Tools/DrawEdgesButton" to="." method="_on_draw_edges_button_toggled"]
+[connection signal="toggled" from="CanvasLayer/UI/Tools/DirectedEdgesCheckbox" to="." method="_on_directed_edges_checkbox_toggled"]
 [connection signal="pressed" from="CanvasLayer/UI/Tools/RandomizeButton" to="." method="_randomize"]
 [connection signal="pressed" from="CanvasLayer/UI/Actions/SaveButton" to="CanvasLayer/UI/Actions" method="_on_save_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/UI/Actions/SaveAsButton" to="CanvasLayer/UI/Actions" method="_on_save_as_button_pressed"]

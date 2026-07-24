@@ -18,7 +18,7 @@ class_name UI extends Control
 
 # Botones para dibujar en el grafo
 @onready var draw_edges_button: Button = %DrawEdgesButton
-@onready var directed_edges_button: Button = %DirectedEdgesButton
+@onready var directed_edges_checkbox: CheckBox = %DirectedEdgesCheckbox
 @onready var randomize_button: Button = %RandomizeButton
 
 # Botones de acciones
@@ -29,7 +29,7 @@ class_name UI extends Control
 
 
 ## Bandera que determina si el botón de aristas dirigidas está activado
-var directed_edges_enabled := false
+var directed_edges_disabled := false
 
 
 func _physics_process(_delta) -> void:
@@ -76,10 +76,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Desactiva todos los botones
 func disable_all() -> void:
-	directed_edges_enabled = directed_edges_button.button_pressed
+	directed_edges_disabled = directed_edges_checkbox.disabled
 
 	draw_edges_button.disabled = true
-	directed_edges_button.disabled = true
+	directed_edges_checkbox.disabled = true
 	randomize_button.disabled = true
 
 	save_button.disabled = true
@@ -91,7 +91,7 @@ func disable_all() -> void:
 ## Activa todos los botones
 func enable_all() -> void:
 	draw_edges_button.disabled = false
-	directed_edges_button.disabled = directed_edges_enabled
+	directed_edges_checkbox.disabled = directed_edges_disabled
 	randomize_button.disabled = false
 
 	save_button.disabled = false
