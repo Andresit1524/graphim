@@ -2,8 +2,8 @@
 @abstract class_name BaseAlgorithm extends Node
 
 
-## Se emite cuando el algoritmo es cancelado
-signal aborted
+## Se emite cuando el algoritmo es finalizado, sea cual sea el motivo
+signal finished
 
 
 ## Tiempo de espera entre pasos
@@ -31,15 +31,15 @@ const LONG_WAIT_TIME = 2.0
 @abstract func start() -> void
 
 
-## Finzaliza la ejecución si se deselecciona el botón
-func abort(msg := "") -> void:
+## Finzaliza la ejecución del algoritmo
+func finish(msg := "") -> void:
 	ui.enable_all()
 	ui.print_instruction(msg)
 	reset_graph_visuals()
-	await wait(LONG_WAIT_TIME)
+	finished.emit()
 
+	await wait(LONG_WAIT_TIME)
 	ui.clear_instruction()
-	aborted.emit()
 
 
 #region Utilidades

@@ -17,7 +17,7 @@ func _ready() -> void:
 		algoritm_buttons.add_child(alg_button)
 
 		alg_button.toggled.connect(_on_algorithm_button_toggled.bind(algorithm))
-		algorithm.aborted.connect(alg_button.set_pressed_no_signal.bind(false))
+		algorithm.finished.connect(alg_button.set_pressed_no_signal.bind(false))
 
 		alg_button.text = algorithm.button_name
 		alg_button.autowrap_mode = TextServer.AUTOWRAP_WORD
@@ -26,9 +26,11 @@ func _ready() -> void:
 
 ## Actúa cuando se presiona un botón
 func _on_algorithm_button_toggled(on: bool, algorithm: BaseAlgorithm) -> void:
-	if on:
-		ui.disable_all()
-		algorithm.start()
+	if not on:
+		algorithm.finish()
 		return
 
-	algorithm.abort()
+	ui.disable_all()
+
+	@warning_ignore("redundant_await")
+	await algorithm.start()

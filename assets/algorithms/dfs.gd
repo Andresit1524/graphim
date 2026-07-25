@@ -9,9 +9,11 @@ func start() -> void:
 	var adyacency_list: Dictionary[NodeData, Array] = graph_data().get_adyacency_list()
 
 	if not adyacency_list.has(begin.data) or not adyacency_list[begin.data]:
-		abort("No se encontró un camino entre los dos nodos")
+		finish("No se encontró un camino entre los dos nodos")
 		return
 
 	for node_data: NodeData in adyacency_list[begin.data]:
 		await wait(WAIT_TIME)
 		node_data.color = Color.BLUE
+
+	finish("Nodo encontrado")
