@@ -5,6 +5,9 @@
 ## Julio de 2026
 
 ### Semana del 20 al 26 de julio
+- 25 de julio:
+    - Prototipo del sistema para algoritmos
+    - Corrección en el cálculo de listas de adyacencia en aristas no dirigidas
 - 24 de julio:
     - Ahora el botón de aristas dirigidas es un checkbox
     - Efectos de sonido añadidos

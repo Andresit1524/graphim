@@ -24,7 +24,9 @@ func get_adyacency_list() -> Dictionary[NodeData, Array]:
 	for e in edges_data:
 		var start: NodeData = nodes_by_uid.get(e.start_uid)
 		var end: NodeData = nodes_by_uid.get(e.end_uid)
-		if start and end: adyacency_list[start].append(end)
+		if start and end:
+			adyacency_list[start].append(end)
+			if not e.directed: adyacency_list[end].append(start)
 
 	return adyacency_list
 
