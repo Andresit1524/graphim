@@ -1,4 +1,4 @@
-## Algoritmo de
+## Algoritmo de búsqueda de bucles
 class_name SearchLoops extends BaseAlgorithm
 
 

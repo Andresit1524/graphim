@@ -3,6 +3,10 @@ class_name World extends Node2D
 
 ## Se emite cuando se cambia el archivo actual
 signal current_file_changed(new_name: String)
+## Se emite cuando se clica un nodo
+signal node_clicked(node: GraphimNode)
+## Se emite cuando se clica un nodo
+signal edge_clicked(node: GraphimEdge)
 
 
 ## Tamaño máximo de un grafo aleatorio
@@ -223,7 +227,11 @@ func _connect_new_node(node: Node) -> void:
 
 	if not _node.is_connected(&"clicked", _draw_edge):
 		_node.clicked.connect(_draw_edge)
-		# TODO: implementar menú contextual
+
+	if not _node.is_connected(&"clicked", node_clicked.emit):
+		_node.clicked.connect(node_clicked.emit)
+
+	# TODO: implementar menú contextual
 
 	if not _node.is_connected(&"deleted", _delete_node):
 		_node.deleted.connect(_delete_node)
@@ -233,10 +241,13 @@ func _connect_new_node(node: Node) -> void:
 func _connect_new_edge(edge: Node) -> void:
 	var _edge := edge as GraphimEdge
 
-	# TODO: Implementar clicked también
+	if not _edge.is_connected(&"clicked", edge_clicked.emit):
+		_edge.clicked.connect(edge_clicked.emit)
+
+	# TODO: implementar menú contextual
 
 	if not _edge.is_connected(&"deleted", _delete_edge):
-		edge.deleted.connect(_delete_edge)
+		_edge.deleted.connect(_delete_edge)
 
 
 ## Dibuja una arista entre los dos nodos cuando se seleccionan

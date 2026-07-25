@@ -9,6 +9,8 @@ class_name UI extends Control
 @onready var fps_label = %FPS
 ## Etiqueta de archivo actual
 @onready var current_file: Label = $CurrentFile
+## Etiqueta para instrucciones
+@onready var instructions_label: Label = %InstructionsLabel
 
 ## Lista de nodos del grafo
 @onready var nodes: Node2D = %Nodes
@@ -60,6 +62,16 @@ func set_file_name(file_name := "") -> void:
 func mark_as_not_saved(value := true) -> void:
 	if value and not current_file.text.begins_with("(*) "):
 		current_file.text = "(*) %s" % current_file.text
+
+
+## Imprime una instrucción en la parte inferior de la pantalla
+func print_instruction(msg := "") -> void:
+	instructions_label.text = msg
+
+
+## Limpia la instrucción
+func clear_instruction() -> void:
+	instructions_label.text = ""
 
 
 func _unhandled_input(event: InputEvent) -> void:

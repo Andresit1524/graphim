@@ -12,7 +12,7 @@ class_name GraphData extends Resource
 ## Obtiene la lista de adyacencia del grafo actual
 # ? Se usará para los algoritmos, pero eso es más adelante
 func get_adyacency_list() -> Dictionary[NodeData, Array]:
-	var adyacency_list := {}
+	var adyacency_list: Dictionary[NodeData, Array] = {}
 	var nodes_by_uid := {}
 
 	# Registra por UID
@@ -33,7 +33,7 @@ func get_adyacency_list() -> Dictionary[NodeData, Array]:
 ## Formato: [inicio, final]: peso. Si no existe, el peso es NAN
 # ? Se usará para los algoritmos, pero eso es más adelante
 func get_adyacency_matrix() -> Dictionary[Array, float]:
-	var adyacency_matrix := {}
+	var adyacency_matrix: Dictionary[Array, float] = {}
 	var nodes_by_uid := {}
 
 	# Registra por UID
