@@ -270,8 +270,8 @@ func _draw_edge(new_node: GraphimNode) -> void:
 	# Verifica que la arista no este existiendo ya
 	# ? Se separan los métodos para que sea fácil implementar bucles en el futuro
 	# ! que?
-	if _find_edge(current_new_edge_start, current_new_edge_end): return
-	if _find_edge_reverse(current_new_edge_start, current_new_edge_end): return
+	if find_edge(current_new_edge_start, current_new_edge_end): return
+	if find_edge_reverse(current_new_edge_start, current_new_edge_end): return
 
 	current_new_edge_start.data.color = Color.WHITE
 
@@ -297,21 +297,39 @@ func _abort_new_edge() -> void:
 
 
 ## Auxiliar: busca una arista que contenga los dos nodos dados y la retorna
-func _find_edge(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
-	for edge in edges.get_children():
-		if edge.data.start_node == start_node and edge.data.end_node == end_node: return edge
+func find_edge(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
+	for edge: GraphimEdge in edges.get_children():
+		if (
+			edge.data.start_node == start_node
+			and edge.data.end_node == end_node
+		): return edge
 
 	return null
 
 
 ## Auxiliar: busca una arista que contenga los dos nodos dados (en reversa) y lo retorna.
 ## Esto solo es válido si la arista no es dirigida.
-func _find_edge_reverse(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
-	for edge in edges.get_children():
+func find_edge_reverse(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
+	for edge: GraphimEdge in edges.get_children():
 		if (
-			edge.data.start_node == end_node and edge.data.end_node == start_node
+			edge.data.start_node == end_node
+			and edge.data.end_node == start_node
 			and not edge.data.directed
 		): return edge
+
+	return null
+
+
+## Auxiliar: busca una arista que contenga los dos nodos dados y la retorna, en cualquier orden
+func find_edge_bi(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
+	for edge: GraphimEdge in edges.get_children():
+		var data = edge.data
+
+		if data.start_node == start_node and data.end_node == end_node: return edge
+
+		# Sentido opuesto para no dirigidas
+		if data.start_node == end_node and data.end_node == start_node and not data.directed:
+			return edge
 
 	return null
 

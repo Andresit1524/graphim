@@ -32,5 +32,6 @@ func _on_algorithm_button_toggled(on: bool, algorithm: BaseAlgorithm) -> void:
 
 	ui.disable_all()
 
+	# ? El await no es redundante porque el algoritmo lo puede tener
 	@warning_ignore("redundant_await")
 	await algorithm.start()

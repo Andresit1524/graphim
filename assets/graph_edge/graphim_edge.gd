@@ -48,6 +48,9 @@ func _ready() -> void:
 	# Refresca los datos
 	data.refresh()
 
+	# Separa su data para evitar efectos secundarios
+	weight_label.label_settings.resource_local_to_scene = true
+
 	Sounds.play_sound(&"pencil")
 
 

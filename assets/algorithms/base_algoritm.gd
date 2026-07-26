@@ -31,7 +31,7 @@ const LONG_WAIT_TIME = 2.0
 @abstract func start() -> void
 
 
-## Finzaliza la ejecución del algoritmo
+## Finaliza la ejecución del algoritmo
 func finish(msg := "") -> void:
 	ui.enable_all()
 	ui.print_instruction(msg)
@@ -51,7 +51,7 @@ func request_node(highlight := false, msg := "") -> GraphimNode:
 	var requested: GraphimNode = await world.node_clicked
 	ui.clear_instruction()
 
-	if highlight: requested.data.color = Color.MEDIUM_SEA_GREEN
+	if highlight: requested.data.color = Color.DODGER_BLUE
 
 	return requested
 
@@ -79,6 +79,53 @@ func reset_graph_visuals() -> void:
 ## Espera un tiempo
 func wait(time: float) -> void:
 	await get_tree().create_timer(time).timeout
+
+
+#endregion
+
+
+#region Adyacencias
+
+
+## Obtiene la lista de adyacencia del grafo actual. Los nodos huérfanos tienen lista vacía
+func get_adyacency_list() -> Dictionary[GraphimNode, Array]:
+	var adyacency_list: Dictionary[GraphimNode, Array] = {}
+
+	# Inicializa
+	for node in get_nodes():
+		adyacency_list[node] = []
+
+	# Aristas
+	for edge in get_edges():
+		var start_node := edge.data.start_node
+		var end_node := edge.data.end_node
+		if start_node and end_node:
+			adyacency_list[start_node].append(end_node)
+			if not edge.data.directed: adyacency_list[end_node].append(start_node)
+
+	return adyacency_list
+
+
+## Obtiene la matriz de adyacencia (en producto cartesiano) del grafo actual.
+## Formato: [inicio, final]: peso. Si no existe, el peso es NAN
+func get_adyacency_matrix() -> Dictionary[Array, float]:
+	var adyacency_matrix: Dictionary[Array, float] = {}
+	var nodes_list := get_nodes()
+
+	# Primera pasada para las aristas
+	for edge in get_edges():
+		var start_node := edge.data.start_node
+		var end_node := edge.data.end_node
+		if start_node and end_node:
+			adyacency_matrix[[start_node, end_node]] = edge.weight
+
+	# Segunda pasada para el resto
+	for node_a in nodes_list:
+		for node_b in nodes_list:
+			if adyacency_matrix.has([node_a, node_b]): continue
+			adyacency_matrix[[node_a, node_b]] = NAN
+
+	return adyacency_matrix
 
 
 #endregion
