@@ -5,6 +5,8 @@
 ## Julio de 2026
 
 ### Semana del 20 al 26 de julio
+- 26 de julio:
+    - Ahora puedes elegir entre tipos de grafos al crear aristas o aleatorizar
 - 25 de julio:
     - Prototipo del sistema para algoritmos
     - Corrección en el cálculo de listas de adyacencia en aristas no dirigidas

@@ -19,8 +19,8 @@ class_name UI extends Control
 
 
 # Botones para dibujar en el grafo
+@onready var graph_type_button: OptionButton = %GraphTypeButton
 @onready var draw_edges_button: Button = %DrawEdgesButton
-@onready var directed_edges_checkbox: CheckBox = %DirectedEdgesCheckbox
 @onready var randomize_button: Button = %RandomizeButton
 
 # Botones de acciones
@@ -88,10 +88,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Desactiva todos los botones
 func disable_all() -> void:
-	directed_edges_disabled = directed_edges_checkbox.disabled
-
+	graph_type_button.disabled = true
 	draw_edges_button.disabled = true
-	directed_edges_checkbox.disabled = true
 	randomize_button.disabled = true
 
 	save_button.disabled = true
@@ -102,8 +100,8 @@ func disable_all() -> void:
 
 ## Activa todos los botones
 func enable_all() -> void:
+	graph_type_button.disabled = false
 	draw_edges_button.disabled = false
-	directed_edges_checkbox.disabled = directed_edges_disabled
 	randomize_button.disabled = false
 
 	save_button.disabled = false

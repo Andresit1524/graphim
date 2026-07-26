@@ -1,6 +1,10 @@
 class_name World extends Node2D
 
 
+## Tipos de grafos
+enum GraphType {NON_DIRECTED, DIRECTED, MIXTURE}
+
+
 ## Se emite cuando se cambia el archivo actual
 signal current_file_changed(new_name: String)
 ## Se emite cuando se clica un nodo
@@ -26,8 +30,6 @@ const DELAY = 0.01
 
 ## Interfaz
 @onready var ui: UI = %UI
-## Botón para dibujar aristas
-@onready var directed_edges_checkbox: CheckBox = %DirectedEdgesCheckbox
 ## Ventana de guardado
 @onready var save_load_dialog: FileDialog = %SaveDialog
 
@@ -42,8 +44,9 @@ const DELAY = 0.01
 
 ## Indica si estamos dibujando aristas
 var drawing_edges := false
-## Indica si estamos dibujando aristas dirigidas o no
-var drawing_directed := false
+## Indica el tipo de grafo que estamos dibujando
+var current_graph_type := GraphType.NON_DIRECTED
+
 
 # Variables temporales para el dibujado de aristas
 var current_new_edge_start: GraphimNode
@@ -201,7 +204,7 @@ func _randomize() -> void:
 		await get_tree().create_timer(DELAY).timeout
 		var new_edge: GraphimEdge = edge_scene.instantiate()
 		edges.add_child(new_edge, true)
-		new_edge.data.directed = [true, false].pick_random()
+		new_edge.data.directed = _get_directed_edge_boolean()
 		new_edge.data.weight = randi_range(1, RANDOM_SIZE)
 		new_edge.data.start_node = node_a
 		new_edge.data.end_node = node_b
@@ -280,12 +283,20 @@ func _draw_edge(new_node: GraphimNode) -> void:
 	edges.add_child(new_edge, true)
 	new_edge.data.start_node = current_new_edge_start
 	new_edge.data.end_node = current_new_edge_end
-	new_edge.data.directed = drawing_directed
+	new_edge.data.directed = _get_directed_edge_boolean()
 	new_edge.data.refresh()
 
 	# Resetea los nodos para nueva arista
 	current_new_edge_start = null
 	current_new_edge_end = null
+
+
+## Auxiliar: Obtiene un valor booleano según el tipo de grafo actual
+func _get_directed_edge_boolean() -> bool:
+	match current_graph_type:
+		GraphType.NON_DIRECTED: return false
+		GraphType.DIRECTED: return true
+		_: return [true, false].pick_random()
 
 
 ## Aborta el dibujado de la nueva arista
@@ -296,7 +307,7 @@ func _abort_new_edge() -> void:
 		current_new_edge_start = null
 
 
-## Auxiliar: busca una arista que contenga los dos nodos dados y la retorna
+## Busca una arista que contenga los dos nodos dados y la retorna
 func find_edge(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
 	for edge: GraphimEdge in edges.get_children():
 		if (
@@ -307,7 +318,7 @@ func find_edge(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
 	return null
 
 
-## Auxiliar: busca una arista que contenga los dos nodos dados (en reversa) y lo retorna.
+## Busca una arista que contenga los dos nodos dados (en reversa) y lo retorna.
 ## Esto solo es válido si la arista no es dirigida.
 func find_edge_reverse(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
 	for edge: GraphimEdge in edges.get_children():
@@ -320,7 +331,7 @@ func find_edge_reverse(start_node: GraphimNode, end_node: GraphimNode) -> Graphi
 	return null
 
 
-## Auxiliar: busca una arista que contenga los dos nodos dados y la retorna, en cualquier orden
+## Busca una arista que contenga los dos nodos dados y la retorna, en cualquier orden
 func find_edge_bi(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
 	for edge: GraphimEdge in edges.get_children():
 		var data = edge.data
@@ -357,20 +368,18 @@ func _delete_edge(edge: GraphimEdge) -> void:
 #region Botones
 
 
-# TODO: mandar esto a la UI
+# TODO: mandar esto a la UI si es pertinente
 
 
 ## Actualiza el estado del dibujado de aristas
 func _on_draw_edges_button_toggled(toggled_on: bool) -> void:
 	drawing_edges = toggled_on
-	directed_edges_checkbox.disabled = not toggled_on
-
 	if not toggled_on: _abort_new_edge()
 
 
-## Actualiza el estado del dibujado de aristas dirigidas
-func _on_directed_edges_checkbox_toggled(toggled_on: bool) -> void:
-	drawing_directed = toggled_on
+## Actualiza el tipo de grafo
+func _on_graph_type_button_item_selected(index: int) -> void:
+	current_graph_type = index as GraphType
 
 
 #endregion

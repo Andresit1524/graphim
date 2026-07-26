@@ -56,8 +56,8 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 0
 offset_left = 42.0
 offset_top = 42.0
-offset_right = 82.0
-offset_bottom = 82.0
+offset_right = 184.0
+offset_bottom = 333.0
 
 [node name="DragInstancer" parent="CanvasLayer/UI/Tools" unique_id=704335588 node_paths=PackedStringArray("instances_node") instance=ExtResource("2_lh2ud")]
 custom_minimum_size = Vector2(121, 121)
@@ -73,21 +73,34 @@ metadata/_edit_use_anchors_ = true
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
 
+[node name="Title" type="Label" parent="CanvasLayer/UI/Tools" unique_id=1427395164]
+layout_mode = 2
+text = "Tipo de arista"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GraphTypeButton" type="OptionButton" parent="CanvasLayer/UI/Tools" unique_id=604728413]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+fit_to_longest_item = false
+item_count = 3
+popup/item_0/text = "No dirigido"
+popup/item_0/id = 1
+popup/item_1/text = "Dirigido"
+popup/item_1/id = 0
+popup/item_2/text = "Mixto"
+popup/item_2/id = 2
+
+[node name="Space2" type="Control" parent="CanvasLayer/UI/Tools" unique_id=1390345702]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
 [node name="DrawEdgesButton" type="Button" parent="CanvasLayer/UI/Tools" unique_id=195797117]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 text = "Dibujar aristas"
-
-[node name="DirectedEdgesCheckbox" type="CheckBox" parent="CanvasLayer/UI/Tools" unique_id=879711036]
-unique_name_in_owner = true
-layout_mode = 2
-disabled = true
-text = "Aristas dirigidas"
-
-[node name="Space2" type="Control" parent="CanvasLayer/UI/Tools" unique_id=1390345702]
-custom_minimum_size = Vector2(0, 15)
-layout_mode = 2
 
 [node name="RandomizeButton" type="Button" parent="CanvasLayer/UI/Tools" unique_id=774338974]
 unique_name_in_owner = true
@@ -305,8 +318,8 @@ unique_name_in_owner = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1279360004]
 
+[connection signal="item_selected" from="CanvasLayer/UI/Tools/GraphTypeButton" to="." method="_on_graph_type_button_item_selected"]
 [connection signal="toggled" from="CanvasLayer/UI/Tools/DrawEdgesButton" to="." method="_on_draw_edges_button_toggled"]
-[connection signal="toggled" from="CanvasLayer/UI/Tools/DirectedEdgesCheckbox" to="." method="_on_directed_edges_checkbox_toggled"]
 [connection signal="pressed" from="CanvasLayer/UI/Tools/RandomizeButton" to="." method="_randomize"]
 [connection signal="pressed" from="CanvasLayer/UI/Actions/SaveButton" to="CanvasLayer/UI/Actions" method="_on_save_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/UI/Actions/SaveAsButton" to="CanvasLayer/UI/Actions" method="_on_save_as_button_pressed"]
