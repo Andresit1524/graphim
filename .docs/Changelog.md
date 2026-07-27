@@ -5,7 +5,9 @@
 ## Julio de 2026
 
 ## Semana del 27 de julio al 2 de agosto
-- 27 de julio: Botón de mezclar
+- 27 de julio: 
+    - Botón de mezclar
+    - Más sonidos e interfaz mejorada
 
 ### Semana del 20 al 26 de julio
 - 26 de julio: Ahora puedes elegir entre tipos de grafos al crear aristas o aleatorizar

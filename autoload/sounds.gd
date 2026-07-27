@@ -6,7 +6,9 @@ extends AudioStreamPlayer
 	&"pop": load("res://assets/sounds/pop.mp3"),
 	&"pencil": load("res://assets/sounds/pencil.mp3"),
 	&"delete": load("res://assets/sounds/swipe.mp3"),
-	&"shuffle": load("res://assets/sounds/shuffle.mp3")
+	&"shuffle": load("res://assets/sounds/shuffle.mp3"),
+	&"success": load("res://assets/sounds/success.mp3"),
+	&"fail": load("res://assets/sounds/wrong.mp3")
 }
 
 

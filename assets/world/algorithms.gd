@@ -2,6 +2,10 @@
 class_name Algorithms extends Node
 
 
+## Grupo de botones
+@export var alg_buttons_group: ButtonGroup
+
+
 ## Mundo
 @onready var world: Node2D = get_tree().current_scene
 ## Botones para los algoritmos
@@ -16,6 +20,7 @@ func _ready() -> void:
 		var alg_button := Button.new()
 		algoritm_buttons.add_child(alg_button)
 
+		alg_button.button_group = alg_buttons_group
 		alg_button.toggled.connect(_on_algorithm_button_toggled.bind(algorithm))
 		algorithm.finished.connect(alg_button.set_pressed_no_signal.bind(false))
 

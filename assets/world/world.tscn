@@ -22,6 +22,9 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_kqacf"]
 
+[sub_resource type="ButtonGroup" id="ButtonGroup_4f15s"]
+allow_unpress = true
+
 [node name="World" type="Node2D" unique_id=1487274566]
 script = ExtResource("1_hxqi4")
 node_scene = ExtResource("3_hqvew")
@@ -268,6 +271,7 @@ script = ExtResource("7_hqvew")
 [node name="Algorithms" type="Node" parent="." unique_id=1595311311]
 unique_name_in_owner = true
 script = ExtResource("8_sn10k")
+alg_buttons_group = SubResource("ButtonGroup_4f15s")
 
 [node name="BFS" type="Node" parent="Algorithms" unique_id=523893545]
 script = ExtResource("12_tic65")

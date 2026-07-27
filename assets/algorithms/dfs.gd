@@ -16,9 +16,11 @@ func start() -> void:
 	var result := await _dfs(adyacency_list, begin, target, queue, backtrack)
 	if backtrack.has(target):
 		ui.print_instruction("Ruta encontrada")
+		Sounds.play_sound(&"success")
 		_paint_result(backtrack, begin, target)
 		return
 
+	Sounds.play_sound(&"fail")
 	ui.print_instruction("Ruta no encontrada")
 
 
@@ -43,7 +45,9 @@ func _dfs(
 	for node: GraphimNode in graph[current]:
 		if backtrack.has(node) or node == begin: continue
 
+		Sounds.play_sound(&"pop")
 		await wait(WAIT_TIME)
+
 		backtrack[node] = current
 		queue.push_back(node)
 		node.data.color = Color.PALE_GREEN
