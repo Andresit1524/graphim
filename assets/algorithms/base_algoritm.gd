@@ -46,34 +46,32 @@ func finish(msg := "") -> void:
 
 
 ## Solicita la selección de un nodo, opcionalmente resaltándolo y usando otro mensaje
-func request_node(highlight := false, msg := "") -> GraphimNode:
+func request_node(msg := "") -> GraphimNode:
 	ui.print_instruction("Selecciona un nodo" if not msg else msg)
 	var requested: GraphimNode = await world.node_clicked
 	ui.clear_instruction()
 
-	if highlight: requested.data.color = Color.DODGER_BLUE
-
+	requested.data.color = GraphColors.HIGHLIGHT
 	return requested
 
 
 ## Solicita la selección de una arista, opcionalmente resaltándola
-func request_edge(highlight := false, msg := "") -> GraphimEdge:
+func request_edge(msg := "") -> GraphimEdge:
 	ui.print_instruction("Selecciona una arista" if not msg else msg)
 	var requested: GraphimEdge = await world.edge_clicked
 	ui.clear_instruction()
 
-	if highlight: requested.data.color = Color.GREEN
-
+	requested.data.color = GraphColors.HIGHLIGHT
 	return requested
 
 
 ## Resetea el estado del grafo
 func reset_graph_visuals() -> void:
 	for node in get_nodes():
-		node.data.color = Color.WHITE
+		node.data.color = GraphColors.BASE
 
 	for edge in get_edges():
-		edge.data.color = Color.WHITE
+		edge.data.color = GraphColors.BASE
 
 
 ## Espera un tiempo

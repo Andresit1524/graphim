@@ -271,7 +271,7 @@ func _draw_edge(new_node: GraphimNode) -> void:
 	# Añade el extremo inicial si es el caso
 	if not current_new_edge_start:
 		current_new_edge_start = new_node
-		current_new_edge_start.data.color = Color.LIGHT_SKY_BLUE
+		current_new_edge_start.data.color = GraphColors.SELECTED
 		return
 
 	# Añade el extremo final
@@ -287,7 +287,7 @@ func _draw_edge(new_node: GraphimNode) -> void:
 	if find_edge(current_new_edge_start, current_new_edge_end): return
 	if find_edge_reverse(current_new_edge_start, current_new_edge_end): return
 
-	current_new_edge_start.data.color = Color.WHITE
+	current_new_edge_start.data.color = GraphColors.BASE
 
 	# Crea y configura
 	var new_edge: GraphimEdge = edge_scene.instantiate()
@@ -314,7 +314,7 @@ func _get_directed_edge_boolean() -> bool:
 func _abort_new_edge() -> void:
 	current_new_edge_end = null
 	if current_new_edge_start != null:
-		current_new_edge_start.data.color = Color.WHITE
+		current_new_edge_start.data.color = GraphColors.BASE
 		current_new_edge_start = null
 
 

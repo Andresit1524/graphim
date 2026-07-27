@@ -45,6 +45,9 @@ func _ready() -> void:
 	data.color_changed.connect(_set_color)
 	data.weight_changed.connect(_change_weight)
 
+	# Color base de la curva
+	curve.default_color = GraphColors.HIGHLIGHT
+
 	# Refresca los datos
 	data.refresh()
 

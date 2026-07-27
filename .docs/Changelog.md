@@ -8,6 +8,7 @@
 - 27 de julio: 
     - Botón de mezclar
     - Más sonidos e interfaz mejorada
+    - Colores centralizados y mejoras en DFS
 
 ### Semana del 20 al 26 de julio
 - 26 de julio: Ahora puedes elegir entre tipos de grafos al crear aristas o aleatorizar
