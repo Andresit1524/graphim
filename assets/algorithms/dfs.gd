@@ -5,16 +5,15 @@ class_name DFS extends BaseAlgorithm
 func start() -> void:
 	# Nodo inicial
 	var begin := await request_node("Selecciona el nodo para comenzar el recorrido")
-
 	# Grafo en lista de adyacencia
 	var graph := get_adyacency_list()
-	# Backtracking
-	var backtrack: Dictionary[GraphimNode, GraphimNode]
 
-	# Inicializa el grafo
+	# Backtracking para colorear aristas
+	var backtrack: Dictionary[GraphimNode, GraphimNode]
 	for node in get_nodes():
 		backtrack[node] = null
 
+	# Explora el grafo
 	await _depth_first_search(graph, begin, backtrack)
 	begin.data.color = GraphColors.HIGHLIGHT
 
@@ -31,9 +30,10 @@ func start() -> void:
 ## Visita un nodo y sus vecinos
 func _depth_first_search(
 	graph: Dictionary[GraphimNode, Array],
-		node: GraphimNode,
+	node: GraphimNode,
 	backtrack: Dictionary[GraphimNode, GraphimNode]
 ):
+	# Marca como visitado
 	await wait(WAIT_TIME)
 	node.data.color = GraphColors.VISITED
 	_color_parent_edge(node, backtrack)
@@ -43,7 +43,13 @@ func _depth_first_search(
 		if neighbor.data.color == GraphColors.BASE:
 			backtrack[neighbor] = node
 			await _depth_first_search(graph, neighbor, backtrack)
+			continue
 
+		var conection := world.find_edge_bi(node, neighbor)
+		if conection.data.color == GraphColors.BASE:
+			conection.data.color = GraphColors.WRONG
+
+	# El nodo se considera finalizado si sus vecinos lo están
 	await wait(WAIT_TIME / 2)
 	node.data.color = GraphColors.FINISHED
 	_color_parent_edge(node, backtrack)
