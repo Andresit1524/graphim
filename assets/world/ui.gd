@@ -22,6 +22,7 @@ class_name UI extends Control
 @onready var graph_type_button: OptionButton = %GraphTypeButton
 @onready var draw_edges_button: Button = %DrawEdgesButton
 @onready var randomize_button: Button = %RandomizeButton
+@onready var shuffle_button: Button = %ShuffleButton
 
 # Botones de acciones
 @onready var save_button: Button = %SaveButton
@@ -91,6 +92,7 @@ func disable_all() -> void:
 	graph_type_button.disabled = true
 	draw_edges_button.disabled = true
 	randomize_button.disabled = true
+	shuffle_button.disabled = true
 
 	save_button.disabled = true
 	save_as_button.disabled = true
@@ -103,6 +105,7 @@ func enable_all() -> void:
 	graph_type_button.disabled = false
 	draw_edges_button.disabled = false
 	randomize_button.disabled = false
+	shuffle_button.disabled = false
 
 	save_button.disabled = false
 	save_as_button.disabled = false

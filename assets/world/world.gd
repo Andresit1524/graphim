@@ -152,6 +152,7 @@ func _load_graph() -> void:
 
 	# Aristas
 	for edge_data: EdgeData in current_graph_data.edges_data:
+		await get_tree().create_timer(DELAY).timeout
 		var new_edge: GraphimEdge = edge_scene.instantiate()
 		edges.add_child(new_edge, true)
 		new_edge.data = edge_data
@@ -211,6 +212,16 @@ func _randomize() -> void:
 		new_edge.data.refresh()
 
 	ui.enable_all()
+
+
+## Mezcla el grafo
+func _shuffle() -> void:
+	Sounds.play_sound(&"shuffle")
+	for node: GraphimNode in nodes.get_children():
+		node.position = Vector2(
+			randf_range(-SPREAD_SIZE, SPREAD_SIZE),
+			randf_range(-SPREAD_SIZE, SPREAD_SIZE)
+		)
 
 
 ## Auxiliar: limpia la ruta del archivo de guardado
