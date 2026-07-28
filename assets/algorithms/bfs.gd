@@ -10,18 +10,14 @@ func start() -> void:
 
 	# Backtracking para colorear aristas
 	var backtrack: Dictionary[GraphimNode, GraphimNode]
-	# Lista de pesos
-	var distances: Dictionary[GraphimNode, float]
 	# Cola de prioridad
 	var queue: Array[GraphimNode]
 
 	# Inicializa
 	for node in get_nodes():
 		backtrack[node] = null
-		distances[node] = INF
 
 	begin.data.color = GraphColors.VISITED
-	distances[begin] = 0
 
 	# Bucle de recorrido
 	queue.push_back(begin)
@@ -36,7 +32,6 @@ func start() -> void:
 			if neighbor.data.color == GraphColors.BASE:
 				await wait(WAIT_TIME)
 
-				distances[neighbor] = distances[current] + conection.data.weight
 				backtrack[neighbor] = current
 				queue.push_back(neighbor)
 

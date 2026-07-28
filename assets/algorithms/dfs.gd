@@ -25,7 +25,7 @@ func _depth_first_search(
 	graph: Dictionary[GraphimNode, Array],
 	node: GraphimNode,
 	backtrack: Dictionary[GraphimNode, GraphimNode]
-):
+) -> void:
 	# Marca como visitado
 	await wait(WAIT_TIME)
 	Sounds.play_sound(&"pop")
