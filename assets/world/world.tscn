@@ -12,10 +12,8 @@
 [ext_resource type="Script" uid="uid://cyofd7al8ov4n" path="res://assets/algorithms/dijkstra.gd" id="10_v8xi1"]
 [ext_resource type="Script" uid="uid://bnvorpmn2brjf" path="res://assets/algorithms/dfs.gd" id="11_qxs72"]
 [ext_resource type="Script" uid="uid://brcktjt2s0ekb" path="res://assets/algorithms/bfs.gd" id="12_tic65"]
-[ext_resource type="Script" uid="uid://mlfenb31lie7" path="res://assets/algorithms/kruskal.gd" id="13_7iag1"]
 [ext_resource type="Script" uid="uid://buenckibf5dfu" path="res://assets/algorithms/coloring.gd" id="14_4f15s"]
 [ext_resource type="Script" uid="uid://ck1j7psayco4f" path="res://assets/algorithms/bellman_ford.gd" id="15_5it4x"]
-[ext_resource type="Script" uid="uid://clvdfserpd72l" path="res://assets/algorithms/a_star.gd" id="16_7iag1"]
 [ext_resource type="Script" uid="uid://ghyg4iu44w46" path="res://assets/algorithms/page_rank.gd" id="17_4f15s"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_lh2ud"]
@@ -291,19 +289,11 @@ button_name = "Bellman-Ford"
 
 [node name="SearchLoops" type="Node" parent="Algorithms" unique_id=410380872]
 script = ExtResource("9_moqa0")
-button_name = "Buscar bucles"
-
-[node name="Kruskal" type="Node" parent="Algorithms" unique_id=1102558979]
-script = ExtResource("13_7iag1")
-button_name = "Kruskal"
+button_name = "Buscar bucles (DFS)"
 
 [node name="Coloring" type="Node" parent="Algorithms" unique_id=1742296094]
 script = ExtResource("14_4f15s")
 button_name = "Colorear"
-
-[node name="AStar" type="Node" parent="Algorithms" unique_id=1754430314]
-script = ExtResource("16_7iag1")
-button_name = "A*"
 
 [node name="PageRank" type="Node" parent="Algorithms" unique_id=1909036777]
 script = ExtResource("17_4f15s")
