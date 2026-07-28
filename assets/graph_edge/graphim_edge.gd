@@ -6,10 +6,9 @@ const LABEL_OFFSET = 20.0
 
 
 ## Se emite cuando se clica el objeto
-# TODO: implementar algo para este método
 signal clicked(edge: GraphimEdge)
 ## Se emite cuando se elimina la arista
-signal deleted(node: GraphimEdge)
+signal deleted(edge: GraphimEdge)
 
 
 @export_group("Visualización")
@@ -46,8 +45,16 @@ func _ready() -> void:
 	data.color_changed.connect(_set_color)
 	data.weight_changed.connect(_change_weight)
 
+	# Color base de la curva
+	curve.default_color = GraphColors.HIGHLIGHT
+
 	# Refresca los datos
 	data.refresh()
+
+	# Separa su data para evitar efectos secundarios
+	weight_label.label_settings.resource_local_to_scene = true
+
+	Sounds.play_sound(&"pencil")
 
 
 func _physics_process(_delta: float) -> void:
@@ -208,8 +215,6 @@ func get_data_copy() -> EdgeData:
 
 ## Maneja los clics sobre la arista
 func _input_event(_viewport, event: InputEvent, _shape_idx) -> void:
-	if event.is_action_pressed(&"left_click"):
-		clicked.emit(self)
+	if event.is_action_pressed(&"left_click"): clicked.emit(self)
 
-	if event.is_action_pressed(&"right_click"):
-		deleted.emit(self)
+	if event.is_action_pressed(&"right_click"): deleted.emit(self)

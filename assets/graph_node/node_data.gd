@@ -1,4 +1,4 @@
-## [code]NodeData[/code] contiene los datos de un nodo, listo para serializar
+## Contiene los datos de un nodo, listo para serializar
 class_name NodeData extends Resource
 
 ## Señal que avisa de que el peso se ha actualizado
@@ -13,7 +13,7 @@ signal color_changed(new_color: Color)
 		weight = value
 		weight_changed.emit(value)
 ## Color del nodo
-@export var color: Color = Color.WHITE:
+@export var color: Color = GraphColors.BASE:
 	set(value):
 		color = value
 		color_changed.emit(value)

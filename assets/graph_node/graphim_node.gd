@@ -42,6 +42,8 @@ func _ready() -> void:
 	# Fuerza a actualiizar los datos
 	data.refresh()
 
+	Sounds.play_sound(&"pop")
+
 
 func _physics_process(delta: float) -> void:
 	var current_pos := global_position
@@ -88,7 +90,7 @@ func _change_color(_color: Color, tweened := false) -> void:
 
 ## Resalta un objeto
 func _highlight(value: bool, tweened := false) -> void:
-	var _color := Color.GRAY if value else Color.WHITE
+	var _color := GraphColors.SELECTED if value else GraphColors.BASE
 
 	if not tweened:
 		modulate = _color

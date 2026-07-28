@@ -7,8 +7,17 @@
 [ext_resource type="Script" uid="uid://eyy44t471n22" path="res://assets/world/buttons.gd" id="4_truut"]
 [ext_resource type="PackedScene" uid="uid://dslxtc5emgxkc" path="res://assets/graph_edge/graphim_edge.tscn" id="5_f47bs"]
 [ext_resource type="Script" uid="uid://dewdt8vncxwdp" path="res://assets/world/physics.gd" id="7_hqvew"]
+[ext_resource type="Script" uid="uid://bingkl6g4mj7t" path="res://assets/world/algorithms.gd" id="8_sn10k"]
+[ext_resource type="Script" uid="uid://cyofd7al8ov4n" path="res://assets/algorithms/dijkstra.gd" id="10_v8xi1"]
+[ext_resource type="Script" uid="uid://bnvorpmn2brjf" path="res://assets/algorithms/dfs.gd" id="11_qxs72"]
+[ext_resource type="Script" uid="uid://brcktjt2s0ekb" path="res://assets/algorithms/bfs.gd" id="12_tic65"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_lh2ud"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kqacf"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_4f15s"]
+allow_unpress = true
 
 [node name="World" type="Node2D" unique_id=1487274566]
 script = ExtResource("1_hxqi4")
@@ -39,14 +48,13 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("4_f47bs")
 metadata/_edit_use_anchors_ = true
-metadata/_edit_lock_ = true
 
 [node name="Tools" type="VBoxContainer" parent="CanvasLayer/UI" unique_id=1736146907]
 layout_mode = 0
 offset_left = 42.0
 offset_top = 42.0
-offset_right = 82.0
-offset_bottom = 82.0
+offset_right = 184.0
+offset_bottom = 333.0
 
 [node name="DragInstancer" parent="CanvasLayer/UI/Tools" unique_id=704335588 node_paths=PackedStringArray("instances_node") instance=ExtResource("2_lh2ud")]
 custom_minimum_size = Vector2(121, 121)
@@ -62,27 +70,44 @@ metadata/_edit_use_anchors_ = true
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
 
+[node name="Title" type="Label" parent="CanvasLayer/UI/Tools" unique_id=1427395164]
+layout_mode = 2
+text = "Tipo de arista"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GraphTypeButton" type="OptionButton" parent="CanvasLayer/UI/Tools" unique_id=604728413]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+fit_to_longest_item = false
+item_count = 3
+popup/item_0/text = "No dirigido"
+popup/item_0/id = 1
+popup/item_1/text = "Dirigido"
+popup/item_1/id = 0
+popup/item_2/text = "Mixto"
+popup/item_2/id = 2
+
+[node name="Space2" type="Control" parent="CanvasLayer/UI/Tools" unique_id=1390345702]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
 [node name="DrawEdgesButton" type="Button" parent="CanvasLayer/UI/Tools" unique_id=195797117]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 text = "Dibujar aristas"
 
-[node name="DirectedEdgesButton" type="Button" parent="CanvasLayer/UI/Tools" unique_id=1452687321]
-unique_name_in_owner = true
-layout_mode = 2
-disabled = true
-toggle_mode = true
-text = "Aristas dirigidas"
-
-[node name="Space2" type="Control" parent="CanvasLayer/UI/Tools" unique_id=1390345702]
-custom_minimum_size = Vector2(0, 15)
-layout_mode = 2
-
 [node name="RandomizeButton" type="Button" parent="CanvasLayer/UI/Tools" unique_id=774338974]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Aleatorizar"
+
+[node name="ShuffleButton" type="Button" parent="CanvasLayer/UI/Tools" unique_id=565734316]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Mezclar"
 
 [node name="Actions" type="VBoxContainer" parent="CanvasLayer/UI" unique_id=1010987770]
 unique_name_in_owner = true
@@ -175,9 +200,84 @@ text = "Grafo en escena"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="AlgoritmsPanel" type="PanelContainer" parent="CanvasLayer/UI" unique_id=802624321]
+custom_minimum_size = Vector2(0.405, 4.645)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -209.0
+offset_right = -35.0
+offset_bottom = -54.0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/UI/AlgoritmsPanel" unique_id=765188626]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VScrollContainer" type="ScrollContainer" parent="CanvasLayer/UI/AlgoritmsPanel/MarginContainer" unique_id=1108259193]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Content" type="VBoxContainer" parent="CanvasLayer/UI/AlgoritmsPanel/MarginContainer/VScrollContainer" unique_id=334644937]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Title" type="Label" parent="CanvasLayer/UI/AlgoritmsPanel/MarginContainer/VScrollContainer/Content" unique_id=229377048]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Algoritmos"
+label_settings = SubResource("LabelSettings_kqacf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AlgoritmButtons" type="VBoxContainer" parent="CanvasLayer/UI/AlgoritmsPanel/MarginContainer/VScrollContainer/Content" unique_id=1938260990]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InstructionsLabel" type="Label" parent="CanvasLayer/UI" unique_id=1080064457]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.001
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 308.848
+offset_top = -54.0
+offset_right = -310.0
+offset_bottom = -31.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Physics" type="Node" parent="." unique_id=1290079163]
 unique_name_in_owner = true
 script = ExtResource("7_hqvew")
+
+[node name="Algorithms" type="Node" parent="." unique_id=1595311311]
+unique_name_in_owner = true
+script = ExtResource("8_sn10k")
+alg_buttons_group = SubResource("ButtonGroup_4f15s")
+
+[node name="BFS" type="Node" parent="Algorithms" unique_id=523893545]
+script = ExtResource("12_tic65")
+button_name = "Búsqueda en anchura"
+
+[node name="DFS" type="Node" parent="Algorithms" unique_id=1898507583]
+script = ExtResource("11_qxs72")
+button_name = "Búsqueda en profundidad"
+
+[node name="Dijkstra" type="Node" parent="Algorithms" unique_id=807360621]
+script = ExtResource("10_v8xi1")
+button_name = "Dijkstra"
 
 [node name="SaveDialog" type="FileDialog" parent="." unique_id=1962484975]
 unique_name_in_owner = true
@@ -197,9 +297,10 @@ unique_name_in_owner = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1279360004]
 
-[connection signal="pressed" from="CanvasLayer/UI/Tools/DrawEdgesButton" to="." method="_on_draw_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/UI/Tools/DirectedEdgesButton" to="." method="_on_directed_button_pressed"]
+[connection signal="item_selected" from="CanvasLayer/UI/Tools/GraphTypeButton" to="." method="_on_graph_type_button_item_selected"]
+[connection signal="toggled" from="CanvasLayer/UI/Tools/DrawEdgesButton" to="." method="_on_draw_edges_button_toggled"]
 [connection signal="pressed" from="CanvasLayer/UI/Tools/RandomizeButton" to="." method="_randomize"]
+[connection signal="pressed" from="CanvasLayer/UI/Tools/ShuffleButton" to="." method="_shuffle"]
 [connection signal="pressed" from="CanvasLayer/UI/Actions/SaveButton" to="CanvasLayer/UI/Actions" method="_on_save_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/UI/Actions/SaveAsButton" to="CanvasLayer/UI/Actions" method="_on_save_as_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/UI/Actions/DeleteButton" to="CanvasLayer/UI/Actions" method="_on_delete_button_pressed"]

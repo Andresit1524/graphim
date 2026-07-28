@@ -1,6 +1,6 @@
-## [code]DragInstancer[/code] almacena un objeto y permite arrastrarlo para que se cree una instancia
-## en el nodo dado. Al implementar, la escena debe tener una propiedad que permita desactivar su
-## interacción con otros objetos, de forma recomendada.
+## Almacena un objeto y permite arrastrarlo para que se cree una instancia en el nodo dado. Al
+## implementar, la escena debe tener una propiedad que permita desactivar su interacción con otros
+## objetos, de forma recomendada.
 class_name DragInstancer extends PanelContainer
 
 

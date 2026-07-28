@@ -1,4 +1,4 @@
-## [code]EdgeData[/code] contiene los datos de una arista, listo para serializar
+## Contiene los datos de una arista, listo para serializar
 class_name EdgeData extends Resource
 
 ## Emitida cuando cambia el caracter de arista dirigida
@@ -18,8 +18,9 @@ signal color_changed(new_color: Color)
 @export var weight: float = 1.0:
 	set(value):
 		weight = value
+		weight_changed.emit(value)
 ## Color de la arista
-@export var color: Color = Color.WHITE:
+@export var color: Color = GraphColors.BASE:
 	set(value):
 		color = value
 		color_changed.emit(value)

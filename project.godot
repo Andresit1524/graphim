@@ -18,6 +18,10 @@ run/main_scene="uid://i7fektpxxnq7"
 config/features=PackedStringArray("4.7")
 config/icon="uid://p50qwu20juc8"
 
+[autoload]
+
+Sounds="*uid://dunno48bw6qyd"
+
 [dotnet]
 
 project/assembly_name="Graphim"
@@ -30,7 +34,8 @@ enabled=PackedStringArray()
 
 folder_colors={
 "res://addons/": "teal",
-"res://assets/": "yellow"
+"res://assets/": "yellow",
+"res://autoload/": "blue"
 }
 
 [global_group]

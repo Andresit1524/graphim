@@ -9,6 +9,8 @@ class_name UI extends Control
 @onready var fps_label = %FPS
 ## Etiqueta de archivo actual
 @onready var current_file: Label = $CurrentFile
+## Etiqueta para instrucciones
+@onready var instructions_label: Label = %InstructionsLabel
 
 ## Lista de nodos del grafo
 @onready var nodes: Node2D = %Nodes
@@ -17,9 +19,10 @@ class_name UI extends Control
 
 
 # Botones para dibujar en el grafo
+@onready var graph_type_button: OptionButton = %GraphTypeButton
 @onready var draw_edges_button: Button = %DrawEdgesButton
-@onready var directed_edges_button: Button = %DirectedEdgesButton
 @onready var randomize_button: Button = %RandomizeButton
+@onready var shuffle_button: Button = %ShuffleButton
 
 # Botones de acciones
 @onready var save_button: Button = %SaveButton
@@ -28,19 +31,8 @@ class_name UI extends Control
 @onready var load_button: Button = %LoadButton
 
 
-## Nombres de los nodos
-var nodes_names: String:
-	set(value):
-		nodes_names = value
-		update_objects_count()
-## Nombres de las aristas
-var edges_names: String:
-	set(value):
-		edges_names = value
-		update_objects_count()
-
 ## Bandera que determina si el botón de aristas dirigidas está activado
-var directed_edges_enabled := false
+var directed_edges_disabled := false
 
 
 func _physics_process(_delta) -> void:
@@ -73,6 +65,16 @@ func mark_as_not_saved(value := true) -> void:
 		current_file.text = "(*) %s" % current_file.text
 
 
+## Imprime una instrucción en la parte inferior de la pantalla
+func print_instruction(msg := "") -> void:
+	instructions_label.text = msg
+
+
+## Limpia la instrucción
+func clear_instruction() -> void:
+	instructions_label.text = ""
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	# Resetea el botón de borrar si se clica por fuera
 	if event is InputEventMouseButton and event.is_pressed():
@@ -87,11 +89,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Desactiva todos los botones
 func disable_all() -> void:
-	directed_edges_enabled = directed_edges_button.button_pressed
-
+	graph_type_button.disabled = true
 	draw_edges_button.disabled = true
-	directed_edges_button.disabled = true
 	randomize_button.disabled = true
+	shuffle_button.disabled = true
 
 	save_button.disabled = true
 	save_as_button.disabled = true
@@ -101,9 +102,10 @@ func disable_all() -> void:
 
 ## Activa todos los botones
 func enable_all() -> void:
+	graph_type_button.disabled = false
 	draw_edges_button.disabled = false
-	directed_edges_button.disabled = directed_edges_enabled
 	randomize_button.disabled = false
+	shuffle_button.disabled = false
 
 	save_button.disabled = false
 	save_as_button.disabled = false

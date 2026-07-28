@@ -1,8 +1,16 @@
 class_name World extends Node2D
 
 
+## Tipos de grafos
+enum GraphType {NON_DIRECTED, DIRECTED, MIXTURE}
+
+
 ## Se emite cuando se cambia el archivo actual
 signal current_file_changed(new_name: String)
+## Se emite cuando se clica un nodo
+signal node_clicked(node: GraphimNode)
+## Se emite cuando se clica un nodo
+signal edge_clicked(node: GraphimEdge)
 
 
 ## Tamaño máximo de un grafo aleatorio
@@ -22,8 +30,6 @@ const DELAY = 0.01
 
 ## Interfaz
 @onready var ui: UI = %UI
-## Botón para dibujar aristas
-@onready var directed_button: Button = %DirectedEdgesButton
 ## Ventana de guardado
 @onready var save_load_dialog: FileDialog = %SaveDialog
 
@@ -38,8 +44,9 @@ const DELAY = 0.01
 
 ## Indica si estamos dibujando aristas
 var drawing_edges := false
-## Indica si estamos dibujando aristas dirigidas o no
-var drawing_directed := false
+## Indica el tipo de grafo que estamos dibujando
+var current_graph_type := GraphType.NON_DIRECTED
+
 
 # Variables temporales para el dibujado de aristas
 var current_new_edge_start: GraphimNode
@@ -71,10 +78,10 @@ func _ready() -> void:
 ## Actualiza el recurso de grafo actual usando los datos del nodo
 func _save_graph() -> void:
 	# Guarda en los datos de grafo
-	current_graph_data.nodes.assign(
+	current_graph_data.nodes_data.assign(
 		nodes.get_children().map(func(c: GraphimNode): return c.get_data_copy())
 	)
-	current_graph_data.edges.assign(
+	current_graph_data.edges_data.assign(
 		edges.get_children().map(func(c: GraphimEdge): return c.get_data_copy())
 	)
 
@@ -110,6 +117,7 @@ func _delete_graph() -> void:
 	print("[World] Borrando grafo")
 
 	for child in nodes.get_children() + edges.get_children():
+		Sounds.play_sound(&"delete")
 		child.queue_free()
 
 	print("[World] Borrado")
@@ -130,7 +138,7 @@ func _load_graph() -> void:
 
 	# Nodos
 	var uids := {}
-	for node_data: NodeData in current_graph_data.nodes:
+	for node_data: NodeData in current_graph_data.nodes_data:
 		await get_tree().create_timer(DELAY).timeout
 		var new_node: GraphimNode = node_scene.instantiate()
 		nodes.add_child(new_node, true)
@@ -143,7 +151,8 @@ func _load_graph() -> void:
 		)
 
 	# Aristas
-	for edge_data: EdgeData in current_graph_data.edges:
+	for edge_data: EdgeData in current_graph_data.edges_data:
+		await get_tree().create_timer(DELAY).timeout
 		var new_edge: GraphimEdge = edge_scene.instantiate()
 		edges.add_child(new_edge, true)
 		new_edge.data = edge_data
@@ -196,13 +205,23 @@ func _randomize() -> void:
 		await get_tree().create_timer(DELAY).timeout
 		var new_edge: GraphimEdge = edge_scene.instantiate()
 		edges.add_child(new_edge, true)
-		new_edge.data.directed = [true, false].pick_random()
+		new_edge.data.directed = _get_directed_edge_boolean()
 		new_edge.data.weight = randi_range(1, RANDOM_SIZE)
 		new_edge.data.start_node = node_a
 		new_edge.data.end_node = node_b
 		new_edge.data.refresh()
 
 	ui.enable_all()
+
+
+## Mezcla el grafo
+func _shuffle() -> void:
+	Sounds.play_sound(&"shuffle")
+	for node: GraphimNode in nodes.get_children():
+		node.position = Vector2(
+			randf_range(-SPREAD_SIZE, SPREAD_SIZE),
+			randf_range(-SPREAD_SIZE, SPREAD_SIZE)
+		)
 
 
 ## Auxiliar: limpia la ruta del archivo de guardado
@@ -223,7 +242,12 @@ func _connect_new_node(node: Node) -> void:
 	if not _node.is_connected(&"clicked", _draw_edge):
 		_node.clicked.connect(_draw_edge)
 
-	if not _node.is_connected(&"deleted", _draw_edge):
+	if not _node.is_connected(&"clicked", node_clicked.emit):
+		_node.clicked.connect(node_clicked.emit)
+
+	# TODO: implementar menú contextual
+
+	if not _node.is_connected(&"deleted", _delete_node):
 		_node.deleted.connect(_delete_node)
 
 
@@ -231,10 +255,13 @@ func _connect_new_node(node: Node) -> void:
 func _connect_new_edge(edge: Node) -> void:
 	var _edge := edge as GraphimEdge
 
-	# TODO: Implementar clicked también
+	if not _edge.is_connected(&"clicked", edge_clicked.emit):
+		_edge.clicked.connect(edge_clicked.emit)
 
-	if not edge.is_connected(&"deleted", _delete_edge):
-		edge.deleted.connect(_delete_edge)
+	# TODO: implementar menú contextual
+
+	if not _edge.is_connected(&"deleted", _delete_edge):
+		_edge.deleted.connect(_delete_edge)
 
 
 ## Dibuja una arista entre los dos nodos cuando se seleccionan
@@ -244,7 +271,7 @@ func _draw_edge(new_node: GraphimNode) -> void:
 	# Añade el extremo inicial si es el caso
 	if not current_new_edge_start:
 		current_new_edge_start = new_node
-		current_new_edge_start.data.color = Color.LIGHT_SKY_BLUE
+		current_new_edge_start.data.color = GraphColors.SELECTED
 		return
 
 	# Añade el extremo final
@@ -257,17 +284,17 @@ func _draw_edge(new_node: GraphimNode) -> void:
 	# Verifica que la arista no este existiendo ya
 	# ? Se separan los métodos para que sea fácil implementar bucles en el futuro
 	# ! que?
-	if _find_edge(current_new_edge_start, current_new_edge_end): return
-	if _find_edge_reverse(current_new_edge_start, current_new_edge_end): return
+	if find_edge(current_new_edge_start, current_new_edge_end): return
+	if find_edge_reverse(current_new_edge_start, current_new_edge_end): return
 
-	current_new_edge_start.data.color = Color.WHITE
+	current_new_edge_start.data.color = GraphColors.BASE
 
 	# Crea y configura
 	var new_edge: GraphimEdge = edge_scene.instantiate()
 	edges.add_child(new_edge, true)
 	new_edge.data.start_node = current_new_edge_start
 	new_edge.data.end_node = current_new_edge_end
-	new_edge.data.directed = drawing_directed
+	new_edge.data.directed = _get_directed_edge_boolean()
 	new_edge.data.refresh()
 
 	# Resetea los nodos para nueva arista
@@ -275,30 +302,56 @@ func _draw_edge(new_node: GraphimNode) -> void:
 	current_new_edge_end = null
 
 
+## Auxiliar: Obtiene un valor booleano según el tipo de grafo actual
+func _get_directed_edge_boolean() -> bool:
+	match current_graph_type:
+		GraphType.NON_DIRECTED: return false
+		GraphType.DIRECTED: return true
+		_: return [true, false].pick_random()
+
+
 ## Aborta el dibujado de la nueva arista
 func _abort_new_edge() -> void:
 	current_new_edge_end = null
 	if current_new_edge_start != null:
-		current_new_edge_start.data.color = Color.WHITE
+		current_new_edge_start.data.color = GraphColors.BASE
 		current_new_edge_start = null
 
 
-## Auxiliar: busca una arista que contenga los dos nodos dados y la retorna
-func _find_edge(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
-	for edge in edges.get_children():
-		if edge.data.start_node == start_node and edge.data.end_node == end_node: return edge
+## Busca una arista que contenga los dos nodos dados y la retorna
+func find_edge(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
+	for edge: GraphimEdge in edges.get_children():
+		if (
+			edge.data.start_node == start_node
+			and edge.data.end_node == end_node
+		): return edge
 
 	return null
 
 
-## Auxiliar: busca una arista que contenga los dos nodos dados (en reversa) y lo retorna.
+## Busca una arista que contenga los dos nodos dados (en reversa) y lo retorna.
 ## Esto solo es válido si la arista no es dirigida.
-func _find_edge_reverse(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
-	for edge in edges.get_children():
+func find_edge_reverse(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
+	for edge: GraphimEdge in edges.get_children():
 		if (
-			edge.data.start_node == end_node and edge.data.end_node == start_node
+			edge.data.start_node == end_node
+			and edge.data.end_node == start_node
 			and not edge.data.directed
 		): return edge
+
+	return null
+
+
+## Busca una arista que contenga los dos nodos dados y la retorna, en cualquier orden
+func find_edge_bi(start_node: GraphimNode, end_node: GraphimNode) -> GraphimEdge:
+	for edge: GraphimEdge in edges.get_children():
+		var data = edge.data
+
+		if data.start_node == start_node and data.end_node == end_node: return edge
+
+		# Sentido opuesto para no dirigidas
+		if data.start_node == end_node and data.end_node == start_node and not data.directed:
+			return edge
 
 	return null
 
@@ -311,11 +364,13 @@ func _delete_node(node: GraphimNode) -> void:
 			edge.queue_free()
 
 	node.queue_free()
+	Sounds.play_sound(&"delete")
 
 
 ## Elimina una arista
 func _delete_edge(edge: GraphimEdge) -> void:
 	edge.queue_free()
+	Sounds.play_sound(&"delete")
 
 
 #endregion
@@ -324,16 +379,18 @@ func _delete_edge(edge: GraphimEdge) -> void:
 #region Botones
 
 
-## Actualiza el estado del dibujado de grafos
-func _on_draw_button_pressed() -> void:
-	drawing_edges = not drawing_edges
-	directed_button.disabled = not drawing_edges
-
-	if not drawing_edges: _abort_new_edge()
+# TODO: mandar esto a la UI si es pertinente
 
 
-func _on_directed_button_pressed() -> void:
-	drawing_directed = not drawing_directed
+## Actualiza el estado del dibujado de aristas
+func _on_draw_edges_button_toggled(toggled_on: bool) -> void:
+	drawing_edges = toggled_on
+	if not toggled_on: _abort_new_edge()
+
+
+## Actualiza el tipo de grafo
+func _on_graph_type_button_item_selected(index: int) -> void:
+	current_graph_type = index as GraphType
 
 
 #endregion
