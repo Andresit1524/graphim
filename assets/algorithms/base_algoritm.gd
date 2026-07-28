@@ -89,7 +89,7 @@ func _discard_rest() -> void:
 
 
 ## Colorea la arista de la que viene un nodo
-func _paint_parent_edge(current: GraphimNode, backtrack: Dictionary[GraphimNode, GraphimNode]):
+func paint_parent_edge(current: GraphimNode, backtrack: Dictionary[GraphimNode, GraphimNode]):
 	var conection := world.find_edge_bi(backtrack[current], current)
 	if conection: conection.data.color = current.data.color
 

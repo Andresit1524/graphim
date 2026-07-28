@@ -30,7 +30,7 @@ func _depth_first_search(
 	await wait(WAIT_TIME)
 	Sounds.play_sound(&"pop")
 	node.data.color = GraphColors.VISITED
-	_paint_parent_edge(node, backtrack)
+	paint_parent_edge(node, backtrack)
 
 	# Recorre sus vecinos si no ha sido así
 	for neighbor in graph[node]:
@@ -49,4 +49,4 @@ func _depth_first_search(
 	await wait(SHORT_WAIT_TIME)
 	Sounds.play_sound(&"bell")
 	node.data.color = GraphColors.FINISHED
-	_paint_parent_edge(node, backtrack)
+	paint_parent_edge(node, backtrack)

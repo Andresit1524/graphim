@@ -37,7 +37,7 @@ func start() -> void:
 
 				Sounds.play_sound(&"pop")
 				neighbor.data.color = GraphColors.VISITED
-				_paint_parent_edge(neighbor, backtrack)
+				paint_parent_edge(neighbor, backtrack)
 
 			# Tacha las aristas sobrantes
 			if conection.data.color == GraphColors.BASE:
@@ -49,7 +49,7 @@ func start() -> void:
 		await wait(SHORT_WAIT_TIME)
 		Sounds.play_sound(&"bell")
 		current.data.color = GraphColors.FINISHED
-		_paint_parent_edge(current, backtrack)
+		paint_parent_edge(current, backtrack)
 
 	Sounds.play_sound(&"success")
 	begin.data.color = GraphColors.HIGHLIGHT
