@@ -275,7 +275,7 @@ alg_buttons_group = SubResource("ButtonGroup_4f15s")
 
 [node name="BFS" type="Node" parent="Algorithms" unique_id=523893545]
 script = ExtResource("12_tic65")
-button_name = "Búsqueda en extensión"
+button_name = "Búsqueda en anchura"
 
 [node name="DFS" type="Node" parent="Algorithms" unique_id=1898507583]
 script = ExtResource("11_qxs72")

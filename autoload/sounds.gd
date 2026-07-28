@@ -8,7 +8,8 @@ extends AudioStreamPlayer
 	&"delete": load("res://assets/sounds/swipe.mp3"),
 	&"shuffle": load("res://assets/sounds/shuffle.mp3"),
 	&"success": load("res://assets/sounds/success.mp3"),
-	&"fail": load("res://assets/sounds/wrong.mp3")
+	&"bell": load("res://assets/sounds/bell.mp3"),
+	&"fail": load("res://assets/sounds/fail.mp3"),
 }
 
 

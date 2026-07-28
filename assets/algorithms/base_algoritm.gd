@@ -6,8 +6,10 @@
 signal finished
 
 
-## Tiempo de espera entre pasos
+## Tiempo de espera normal
 const WAIT_TIME = 1.0
+## Tiempo de espera corto
+const SHORT_WAIT_TIME = 0.5
 ## Tiempo de espera largo
 const LONG_WAIT_TIME = 2.0
 
@@ -72,6 +74,24 @@ func reset_graph_visuals() -> void:
 
 	for edge in get_edges():
 		edge.data.color = GraphColors.BASE
+
+
+## Descarta los nodos y aristas que no se tocaron
+func _discard_rest() -> void:
+	# Colorea los nodos y aristas restantes
+	for edge in get_edges():
+		if edge.data.color == GraphColors.BASE:
+			edge.data.color = GraphColors.WRONG
+
+	for node in get_nodes():
+		if node.data.color == GraphColors.BASE:
+			node.data.color = GraphColors.WRONG
+
+
+## Colorea la arista de la que viene un nodo
+func _paint_parent_edge(current: GraphimNode, backtrack: Dictionary[GraphimNode, GraphimNode]):
+	var conection := world.find_edge_bi(backtrack[current], current)
+	if conection: conection.data.color = current.data.color
 
 
 ## Espera un tiempo

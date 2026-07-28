@@ -15,16 +15,9 @@ func start() -> void:
 
 	# Explora el grafo
 	await _depth_first_search(graph, begin, backtrack)
+	Sounds.play_sound(&"success")
 	begin.data.color = GraphColors.HIGHLIGHT
-
-	# Colorea los nodos y aristas restantes
-	for edge in get_edges():
-		if edge.data.color == GraphColors.BASE:
-			edge.data.color = GraphColors.WRONG
-
-	for node in get_nodes():
-		if node.data.color == GraphColors.BASE:
-			node.data.color = GraphColors.WRONG
+	_discard_rest()
 
 
 ## Visita un nodo y sus vecinos
@@ -35,8 +28,9 @@ func _depth_first_search(
 ):
 	# Marca como visitado
 	await wait(WAIT_TIME)
+	Sounds.play_sound(&"pop")
 	node.data.color = GraphColors.VISITED
-	_color_parent_edge(node, backtrack)
+	_paint_parent_edge(node, backtrack)
 
 	# Recorre sus vecinos si no ha sido así
 	for neighbor in graph[node]:
@@ -47,15 +41,12 @@ func _depth_first_search(
 
 		var conection := world.find_edge_bi(node, neighbor)
 		if conection.data.color == GraphColors.BASE:
+			await wait(SHORT_WAIT_TIME)
+			Sounds.play_sound(&"fail")
 			conection.data.color = GraphColors.WRONG
 
 	# El nodo se considera finalizado si sus vecinos lo están
-	await wait(WAIT_TIME / 2)
+	await wait(SHORT_WAIT_TIME)
+	Sounds.play_sound(&"bell")
 	node.data.color = GraphColors.FINISHED
-	_color_parent_edge(node, backtrack)
-
-
-## Colorea la arista de la que viene un nodo
-func _color_parent_edge(current: GraphimNode, backtrack: Dictionary[GraphimNode, GraphimNode]):
-	var conection := world.find_edge_bi(backtrack[current], current)
-	if conection: conection.data.color = current.data.color
+	_paint_parent_edge(node, backtrack)
