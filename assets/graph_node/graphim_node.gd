@@ -30,7 +30,7 @@ var disabled := false:
 		_disable(value)
 
 ## Fuerza aplicada sobre el nodo
-var force: Vector2
+var force := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -41,16 +41,12 @@ func _ready() -> void:
 
 	# Fuerza a actualiizar los datos
 	data.refresh()
+	last_global_pos = global_position
 
 	Sounds.play_sound(&"pop")
 
 
 func _physics_process(delta: float) -> void:
-	var current_pos := global_position
-
-	# Actualiza la última posición
-	last_global_pos = current_pos
-
 	# Necesario para que funcione el arrastre con el mouse
 	handle_dragging(delta)
 
@@ -138,15 +134,16 @@ func _reset_physics() -> void:
 
 
 ## Aplica las fuerzas sobre el objeto dada la fricción a usar. Se usa desde afuera
-func apply_forces(delta: float, damping: float) -> void:
+func apply_forces(delta: float) -> void:
 	if disabled: return
 
-	# Aplica Verlet con fricción sobre la velocidad (el desplazamiento)
-	var inertia := (global_position - last_global_pos) * (1.0 - damping)
-	var displacement := inertia + (force * delta * delta)
-
 	# Usamos el motor de Godot para mover y detenernos si hay colisión
-	move_and_collide(displacement)
+	# ? Se usa la integración de verlet para este fin
+	# ? El coeficiente 2 en x_i no está porque es desplazamiento, no posición directamente
+	last_global_pos = global_position
+	move_and_collide(global_position - last_global_pos + force * delta * delta)
+
+	force = Vector2.ZERO
 
 
 #endregion

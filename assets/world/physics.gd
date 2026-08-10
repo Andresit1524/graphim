@@ -2,23 +2,19 @@
 class_name Physics extends Node
 
 
-## Constante de repulsión para simplificar el valor de la fuerza
-const REPULSION_CONST = 1e6
+## Constante de escala para la distancia entre los nodos
+const K_SCALE := 2 / pow(12, 0.25)
+## Constante de escala de movimiento
+const MOVE_SCALE := 1e6
 
 
-@export_group("Nodes physics")
-## Fuerza de repulsión
-@export var nodes_repulsion: float = 30
-## Fuerza de repulsión al centro
-@export var center_atraction: float = 0.2
-## Fricción del movimiento
-@export var friction: float = 0.2
-
-@export_group("Edges physics")
-## Longitud de la arista
-@export var edge_length: float = 70.0
-## Fuerza de Hooke para los nodos que conecta
-@export var edge_force: float = 200
+## Constante de empaquetamiento
+@export_range(0.01, 10.0) var alpha: float = 1.0:
+	set(value):
+		alpha = value
+		_update_ell()
+## Fuerza de gravedad
+@export_range(0.0, 20.0) var gravity: float = 1.0
 
 
 ## Lista de nodos
@@ -27,66 +23,65 @@ const REPULSION_CONST = 1e6
 @onready var edges: Node2D = %Edges
 
 
+## Longitud ideal actual entre nodos
+var current_ell := 0.0
+
+
+func _ready() -> void:
+	# Conecta la actualización de la distancia ideal
+	nodes.child_order_changed.connect(_update_ell)
+	get_viewport().size_changed.connect(_update_ell)
+
+	_update_ell()
+
+
 func _physics_process(delta: float) -> void:
-	_make_and_apply_forces(delta)
-
-
-## Aplica las fuerzas sobre todos los nodos
-func _make_and_apply_forces(delta: float) -> void:
 	var graph_nodes := nodes.get_children()
 	var graph_edges := edges.get_children()
 
-	# Gravedad inversa
-	for node: GraphimNode in graph_nodes:
-		node.force = _apply_inverse_gravity(node)
+	if not graph_nodes: return
 
 	# Repulsión
-	for i in graph_nodes.size():
+	for i in nodes.get_child_count():
+		var node_i: GraphimNode = graph_nodes[i]
+
 		for j in i:
-			var node_a = graph_nodes[i]
-			var node_b = graph_nodes[j]
-			var current_force := _coulomb(node_b.global_position, node_a.global_position)
+			var node_j: GraphimNode = graph_nodes[j]
+			var distance_ji := node_i.global_position - node_j.global_position
+			var distance_sq := maxf(distance_ji.length_squared(), Constants.EPSILON)
+			var inverse_distance := distance_ji.normalized() / distance_sq
 
-			node_a.force += current_force
-			node_b.force += -current_force
+			node_i.force += current_ell * inverse_distance
+			node_j.force -= current_ell * inverse_distance
 
-	# Atracción entre nodos de una arista
+	# Atracción entre nodos
 	for edge: GraphimEdge in graph_edges:
-		var start := edge.data.start_node
-		var end := edge.data.end_node
+		var node_a := edge.data.start_node
+		var node_b := edge.data.end_node
 
-		# Validamos que los nodos de la arista sigan existiendo en memoria
-		if not is_instance_valid(start) or not is_instance_valid(end): continue
+		var distance_ba := node_a.global_position - node_b.global_position
+		var force := distance_ba / (current_ell * current_ell)
 
-		var current_force := _hooke(start, end)
+		node_a.force -= force
+		node_b.force += force
 
-		start.force -= current_force / 2
-		end.force += current_force / 2
-
-	# Aplica la fuerza a cada nodo
+	# Gravedad inversa y aplicación
 	for node: GraphimNode in graph_nodes:
-		node.apply_forces(delta, friction)
+		node.force *= MOVE_SCALE
+
+		# Aplica la gravedad antes para evitar que MOVE_SCALE la haga extrema
+		var global_pos := node.global_position
+		node.force -= gravity * global_pos.normalized() * global_pos.length_squared()
+		node.apply_forces(delta)
 
 
-## Calcula la repulsión usando la ley de Coulomb para un par de posiciones globales
-func _coulomb(from: Vector2, to: Vector2) -> Vector2:
-	var distance := to - from
+## Auxiliar: recalcula la distancia ideal
+func _update_ell() -> void:
+	var viewport := get_viewport()
+	if not viewport: return
 
-	# Evitamos división por cero y suavizamos la fuerza en distancias cortas (+ 100)
-	return distance.normalized() * nodes_repulsion * REPULSION_CONST / (distance.length_squared() + 100.0)
+	var size := viewport.get_visible_rect().size
+	var max_diameter := minf(size.x, size.y)
+	var max_circle_area := PI * max_diameter * max_diameter / 4
 
-
-## Calcula la fuerza que conecta dos nodos usando la ley de hooke
-func _hooke(from: GraphimNode, to: GraphimNode) -> Vector2:
-	var distance := to.global_position - from.global_position
-	var force := (distance.normalized() * edge_length - distance) * edge_force
-
-	return force
-
-
-## Aplica la gravedad a la inversa, empujando hacia el centro del mundo 2D
-func _apply_inverse_gravity(node: GraphimNode) -> Vector2:
-	var distance := -node.global_position
-	if distance.length_squared() < Constants.EPSILON: return Vector2.ZERO
-
-	return distance.normalized() * center_atraction * distance.length_squared()
+	current_ell = K_SCALE * sqrt(max_circle_area / nodes.get_child_count()) / alpha

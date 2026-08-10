@@ -14,7 +14,7 @@ signal edge_clicked(node: GraphimEdge)
 
 
 ## Tamaño máximo de un grafo aleatorio
-const RANDOM_SIZE = 50
+const RANDOM_SIZE = 70
 ## Espacio para aleatorizar la posición de los nodos
 const SPREAD_SIZE = 300
 ## Retraso entre adición de nodos-aristas nuevos
