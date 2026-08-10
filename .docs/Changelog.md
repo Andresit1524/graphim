@@ -4,7 +4,18 @@
 
 ## Julio de 2026
 
+## Semana del 27 de julio al 2 de agosto
+- 27 de julio: 
+    - Botón de mezclar
+    - Más sonidos e interfaz mejorada
+    - Colores centralizados y mejoras en DFS
+    - DFS, BFS y Dijkstra implementados
+
 ### Semana del 20 al 26 de julio
+- 26 de julio: Ahora puedes elegir entre tipos de grafos al crear aristas o aleatorizar
+- 25 de julio:
+    - Prototipo del sistema para algoritmos
+    - Corrección en el cálculo de listas de adyacencia en aristas no dirigidas
 - 24 de julio:
     - Ahora el botón de aristas dirigidas es un checkbox
     - Efectos de sonido añadidos

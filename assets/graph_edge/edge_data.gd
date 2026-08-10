@@ -20,7 +20,7 @@ signal color_changed(new_color: Color)
 		weight = value
 		weight_changed.emit(value)
 ## Color de la arista
-@export var color: Color = Color.WHITE:
+@export var color: Color = GraphColors.BASE:
 	set(value):
 		color = value
 		color_changed.emit(value)

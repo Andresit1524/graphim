@@ -45,8 +45,14 @@ func _ready() -> void:
 	data.color_changed.connect(_set_color)
 	data.weight_changed.connect(_change_weight)
 
+	# Color base de la curva
+	curve.default_color = GraphColors.HIGHLIGHT
+
 	# Refresca los datos
 	data.refresh()
+
+	# Separa su data para evitar efectos secundarios
+	weight_label.label_settings.resource_local_to_scene = true
 
 	Sounds.play_sound(&"pencil")
 

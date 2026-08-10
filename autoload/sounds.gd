@@ -5,7 +5,11 @@ extends AudioStreamPlayer
 @export var sounds: Dictionary[StringName, AudioStream] = {
 	&"pop": load("res://assets/sounds/pop.mp3"),
 	&"pencil": load("res://assets/sounds/pencil.mp3"),
-	&"delete": load("res://assets/sounds/swipe.mp3")
+	&"delete": load("res://assets/sounds/swipe.mp3"),
+	&"shuffle": load("res://assets/sounds/shuffle.mp3"),
+	&"success": load("res://assets/sounds/success.mp3"),
+	&"bell": load("res://assets/sounds/bell.mp3"),
+	&"fail": load("res://assets/sounds/fail.mp3"),
 }
 
 

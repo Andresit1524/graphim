@@ -14,7 +14,6 @@ arrowhead_size = 2.0
 
 [node name="Curve" type="Line2D" parent="." unique_id=1062482950]
 width = 5.0
-default_color = Color(1, 0.6870301, 0, 1)
 
 [node name="Weight" type="Label" parent="." unique_id=1869160487]
 anchors_preset = -1
