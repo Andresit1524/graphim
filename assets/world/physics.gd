@@ -24,7 +24,11 @@ const MOVE_SCALE := 100
 
 
 ## Longitud ideal actual entre nodos
-var current_ell := 0.0
+static var current_ell := 0.0
+## Longitud al cuadrado
+static var current_ell_sq := 0.0
+## Longitud ideal inversa
+static var current_ell_inv := 0.0
 
 
 func _ready() -> void:
@@ -47,33 +51,31 @@ func _physics_process(delta: float) -> void:
 
 		for j in i:
 			var node_j: GraphimNode = graph_nodes[j]
-			var distance_ji := node_i.global_position - node_j.global_position
-			var inverse_distance := distance_ji.normalized() / maxf(distance_ji.length(), Constants.EPSILON)
+			var ji := node_i.global_position - node_j.global_position
+			var ji_repulsion := ji / ji.length_squared()
 
-			node_i.force += current_ell * current_ell * inverse_distance
-			node_j.force -= current_ell * current_ell * inverse_distance
+			node_i.repulsion += ji_repulsion
+			node_j.repulsion -= ji_repulsion
 
 	# Atracción entre nodos
 	for edge: GraphimEdge in graph_edges:
-		var node_a := edge.data.start_node
-		var node_b := edge.data.end_node
+		var node_i := edge.data.start_node
+		var node_j := edge.data.end_node
 
-		var distance_ba := node_a.global_position - node_b.global_position
-		var force := distance_ba.normalized() * distance_ba.length_squared() / current_ell
+		var ji := node_i.global_position - node_j.global_position
+		var ji_atraction := ji * ji.length()
 
-		node_a.force -= force
-		node_b.force += force
+		# ? Se restan las fuerzas (invertido respecto a la repulsión más arriba)
+		node_i.atraction -= ji_atraction
+		node_j.atraction += ji_atraction
 
 	# Gravedad inversa y aplicación
 	for node: GraphimNode in graph_nodes:
-		node.force *= MOVE_SCALE
-
 		# Aplica la gravedad antes para evitar que MOVE_SCALE la haga extrema
 		var global_pos := node.global_position
 		node.force -= gravity * global_pos.normalized() * global_pos.length_squared()
 
-		node.apply_forces(delta)
-		node.draw_packaging(current_ell)
+		node.integrate_forces(delta)
 
 
 ## Auxiliar: recalcula la distancia ideal
@@ -86,3 +88,5 @@ func _update_ell() -> void:
 	var max_circle_area := PI * max_diameter * max_diameter / 4
 
 	current_ell = K_SCALE * sqrt(max_circle_area / nodes.get_child_count()) / alpha
+	current_ell_sq = current_ell * current_ell
+	current_ell_inv = 1 / current_ell

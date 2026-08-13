@@ -29,6 +29,11 @@ var disabled := false:
 		disabled = value
 		_disable(value)
 
+
+## Distancia para repulsión
+var repulsion := Vector2.ZERO
+## Distancia para atracción
+var atraction := Vector2.ZERO
 ## Fuerza aplicada sobre el nodo
 var force := Vector2.ZERO
 
@@ -128,17 +133,22 @@ func _contract() -> Tween:
 #region Físicas
 
 
-## Aplica las fuerzas sobre el objeto dada la fricción a usar. Se usa desde afuera
-func apply_forces(delta: float) -> void:
+## Aplica las fuerzas sobre el objeto. Se usa desde afuera
+func integrate_forces(delta: float) -> void:
 	if disabled: return
 
-	# Usamos el motor de Godot para mover y detenernos si hay colisión
-	# ? Se usa la integración de verlet para este fin
-	# ? El coeficiente 2 en x_i no está porque es desplazamiento, no posición directamente
+	force += (
+		repulsion * Physics.current_ell_sq
+		+ atraction * Physics.current_ell_inv
+	) * Physics.MOVE_SCALE
+
+	# ? Integración de Verlet
 	last_global_pos = global_position
-	move_and_collide(global_position - last_global_pos + force * delta * delta)
+	global_position += global_position - last_global_pos + force * delta * delta
 
 	force = Vector2.ZERO
+	atraction = Vector2.ZERO
+	repulsion = Vector2.ZERO
 
 
 #endregion
