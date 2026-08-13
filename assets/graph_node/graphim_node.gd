@@ -60,7 +60,7 @@ func _disable(value: bool) -> void:
 		remove_from_group(&"nodes")
 	else:
 		add_to_group(&"nodes")
-		_reset_physics()
+		last_global_pos = global_position
 
 
 #region Visuales
@@ -126,11 +126,6 @@ func _contract() -> Tween:
 
 
 #region Físicas
-
-
-## Resetea la física del objeto (util al instanciar)
-func _reset_physics() -> void:
-	last_global_pos = global_position
 
 
 ## Aplica las fuerzas sobre el objeto dada la fricción a usar. Se usa desde afuera

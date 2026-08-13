@@ -5,7 +5,7 @@ class_name Physics extends Node
 ## Constante de escala para la distancia entre los nodos
 const K_SCALE := 2 / pow(12, 0.25)
 ## Constante de escala de movimiento
-const MOVE_SCALE := 1e6
+const MOVE_SCALE := 100
 
 
 ## Constante de empaquetamiento
@@ -14,7 +14,7 @@ const MOVE_SCALE := 1e6
 		alpha = value
 		_update_ell()
 ## Fuerza de gravedad
-@export_range(0.0, 20.0) var gravity: float = 1.0
+@export_range(0.0, 10.0) var gravity: float = 1.0
 
 
 ## Lista de nodos
@@ -48,11 +48,10 @@ func _physics_process(delta: float) -> void:
 		for j in i:
 			var node_j: GraphimNode = graph_nodes[j]
 			var distance_ji := node_i.global_position - node_j.global_position
-			var distance_sq := maxf(distance_ji.length_squared(), Constants.EPSILON)
-			var inverse_distance := distance_ji.normalized() / distance_sq
+			var inverse_distance := distance_ji.normalized() / maxf(distance_ji.length(), Constants.EPSILON)
 
-			node_i.force += current_ell * inverse_distance
-			node_j.force -= current_ell * inverse_distance
+			node_i.force += current_ell * current_ell * inverse_distance
+			node_j.force -= current_ell * current_ell * inverse_distance
 
 	# Atracción entre nodos
 	for edge: GraphimEdge in graph_edges:
@@ -60,7 +59,7 @@ func _physics_process(delta: float) -> void:
 		var node_b := edge.data.end_node
 
 		var distance_ba := node_a.global_position - node_b.global_position
-		var force := distance_ba / (current_ell * current_ell)
+		var force := distance_ba.normalized() * distance_ba.length_squared() / current_ell
 
 		node_a.force -= force
 		node_b.force += force
@@ -72,7 +71,9 @@ func _physics_process(delta: float) -> void:
 		# Aplica la gravedad antes para evitar que MOVE_SCALE la haga extrema
 		var global_pos := node.global_position
 		node.force -= gravity * global_pos.normalized() * global_pos.length_squared()
+
 		node.apply_forces(delta)
+		node.draw_packaging(current_ell)
 
 
 ## Auxiliar: recalcula la distancia ideal
